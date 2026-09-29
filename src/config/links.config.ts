@@ -226,7 +226,6 @@ export const siteConfig: SiteConfig = {
           href: A_COMPLETER,
           icon: "ScrollText",
           category: "representation",
-          badge: { label: "AGA · 30 sept.", tone: "important", endsAt: "2026-10-01" },
         },
         {
           title: "Assurance santé et dentaire",
