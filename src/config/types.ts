@@ -70,16 +70,12 @@ export interface AssociationConfig {
 
 export type AlertTone = "info" | "important" | "urgent";
 
+/** Bandeau du prochain événement public de l’Association (toujours affiché pendant sa période). */
 export interface AlertBannerConfig extends Schedule {
   /** Active ou désactive le bandeau. */
   enabled: boolean;
-  /**
-   * Identifiant unique de l’annonce (lettres, chiffres et tirets). Une personne qui replie le bandeau
-   * le retrouve replié, sauf si l’identifiant change : modifiez-le à chaque nouvelle annonce.
-   */
-  id: string;
   tone: AlertTone;
-  /** Étiquette courte, p. ex. « AGA », « Rappel » (6 caractères au plus conseillés : elle sert aussi de pastille repliée). */
+  /** Étiquette courte, p. ex. « AGA », « 5 à 7 », « Gala ». */
   label: string;
   message: string;
   /** Date de l’événement (« 2026-09-30 ») : affichée en vignette à gauche du message. */

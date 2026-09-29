@@ -1,8 +1,5 @@
 import type { AlertBannerConfig, Schedule } from "@/config/types";
 
-/** Clé localStorage : bandeau replié par la personne, pour un identifiant d’annonce donné. */
-export const BANNER_STORAGE_PREFIX = "aeebm:bandeau:";
-
 const TIME_ZONE = "America/Toronto"; // Heure de l’Est (Montréal)
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2}))?(?:\.\d+)?(Z|[+-]\d{2}:?\d{2})?)?$/;
 
@@ -84,7 +81,7 @@ export interface ScheduledGroup {
 
 /**
  * Script exécuté avant le premier affichage (sans décalage de mise en page) :
- * - bandeau : `data-banner="hidden"` hors période, `data-banner="collapsed"` s’il a été replié ;
+ * - bandeau : `data-banner="hidden"` hors de sa période d’affichage ;
  * - éléments datés (liens, pastilles, lien vedette) : masqués hors de leur période d’affichage ;
  * - groupes (sections) : masqués quand tous leurs éléments datés le sont.
  */
@@ -93,15 +90,13 @@ export function prepaintScript(
   elements: ScheduledElement[],
   groups: ScheduledGroup[] = [],
 ): string {
-  const bannerData = banner
-    ? { ...resolveWindow(banner, "alertBanner"), key: BANNER_STORAGE_PREFIX + banner.id }
-    : null;
+  const bannerData = banner ? resolveWindow(banner, "alertBanner") : null;
   const items = elements.map((element) => [element.id, element.window.start, element.window.end]);
   const sets = groups.map((group) => [group.id, group.members]);
   return (
     `(function(){var d=document.documentElement,n=Date.now(),b=${inlineJson(bannerData)},l=${inlineJson(items)},g=${inlineJson(sets)},h=[],x={};` +
     `function o(s,e){return(s!==null&&n<s)||(e!==null&&n>=e)}` +
-    `if(b){if(o(b.start,b.end))d.setAttribute("data-banner","hidden");else try{if(localStorage.getItem(b.key)==="1")d.setAttribute("data-banner","collapsed")}catch(_){}}` +
+    `if(b&&o(b.start,b.end))d.setAttribute("data-banner","hidden");` +
     `for(var i=0;i<l.length;i++)if(o(l[i][1],l[i][2])){x[l[i][0]]=1;h.push('[data-sched="'+l[i][0]+'"]')}` +
     `for(var j=0;j<g.length;j++){var a=g[j][1],k=0;while(k<a.length&&x[a[k]])k++;if(k===a.length)h.push('[data-sched="'+g[j][0]+'"]')}` +
     `if(h.length){var t=document.createElement("style");t.textContent=h.join(",")+"{display:none!important}";document.head.appendChild(t)}})();`

@@ -1,4 +1,4 @@
-import { AlertBanner, AlertBannerPill } from "@/components/AlertBanner";
+import { AlertBanner } from "@/components/AlertBanner";
 import { BackgroundGlow } from "@/components/BackgroundGlow";
 import { Ornament } from "@/components/brand/Ornament";
 import { SocialIcon } from "@/components/brand/BrandIcons";
@@ -83,7 +83,6 @@ export default function HomePage() {
         <div className="support relative z-10 mx-auto flex min-h-dvh w-full flex-col surface px-[max(1rem,calc(50%-14rem))] pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:my-10 sm:min-h-0 sm:max-w-[30rem] sm:px-7 sm:pt-7 sm:pb-10">
           {banner ? (
             <AlertBanner
-              id={banner.id}
               tone={banner.tone}
               label={banner.label}
               message={frTypo(banner.message)}
@@ -93,12 +92,6 @@ export default function HomePage() {
           ) : null}
 
           <header className="relative pt-5">
-            {banner ? (
-              // Pastille bornée à l’espace à gauche de l’avatar ; plancher en rem pour rester lisible avec le texte agrandi.
-              <div className="absolute top-0 left-0 z-20 max-w-[max(calc(50%-2.875rem),5.5rem)] sm:max-w-none">
-                <AlertBannerPill id={banner.id} tone={banner.tone} label={banner.label} />
-              </div>
-            ) : null}
             <Enter index={0} className="absolute top-0 right-0 z-20">
               <ShareModal
                 url={siteUrl}

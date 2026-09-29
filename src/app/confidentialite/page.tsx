@@ -98,10 +98,6 @@ export default function PrivacyPage() {
                 consentement.
               </p>
             )}
-            <p>
-              Votre navigateur mémorise localement si vous avez replié une annonce. Cette information reste sur votre
-              appareil et n’est jamais transmise.
-            </p>
           </Section>
 
           <Section index={4} title="Utilisation">

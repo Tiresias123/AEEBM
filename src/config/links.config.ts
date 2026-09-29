@@ -15,7 +15,7 @@
  *   • Couleur de l’icône ........................ category: "academique" | "evenements" | "carriere" | "representation" | "services"
  *   • Pastille .................................. badge: { label: "Nouveau", tone: "new" | "important" | "deadline" | "info" }
  *   • Icônes disponibles ........................ voir src/lib/icons.ts (catalogue : https://lucide.dev/icons)
- *   • Bandeau d’annonce ......................... alertBanner.enabled + changer alertBanner.id à chaque nouvelle annonce
+ *   • Prochain événement (bandeau) .............. alertBanner : label, message, date, endsAt
  *   • Thème visuel .............................. theme: "ivoire" (charte, papier clair) | "bordeaux" (charte, sombre) | "amethyste"
  *   • Nouvelle année ............................ changer COHORTE ci-dessous
  *
@@ -75,10 +75,11 @@ export const siteConfig: SiteConfig = {
     legalLinks: [POLITIQUE_CONFIDENTIALITE, { label: "Règlements généraux", href: A_COMPLETER }],
   },
 
-  /* ─────────────────────── 2. BANDEAU D’ANNONCE PRIORITAIRE ─────────────────────── */
+  /* ─────────────────────── 2. PROCHAIN ÉVÉNEMENT (BANDEAU) ─────────────────────── */
+  // Toujours le prochain événement public de l’Association. À terme : alimenté automatiquement par
+  // l’agenda Google de l’AEEBM (voir README, « Évolution prévue »).
   alertBanner: {
     enabled: true,
-    id: "aga-2026-09-30", // Changer l’identifiant pour réafficher le bandeau déplié à tout le monde.
     tone: "important",
     label: "AGA",
     // ⚠️ Ajouter l’heure et le lieu tirés de l’avis de convocation.

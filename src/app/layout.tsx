@@ -139,9 +139,6 @@ if (process.env.NODE_ENV === "production") {
       warnings.push(`sections.id « ${section.id} » : utiliser seulement lettres, chiffres et tirets.`);
     }
   }
-  if (!/^[a-z0-9-]+$/i.test(siteConfig.alertBanner.id)) {
-    warnings.push(`alertBanner.id « ${siteConfig.alertBanner.id} » : utiliser seulement lettres, chiffres et tirets.`);
-  }
   if (warnings.length > 0) console.warn(warnings.map((warning) => `\n⚠️  [AEEBM] ${warning}`).join("\n") + "\n");
 }
 
@@ -158,7 +155,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       data-confetti={activeTheme.colors.confetti.join(",")}
       style={themeToCssVariables(activeTheme) as CSSProperties}
       className={cn(jakarta.variable, cormorant.variable, poppins.variable)}
-      // Le script ci-dessous peut ajouter data-banner avant l’hydratation.
+      // Le script ci-dessous peut ajouter data-banner (bandeau hors période) avant l’hydratation.
       suppressHydrationWarning
     >
       <head>

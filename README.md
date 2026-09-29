@@ -22,7 +22,7 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Ajouter une pastille                      | `badge: { label: "Nouveau", tone: "new" }` (`important`, `deadline`, `info`)       |
 | Changer la couleur d’une icône            | `category` : `academique`, `evenements`, `carriere`, `representation`, `services`  |
 | Changer d’icône                           | `icon` : un nom de `src/lib/icons.ts` (catalogue : <https://lucide.dev/icons>)     |
-| Publier une annonce en haut de page       | `alertBanner` : `enabled: true`, **nouvel `id`**, `message`, `endsAt` facultatif   |
+| Annoncer le prochain événement            | `alertBanner` : `label`, `message`, `date`, `endsAt` (masqué seul après)           |
 | Mettre un autre lien en vedette           | `spotlight`                                                                        |
 | Changer l’inscription du sceau            | `association.seal` : `top` (arc supérieur) et `bottom` (arc inférieur)             |
 | Changer les icônes des piliers de la bio  | `association.bioIcons` : une icône par segment de `bio` (séparés par « • »)        |
@@ -34,9 +34,9 @@ Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit ch
 
 **Adresses provisoires.** Tant qu’un lien vaut `A_COMPLETER`, sa carte s’affiche avec la mention « Bientôt », n’est pas cliquable et masque une éventuelle pastille « Nouveau » ; un réseau social est grisé ; le lien du bandeau et celui du pied de page sont omis. Chaque build liste ces adresses dans la console.
 
-**Titres.** Les identifiants (`sections[].id`, `alertBanner.id`) n’acceptent que lettres, chiffres et tirets ; l’étiquette du bandeau (`label`) gagne à rester courte (6 caractères environ), car elle sert aussi de pastille repliée.
+**Titres.** Les identifiants (`sections[].id`) n’acceptent que lettres, chiffres et tirets ; l’étiquette du bandeau (`label`) gagne à rester courte (« AGA », « 5 à 7 », « Gala »).
 
-**Bandeau d’annonce.** Le bouton ✕ replie l’annonce en une pastille (en haut à gauche) qui permet de la rouvrir ; ce choix est mémorisé pour cet `id`. Pour diffuser une nouvelle annonce dépliée à tout le monde, changez l’`id` (lettres, chiffres, tirets).
+**Prochain événement.** Le bandeau du haut présente toujours le prochain événement public de l’Association : étiquette (`label`), message, vignette de date (`date`) et lien facultatif. Il ne se ferme pas et disparaît seul après `endsAt` : il suffit alors d’y inscrire l’événement suivant (à terme, automatiquement : voir « Évolution prévue »).
 
 **Dates.** Une date sans fuseau est lue à l’heure de Montréal (`"2026-10-01"` = 1er octobre, 0 h). Les éléments datés apparaissent et disparaissent seuls, sans redéploiement ; une section dont tous les liens sont hors période disparaît avec eux. Une date inexistante (« 2026-02-30 ») arrête le build avec un message clair.
 
@@ -110,6 +110,16 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 - [ ] Remplacer `https://www.alumo.ca` par le portail du régime de l’AEEBM.
 - [ ] Ajouter l’heure et le lieu de l’AGA au bandeau.
 
+### Évolution prévue : prochain événement depuis Google Agenda
+
+Objectif : que le bandeau affiche seul le prochain événement public de l’AEEBM, sans modifier le code.
+
+1. Créer (ou choisir) un agenda Google de l’Association réservé aux événements publics, et le rendre public : Paramètres de l’agenda › Autorisations d’accès › « Rendre disponible publiquement ».
+2. Copier son **adresse publique au format iCal** (Paramètres › Intégrer l’agenda) et l’ajouter chez l’hébergeur (variable prévue : `GOOGLE_CALENDAR_ICS_URL`).
+3. Le site lira cet agenda côté serveur et le relira toutes les heures : titre de l’événement → message, date → vignette, lien de la description → bouton. Si l’agenda est vide ou injoignable, le bandeau de `links.config.ts` reste affiché.
+
+Aucune clé d’API n’est nécessaire pour un agenda public. À implémenter : lecture iCal dans `getPageModel` (`src/lib/site.ts`), point d’entrée unique du bandeau.
+
 ---
 
 ## Architecture
@@ -133,7 +143,7 @@ src/
 │   ├── NewsletterCard.tsx      Formulaire d’infolettre avec états, annonces et confettis
 │   ├── ShareModal.tsx          Bouton de partage (la fenêtre ShareDialog est chargée à la demande)
 │   ├── ShareDialog.tsx         Copie du lien, partage direct, code QR téléchargeable
-│   ├── AlertBanner.tsx         Bandeau repliable en pastille, mémorisé par identifiant
+│   ├── AlertBanner.tsx         Bandeau du prochain événement (vignette de date)
 │   ├── Footer.tsx              Logo officiel et mentions institutionnelles
 │   └── brand/                  Monogramme vectoriel, pastille vérifiée, icônes de marques
 ├── config/

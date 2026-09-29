@@ -330,12 +330,8 @@
 
 /* ───────────────────────────── Bandeau & fenêtre modale ───────────────────────────── */
 
-/*
- * État décidé avant le premier affichage par le script de src/lib/schedule.ts. Un bandeau replié par
- * la personne pendant la visite (data-banner-live) n’est pas masqué ici : son animation de repli se joue.
- */
-[data-banner="hidden"] [data-alert-banner],
-[data-banner="collapsed"]:not([data-banner-live]) [data-alert-banner] {
+/* Bandeau hors de sa période d’affichage : masqué avant le premier affichage (script de src/lib/schedule.ts). */
+[data-banner="hidden"] [data-alert-banner] {
   display: none !important;
 }
 
