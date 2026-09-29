@@ -102,8 +102,8 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
           className={clsx(toneClass[tone], "enter @container relative mb-5 overflow-hidden rounded-2xl")}
         >
           {/* Une rangée ; sous 17 rem (texte agrandi), l’étiquette et × passent au-dessus du message. */}
-          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
-            <span className="tone-badge mt-[0.1rem] inline-flex max-w-full min-w-0 items-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
+          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
+            <span className="tone-badge inline-flex max-w-full min-w-0 items-center justify-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
               <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
               <span className="min-w-0">{label}</span>
             </span>
@@ -136,7 +136,7 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
               aria-label="Replier l’annonce"
               aria-controls={panelId}
               aria-expanded="true"
-              className="relative -my-0.5 grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
+              className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
             >
               <X aria-hidden="true" className="size-3.5" />
             </button>
