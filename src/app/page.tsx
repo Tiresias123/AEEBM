@@ -9,13 +9,12 @@ import { MotionProvider } from "@/components/motion";
 import { NewsletterCard } from "@/components/NewsletterCard";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { SectionHeading } from "@/components/SectionHeading";
-import { ShareModal } from "@/components/ShareModal";
 import { SocialBar } from "@/components/SocialBar";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { siteConfig } from "@/config/links.config";
 import { getIcon } from "@/lib/icons";
 import { isPendingHref } from "@/lib/pending";
-import { activeTheme, getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
+import { getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
 import { dateTile, frTypo } from "@/lib/typo";
 
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
@@ -92,16 +91,6 @@ export default function HomePage() {
           ) : null}
 
           <header className="relative pt-5">
-            <Enter index={0} className="absolute top-0 right-0 z-20">
-              <ShareModal
-                url={siteUrl}
-                title={association.acronym}
-                text={`${association.acronym} · ${association.displayName}`}
-                qrLogoSrc="/qr-logo.svg"
-                qrColor={activeTheme.qrColor}
-                qrCaptionColor={activeTheme.qrCaptionColor}
-              />
-            </Enter>
             <ProfileHeader association={association} />
           </header>
 

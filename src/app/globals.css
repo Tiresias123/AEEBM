@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* Écrans bas (iPhone SE dans Safari, portable 13 po) : fenêtre de partage compacte. */
-@custom-variant short (@media (max-height: 42rem));
-
 /*
  * Système de design AEEBM.
  * Les couleurs proviennent de src/config/themes.ts (injectées en variables CSS sur <html>).
@@ -290,31 +287,6 @@
   }
 }
 
-/* Anneau lumineux de l’avatar. */
-.avatar-ring {
-  background: conic-gradient(from 210deg, var(--ring-1), var(--ring-2), var(--ring-3), var(--ring-1));
-}
-
-/* Anneau ouvert (thèmes de la charte) : interrompu dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
-[data-avatar-ring="open"] .avatar-ring-frame {
-  -webkit-mask: conic-gradient(
-    from 90deg,
-    transparent 0 22deg,
-    #000 0 158deg,
-    transparent 0 202deg,
-    #000 0 338deg,
-    transparent 0
-  );
-  mask: conic-gradient(
-    from 90deg,
-    transparent 0 22deg,
-    #000 0 158deg,
-    transparent 0 202deg,
-    #000 0 338deg,
-    transparent 0
-  );
-}
-
 /* Puces de <BulletLine> : masquées jusqu’à la mesure des lignes, pour qu’aucune ne commence une ligne. */
 @media (scripting: enabled) {
   [data-bullets]:not([data-measured]) [data-bullet] {
@@ -322,74 +294,11 @@
   }
 }
 
-/* Défilement vertical discret dans la fenêtre modale. */
-.scrollbar-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--line-strong) transparent;
-}
-
-/* ───────────────────────────── Bandeau & fenêtre modale ───────────────────────────── */
+/* ───────────────────────────── Bandeau ───────────────────────────── */
 
 /* Bandeau hors de sa période d’affichage : masqué avant le premier affichage (script de src/lib/schedule.ts). */
 [data-banner="hidden"] [data-alert-banner] {
   display: none !important;
-}
-
-.dialog-overlay[data-state="open"] {
-  animation: overlay-in 0.3s ease-out;
-}
-.dialog-overlay[data-state="closed"] {
-  animation: overlay-out 0.2s ease-in forwards;
-}
-.dialog-sheet[data-state="open"] {
-  animation: sheet-in 0.5s var(--ease-out-expo);
-}
-.dialog-sheet[data-state="closed"] {
-  animation: sheet-out 0.25s ease-in forwards;
-}
-
-@media (min-width: 40rem) {
-  .dialog-sheet[data-state="open"] {
-    animation-name: modal-in;
-    animation-duration: 0.4s;
-  }
-  .dialog-sheet[data-state="closed"] {
-    animation-name: modal-out;
-    animation-duration: 0.18s;
-  }
-}
-
-@keyframes overlay-in {
-  from {
-    opacity: 0;
-  }
-}
-@keyframes overlay-out {
-  to {
-    opacity: 0;
-  }
-}
-@keyframes sheet-in {
-  from {
-    transform: translateY(100%);
-  }
-}
-@keyframes sheet-out {
-  to {
-    transform: translateY(100%);
-  }
-}
-@keyframes modal-in {
-  from {
-    opacity: 0;
-    transform: scale(0.94);
-  }
-}
-@keyframes modal-out {
-  to {
-    opacity: 0;
-    transform: scale(0.96);
-  }
 }
 
 /* ───────────────────────────── Mouvement réduit ───────────────────────────── */

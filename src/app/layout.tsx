@@ -151,7 +151,6 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       data-theme={siteConfig.theme}
       data-display-font={activeTheme.fonts.display}
       data-body-font={activeTheme.fonts.body}
-      data-avatar-ring={activeTheme.avatarRing}
       data-confetti={activeTheme.colors.confetti.join(",")}
       style={themeToCssVariables(activeTheme) as CSSProperties}
       className={cn(jakarta.variable, cormorant.variable, poppins.variable)}

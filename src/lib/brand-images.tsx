@@ -12,7 +12,7 @@ export function monogramColors(): MonogramColors {
 }
 
 /** Monogramme « avatar rond » aux couleurs du thème, en SVG autonome. */
-export function themedMonogramSvg(strokeWidth = 1.6): string {
+function themedMonogramSvg(strokeWidth = 1.6): string {
   return monogramSvg(monogramColors(), { strokeWidth });
 }
 

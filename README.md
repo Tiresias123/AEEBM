@@ -1,10 +1,10 @@
 # AEEBM · Page de liens
 
 Page de liens officielle (alternative sur mesure à Linktree) de l’**Association étudiante de l’École du Barreau de Montréal**.
-Direction artistique de la charte 2026-2027 (papier blanc cassé grainé, encre et titres bordeaux), code QR de partage, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
+Direction artistique de la charte 2026-2027 (papier blanc cassé grainé, encre et titres bordeaux), sceau guilloché, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
 
 - **Next.js 15** (App Router, React 19) · **TypeScript strict** · **Tailwind CSS v4**
-- **framer-motion** (retour tactile, survols, transitions d’état), **lucide-react**, **Radix UI Dialog**, **canvas-confetti**, **qrcode.react**
+- **framer-motion** (retour tactile, survols, transitions d’état), **lucide-react**, **canvas-confetti**
 - Image de partage, favicons, icônes PWA et manifeste générés au build à partir de la configuration et du thème
 - Page statique : contenu visible dès le premier affichage, même sans JavaScript
 
@@ -50,7 +50,7 @@ Les couleurs vivent dans `src/config/themes.ts` (source unique : page, image de 
 - `bordeaux` : direction artistique de la charte 2026-2027 en version sombre. Bordeaux Barreau `#681A16` et ses nuances (bordeaux clair, grenat, cuir, bordeaux profond, bois de rose) pour le lien vedette, les halos et les icônes ; ivoire, rosé et brume pour le texte ; sauge réservée à « vérifié » ; grenat réservé aux appels à l’action et au point « à traiter » ; Cormorant Garamond et Poppins ; anneau de l’avatar ouvert comme le cercle de la charte.
 - `amethyste` : pourpre, indigo et cobalt, Plus Jakarta Sans. En y passant, inverser aussi les valeurs `preload` des polices dans `src/app/layout.tsx`.
 
-Dans les deux thèmes, le monogramme (avatar, favicon, icônes, centre du code QR, image de partage) reste la version officielle sur bordeaux.
+Dans tous les thèmes, le monogramme (sceau, favicon, icônes, image de partage) reste la version officielle sur bordeaux.
 
 ---
 
@@ -83,7 +83,7 @@ Copier `.env.example` en `.env.local` (ou les définir chez l’hébergeur).
 
 | Variable                | Rôle                                                                                        |
 | ----------------------- | ------------------------------------------------------------------------------------------- |
-| `NEXT_PUBLIC_SITE_URL`  | URL publique (code QR, partage, SEO). Sinon : domaine de production Vercel, puis `siteUrl`. |
+| `NEXT_PUBLIC_SITE_URL`  | URL publique (image de partage, SEO). Sinon : domaine de production Vercel, puis `siteUrl`. |
 | `MAILCHIMP_API_KEY`     | Clé d’API Mailchimp (se termine par `-us21`, `-us6`…).                                      |
 | `MAILCHIMP_AUDIENCE_ID` | Identifiant de l’audience Mailchimp.                                                        |
 
@@ -104,7 +104,7 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 ### Avant la mise en ligne
 
 - [ ] Remplacer les adresses `A_COMPLETER` (réseaux sociaux, Drive, formulaires, billetterie, règlements).
-- [ ] Définir l’URL publique (`NEXT_PUBLIC_SITE_URL` ou domaine Vercel) **avant d’imprimer le code QR**.
+- [ ] Définir l’URL publique (`NEXT_PUBLIC_SITE_URL` ou domaine Vercel) avant de diffuser le lien (affiches, réseaux).
 - [ ] Configurer Mailchimp (variables ci-dessus, langue française).
 - [ ] Faire valider la politique de confidentialité (`/confidentialite`), la personne responsable et la liste des fournisseurs (`privacy`). Elle n’est plus liée depuis la page (ni infolettre ni pied de page) : la Loi 25 demande de publier sur le site une politique de confidentialité dès que des renseignements personnels y sont recueillis (adresses courriel de l’infolettre). Pour rétablir les liens : `privacyLink` dans `newsletter` et une entrée dans `association.legalLinks`.
 - [ ] Remplacer `https://www.alumo.ca` par le portail du régime de l’AEEBM.
@@ -133,7 +133,7 @@ src/
 │   ├── confidentialite/        Politique de confidentialité (Loi 25)
 │   ├── api/newsletter/         Inscription Mailchimp (statuts, réabonnement, pot de miel, origine)
 │   ├── opengraph-image.tsx     Image de partage 1200 × 630 (JPEG) générée au build
-│   └── favicon.svg/, favicon.ico/, qr-logo.svg/, icon-*.png/, apple-touch-icon.png/, manifest.ts, robots.ts, sitemap.ts
+│   └── favicon.svg/, favicon.ico/, icon-*.png/, apple-touch-icon.png/, manifest.ts, robots.ts, sitemap.ts
 ├── components/
 │   ├── BackgroundGlow.tsx      Halos radiaux, voile de bruit
 │   ├── ProfileHeader.tsx       Sceau et ondes, nom, pastille, accroche et piliers de la bio
@@ -141,8 +141,6 @@ src/
 │   ├── SpotlightCard.tsx       Lien vedette
 │   ├── LinkCard.tsx            Carte de lien (tuile d’icône, titres, chevron animé)
 │   ├── NewsletterCard.tsx      Formulaire d’infolettre avec états, annonces et confettis
-│   ├── ShareModal.tsx          Bouton de partage (la fenêtre ShareDialog est chargée à la demande)
-│   ├── ShareDialog.tsx         Copie du lien, partage direct, code QR téléchargeable
 │   ├── AlertBanner.tsx         Bandeau du prochain événement (vignette de date)
 │   ├── Footer.tsx              Logo officiel et mentions institutionnelles
 │   └── brand/                  Monogramme vectoriel, pastille vérifiée, icônes de marques
@@ -160,11 +158,11 @@ src/
 - **Sceau** : le monogramme au centre d’un sceau vectoriel calculé au rendu (`src/lib/seal.ts`) : bande guillochée (quatre sinusoïdes polaires entrelacées, comme la gravure des diplômes), inscription circulaire et deux filets, tous interrompus dans l’axe horizontal (cercle ouvert de la charte) où se posent deux losanges. Autour, les « ondes du cercle ouvert » : arcs concentriques très fins, estompés sous le sceau. Les tracés se dessinent à l’arrivée (animation CSS finie, désactivée par « réduire les animations »).
 - **Cercle ouvert** : repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
 - **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
-- **Titres** : sigle, titres de section, infolettre et fenêtre de partage en Cormorant Garamond ; texte courant en Poppins (charte, section 12).
+- **Titres** : sigle, titres de section et infolettre en Cormorant Garamond ; texte courant en Poppins (charte, section 12).
 
 ### Accessibilité et performance
 
-- WCAG 2.2 AA : contrastes, focus visibles, lien d’évitement, libellés et annonces ARIA, liens externes signalés, fenêtre modale Radix, cibles tactiles.
+- WCAG 2.2 AA : contrastes, focus visibles, lien d’évitement, libellés et annonces ARIA, liens externes signalés, cibles tactiles.
 - Animations limitées à l’apparition des blocs (page immobile en moins de 2 s) et neutralisées par « réduire les animations ». Aucun flou recalculé au défilement.
-- Entrée en cascade en CSS : aucun contenu n’attend le JavaScript ; fenêtre de partage et code QR chargés à la demande (avec repli si le chargement échoue).
+- Entrée en cascade en CSS : aucun contenu n’attend le JavaScript.
 - `100dvh`, zones sûres iOS et `viewport-fit=cover` pour les navigateurs intégrés (Instagram, LinkedIn).

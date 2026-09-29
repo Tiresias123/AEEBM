@@ -31,10 +31,6 @@ export interface ThemeTokens {
   fonts: { display: "jakarta" | "cormorant"; body: "jakarta" | "poppins" };
   /** Couleur de la barre d’adresse mobile et du manifeste. */
   browserColor: string;
-  /** Couleur des modules du code QR (sur fond blanc). */
-  qrColor: string;
-  /** Couleur de la légende (URL) sous le code QR, sur fond blanc. */
-  qrCaptionColor: string;
   /** Anneau de l’avatar : continu, ou ouvert comme le cercle de la charte (interrompu dans l’axe du sigle). */
   avatarRing: "closed" | "open";
   colors: {
@@ -101,8 +97,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     label: "Ivoire — charte AEEBM 2026-2027 (papier)",
     fonts: { display: "cormorant", body: "poppins" },
     browserColor: "#F6F0E7", // Haut du support sur téléphone
-    qrColor: "#681A16",
-    qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
     avatarRing: "open",
     colors: {
       bg: "#0B0909", // Fond bordeaux sombre autour du support (grand écran)
@@ -161,8 +155,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     label: "Bordeaux — charte AEEBM 2026-2027",
     fonts: { display: "cormorant", body: "poppins" },
     browserColor: "#2F1816", // Haut du support sur téléphone
-    qrColor: "#681A16",
-    qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
     avatarRing: "open",
     colors: {
       bg: "#0B0909",
@@ -223,8 +215,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     label: "Améthyste — Dark Luxury",
     fonts: { display: "jakarta", body: "jakarta" },
     browserColor: "#08090D",
-    qrColor: "#141129",
-    qrCaptionColor: "#6B6780",
     avatarRing: "closed",
     colors: {
       bg: "#08090D",
