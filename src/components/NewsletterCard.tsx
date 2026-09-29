@@ -202,7 +202,7 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
                 ref={focusOnMount}
                 tabIndex={-1}
                 id={titleId}
-                className="text-gradient-subtitle text-base font-semibold outline-none"
+                className="text-gradient-subtitle font-display-name text-[length:calc(1.05rem*var(--display-scale))] outline-none"
               >
                 {newsletter.successTitle}
               </h2>
@@ -229,7 +229,7 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
               transition={{ duration: 0.25 }}
               className="relative"
             >
-              <h2 id={titleId} className="text-[1.02rem] font-semibold tracking-[-0.01em]">
+              <h2 id={titleId} className="font-display-name text-[length:calc(1.1rem*var(--display-scale))]">
                 <span className="text-gradient-subtitle">{newsletter.title}</span>
               </h2>
               <p className="mt-1 text-[0.8rem] text-balance text-soft/85">{frTypo(newsletter.description)}</p>

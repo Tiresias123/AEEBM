@@ -42,6 +42,8 @@ export interface ThemeTokens {
     textMuted: string;
     /** Halos d’ambiance (4 calques radiaux). */
     glow: [string, string, string, string];
+    /** Support de la page (surface teintée et grainée) : dégradé vertical et lumière d’ambiance. */
+    panel: { from: string; to: string; light: string };
     /** Dégradé d’accent principal (bouton vedette, boutons d’action). */
     accent: { from: string; via: string; to: string };
     /** Texte du bouton vedette et des boutons d’action. */
@@ -76,7 +78,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
   bordeaux: {
     label: "Bordeaux — charte AEEBM 2026-2027",
     fonts: { display: "cormorant", body: "poppins" },
-    browserColor: "#0B0909",
+    browserColor: "#2F1816", // Haut du support sur téléphone
     qrColor: "#681A16",
     qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
     avatarRing: "open",
@@ -87,6 +89,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       textSoft: "#DAD2CE", // Brume
       textMuted: "#A39894", // Pierre éclaircie pour le contraste sur fond sombre
       glow: ["#7E211B", "#4A1310", "#2E1715", "#4E1511"], // Bordeaux lumineux, bordeaux profond, pierre chaude
+      panel: { from: "#1D1312", to: "#110C0C", light: "#681A16" }, // Bordeaux fumé, éclairé par le haut
       accent: { from: "#8A2520", via: "#681A16", to: "#4A1310" }, // Bordeaux Barreau
       onAccent: "#FAF7F4",
       ring: ["#F5EAE8", "#681A16", "#DAD2CE"], // Rosé, bordeaux, brume
@@ -135,6 +138,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       textSoft: "#D4D4D8",
       textMuted: "#A1A1AA",
       glow: ["#312E81", "#701A75", "#1E40AF", "#1E1B4B"],
+      panel: { from: "#13131F", to: "#0B0C12", light: "#312E81" },
       // Dégradé fuchsia › indigo › cobalt, assombri pour un texte blanc lisible (≥ 4,5:1) sur tout le dégradé.
       accent: { from: "#A21CAF", via: "#4F46E5", to: "#2563EB" },
       onAccent: "#FFFFFF",
@@ -183,6 +187,9 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--glow-2": c.glow[1],
     "--glow-3": c.glow[2],
     "--glow-4": c.glow[3],
+    "--panel-from": c.panel.from,
+    "--panel-to": c.panel.to,
+    "--panel-light": c.panel.light,
     "--accent-from": c.accent.from,
     "--accent-via": c.accent.via,
     "--accent-to": c.accent.to,

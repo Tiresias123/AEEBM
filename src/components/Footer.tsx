@@ -2,6 +2,7 @@ import { Heart } from "lucide-react";
 import Image from "next/image";
 import { CurrentYear } from "@/components/CurrentYear";
 import { Enter } from "@/components/Enter";
+import { Ornament } from "@/components/brand/Ornament";
 import { PostalAddress } from "@/components/PostalAddress";
 import type { AssociationConfig, FooterConfig, LegalLink } from "@/config/types";
 import { isExternalHref, linkProps } from "@/lib/links";
@@ -60,6 +61,7 @@ export function Footer({
   return (
     <Enter index={enterIndex} className="mt-14">
       <footer className="flex flex-col items-center text-center">
+        <Ornament className="mb-8" />
         {/*
          * Logo officiel, version principale « blanc sur bordeaux » (charte, section 10) : plaque bordeaux en aplat,
          * marge intérieure au moins égale à la hauteur du « B » (zone de protection), largeur au-dessus de 110 px.

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 function Section({ title, children, index }: { title: string; children: ReactNode; index: number }) {
   return (
     <Enter index={index} className="border-t border-white/[0.08] pt-6">
-      <h2 className="text-[0.95rem] font-semibold tracking-[-0.01em] text-ink">{title}</h2>
+      <h2 className="font-display-name text-[length:calc(1rem*var(--display-scale))] text-ink">{title}</h2>
       <div className="mt-2 space-y-2 text-[0.875rem] leading-relaxed text-soft/90">{children}</div>
     </Enter>
   );
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
   return (
     <>
       <BackgroundGlow />
-      <main className="relative z-10 mx-auto w-full max-w-[40rem] px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-16 sm:px-8 lg:pt-14">
+      <main className="support relative z-10 mx-auto min-h-dvh w-full surface px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-16 sm:my-10 sm:min-h-0 sm:max-w-[min(40rem,calc(100%-3rem))] sm:px-10 sm:pt-10 sm:pb-12">
         <Enter index={0}>
           <Link
             href="/"

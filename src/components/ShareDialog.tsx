@@ -234,7 +234,7 @@ function ShareSheet({
     <>
       <div className="flex items-start justify-between gap-4">
         <div>
-          <Dialog.Title className="text-[1.1rem] font-semibold tracking-[-0.01em] text-ink">
+          <Dialog.Title className="font-display-name text-[length:calc(1.15rem*var(--display-scale))] text-ink">
             Partager la page
           </Dialog.Title>
           <Dialog.Description className="mt-1 text-[0.8rem] text-pretty text-muted">
@@ -353,7 +353,7 @@ export default function ShareDialog({ open, onOpenChange, returnFocusTo, ...prop
             returnFocusTo.current?.focus();
           }}
           className={clsx(
-            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-white/10 bg-bg-elevated p-5 shadow-2xl outline-none",
+            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-white/10 surface p-5 shadow-2xl outline-none",
             "inset-x-0 bottom-0 rounded-t-[1.75rem] pt-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] short:pt-5",
             "sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-[24rem] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[1.75rem] sm:border sm:p-6",
           )}

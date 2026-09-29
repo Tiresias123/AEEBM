@@ -1,5 +1,6 @@
 import { AlertBanner, AlertBannerPill } from "@/components/AlertBanner";
 import { BackgroundGlow } from "@/components/BackgroundGlow";
+import { Ornament } from "@/components/brand/Ornament";
 import { SocialIcon } from "@/components/brand/BrandIcons";
 import { Enter } from "@/components/Enter";
 import { Footer } from "@/components/Footer";
@@ -79,7 +80,7 @@ export default function HomePage() {
       </a>
       <BackgroundGlow />
       <MotionProvider>
-        <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:my-10 sm:min-h-0 sm:rounded-[2.25rem] sm:border sm:border-white/[0.08] sm:bg-white/[0.02] sm:px-7 sm:pt-7 sm:pb-10 sm:shadow-[0_40px_120px_-40px_rgb(0_0_0/0.9)]">
+        <div className="support relative z-10 mx-auto flex min-h-dvh w-full flex-col surface px-[max(1rem,calc(50%-14rem))] pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:my-10 sm:min-h-0 sm:max-w-[30rem] sm:px-7 sm:pt-7 sm:pb-10">
           {banner ? (
             <AlertBanner
               id={banner.id}
@@ -112,9 +113,10 @@ export default function HomePage() {
 
           <Enter index={4} className="mt-6">
             <SocialBar items={socialItems} />
+            <Ornament className="mt-7" />
           </Enter>
 
-          <main id="contenu" tabIndex={-1} className="mt-8 flex flex-col outline-none">
+          <main id="contenu" tabIndex={-1} className="mt-7 flex flex-col outline-none">
             {spotlight && SpotlightIcon ? (
               <SpotlightCard
                 title={spotlight.config.title}

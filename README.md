@@ -143,7 +143,9 @@ src/
 
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
-- **Cercle ouvert** : anneau de l’avatar, interrompu dans l’axe du sigle.
+- **Cercle ouvert** : anneau de l’avatar, interrompu dans l’axe du sigle, repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
+- **Support** : surface bordeaux fumé, éclairée par le haut et légèrement grainée comme un papier vergé ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
+- **Titres** : sigle, titres de section, infolettre et fenêtre de partage en Cormorant Garamond ; texte courant en Poppins (charte, section 12).
 
 ### Accessibilité et performance
 
