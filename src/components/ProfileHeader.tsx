@@ -15,7 +15,7 @@ export function ProfileHeader({ association }: { association: AssociationConfig 
             aria-hidden="true"
             className="avatar-ring absolute -inset-4 animate-ring-spin rounded-full opacity-[var(--ring-glow)] blur-xl"
           />
-          {/* Anneau satiné (ouvert dans le thème « barreau ») */}
+          {/* Anneau satiné (ouvert dans le thème « bordeaux ») */}
           <div aria-hidden="true" className="avatar-ring-frame absolute inset-0 rounded-full">
             <div className="avatar-ring size-full animate-ring-spin rounded-full" />
           </div>

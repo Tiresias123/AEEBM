@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/links.config";
 import { loadThemeFonts, OG_SIZE, stripEmoji, themedMonogramUri } from "@/lib/brand-images";
 import { activeTheme, getSiteUrl } from "@/lib/site";
 
-/** Anneau ouvert (thème « barreau ») : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */
+/** Anneau ouvert (thème « bordeaux ») : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */
 const RING_R = 146;
 const RING_DX = +(RING_R * Math.cos((22 * Math.PI) / 180)).toFixed(2);
 const RING_DY = +(RING_R * Math.sin((22 * Math.PI) / 180)).toFixed(2);
@@ -83,7 +83,7 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
       />
 
       <div style={{ display: "flex", alignItems: "center", gap: 64, width: "100%" }}>
-        {/* Avatar avec anneau (continu, ou ouvert et sans halo dans le thème « barreau ») */}
+        {/* Avatar avec anneau (continu, ou ouvert et sans halo dans le thème « bordeaux ») */}
         <div
           style={{
             display: "flex",

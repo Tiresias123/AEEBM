@@ -15,25 +15,25 @@ import {
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-jakarta",
-  display: "swap",
-});
-
-// Polices de la charte AEEBM (thème « barreau ») : téléchargées seulement si le thème les utilise.
+// Préchargement : polices du thème par défaut (« bordeaux ») seulement. Le navigateur ne télécharge une police
+// non préchargée que si le thème l’utilise. En passant au thème « amethyste », inverser les valeurs de preload.
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   weight: "600",
   variable: "--font-cormorant",
   display: "swap",
-  preload: false,
 });
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500"],
   variable: "--font-poppins",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
   display: "swap",
   preload: false,
 });

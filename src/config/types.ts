@@ -180,7 +180,7 @@ export interface FooterConfig {
 }
 
 export interface SiteConfig {
-  /** Thème visuel : "amethyste" (défaut) ou "barreau" (charte AEEBM). */
+  /** Thème visuel : "bordeaux" (charte AEEBM, défaut) ou "amethyste" (pourpre, indigo, cobalt). */
   theme: ThemeName;
   /** URL publique canonique (partage, code QR, SEO). Surcharge possible : NEXT_PUBLIC_SITE_URL. */
   siteUrl: `https://${string}` | `http://${string}`;

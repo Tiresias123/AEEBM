@@ -16,7 +16,7 @@
  *   • Pastille .................................. badge: { label: "Nouveau", tone: "new" | "important" | "deadline" | "info" }
  *   • Icônes disponibles ........................ voir src/lib/icons.ts (catalogue : https://lucide.dev/icons)
  *   • Bandeau d’annonce ......................... alertBanner.enabled + changer alertBanner.id à chaque nouvelle annonce
- *   • Thème visuel .............................. theme: "amethyste" | "barreau" (charte bordeaux de l’AEEBM)
+ *   • Thème visuel .............................. theme: "bordeaux" (charte de l’AEEBM) | "amethyste" (pourpre, indigo, cobalt)
  *   • Nouvelle année ............................ changer COHORTE ci-dessous
  *
  * Adresses provisoires : tant qu’un lien vaut A_COMPLETER, la carte s’affiche « Bientôt » (non cliquable,
@@ -36,7 +36,7 @@ const COURRIEL = "aeebm.contact@gmail.com";
 const POLITIQUE_CONFIDENTIALITE = { label: "Politique de confidentialité", href: "/confidentialite" } as const;
 
 export const siteConfig: SiteConfig = {
-  theme: "amethyste",
+  theme: "bordeaux",
 
   // URL publique (code QR, partage, SEO). Sur Vercel, le domaine de production est détecté automatiquement ;
   // NEXT_PUBLIC_SITE_URL a priorité. Cette valeur ne sert qu’en dernier recours.
@@ -111,6 +111,7 @@ export const siteConfig: SiteConfig = {
     badge: "Nouveau",
     // Dégradé propre au lien vedette, par thème (un thème absent reprend son dégradé d’accent).
     gradient: {
+      bordeaux: { from: "#A32D26", via: "#681A16", to: "#3A0D0A" },
       amethyste: { from: "#A21CAF", via: "#4F46E5", to: "#2563EB" },
     },
   },

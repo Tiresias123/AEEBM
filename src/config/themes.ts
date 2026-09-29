@@ -4,13 +4,14 @@
  * Source unique des couleurs : injectées en variables CSS sur <html>, et réutilisées
  * pour l’image OpenGraph, le manifeste PWA et la couleur de la barre du navigateur.
  *
+ * - « bordeaux »  (défaut) : direction artistique de la charte AEEBM 2026-2027 en version sombre.
+ *                   Bordeaux Barreau #681A16 et ses nuances (grenat, bordeaux profond), neutres chauds
+ *                   (ivoire, rosé, brume, pierre), sauge réservée à « vérifié », grenat réservé aux appels
+ *                   à l’action, Cormorant Garamond + Poppins, cercle ouvert.
  * - « amethyste » : direction « Dark Luxury / Glassmorphism » (pourpre, indigo, cobalt).
- * - « barreau »   : déclinaison sombre de la charte AEEBM 2026-2027 (bordeaux Barreau,
- *                   neutres chauds, sauge pour « vérifié », grenat réservé aux appels à l’action,
- *                   Cormorant Garamond + Poppins).
  */
 
-export type ThemeName = "amethyste" | "barreau";
+export type ThemeName = "bordeaux" | "amethyste";
 
 export type BadgeTone = "new" | "important" | "deadline" | "info";
 
@@ -76,6 +77,56 @@ export interface ThemeTokens {
 }
 
 export const themes: Record<ThemeName, ThemeTokens> = {
+  bordeaux: {
+    label: "Bordeaux — charte AEEBM 2026-2027",
+    fonts: { display: "cormorant", body: "poppins" },
+    browserColor: "#0B0909",
+    qrColor: "#681A16",
+    qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
+    avatarRing: "open",
+    colors: {
+      bg: "#0B0909",
+      bgElevated: "#120E0E",
+      text: "#FAF7F4", // Ivoire
+      textSoft: "#DAD2CE", // Brume
+      textMuted: "#A39894", // Pierre éclaircie pour le contraste sur fond sombre
+      glow: ["#7E211B", "#4A1310", "#2E1715", "#4E1511"], // Bordeaux lumineux, bordeaux profond, pierre chaude
+      accent: { from: "#8A2520", via: "#681A16", to: "#4A1310" }, // Bordeaux Barreau
+      onAccent: "#FAF7F4",
+      ring: ["#F5EAE8", "#681A16", "#DAD2CE"], // Rosé, bordeaux, brume
+      ringGlow: 0.45,
+      subtitle: { from: "#F5EAE8", to: "#DAD2CE" },
+      verified: { from: "#7FA08A", to: "#6F8F7A" }, // Sauge : statut « vérifié »
+      avatar: { from: "#681A16", to: "#681A16" }, // Monogramme « avatar rond » sur bordeaux
+      cta: { from: "#7E1019", to: "#7E1019" }, // Grenat : réservé aux appels à l’action
+      confetti: ["#681A16", "#F5EAE8", "#FAF7F4", "#DAD2CE", "#A39894"],
+      // Nuancier dérivé de la charte : icônes blanches à 5:1 ou plus sur toute la surface.
+      categories: {
+        academique: { from: "#9A3B32", to: "#521510" }, // Bordeaux clair
+        evenements: { from: "#A8243A", to: "#5A0B1A" }, // Grenat
+        carriere: { from: "#8C5E50", to: "#44291F" }, // Cuir (bordeaux et pierre)
+        representation: { from: "#84231D", to: "#3A0C0A" }, // Bordeaux Barreau profond
+        services: { from: "#8C4A4F", to: "#431F24" }, // Bois de rose (bordeaux et rosé)
+      },
+      // Étiquettes en ivoire, rosé ou brume ; grenat réservé au point « à traiter » (charte, section 13).
+      badges: {
+        new: "#F5EAE8",
+        important: "#DAD2CE",
+        deadline: "#FAF7F4",
+        info: "#DAD2CE",
+      },
+      badgeDots: {
+        new: "#F5EAE8",
+        important: "#DAD2CE",
+        deadline: "#7E1019",
+        info: "#A39894",
+      },
+      badgeDotRing: "#F5EAE8",
+      danger: "#F0B8B2",
+      rule: "color-mix(in oklab, #681A16 80%, transparent)", // Filet bordeaux
+    },
+    noiseOpacity: 0.04,
+  },
   amethyste: {
     label: "Améthyste — Dark Luxury",
     fonts: { display: "jakarta", body: "jakarta" },
@@ -124,55 +175,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       rule: "rgb(255 255 255 / 0.14)",
     },
     noiseOpacity: 0.035,
-  },
-  barreau: {
-    label: "Barreau — charte AEEBM 2026-2027",
-    fonts: { display: "cormorant", body: "poppins" },
-    browserColor: "#0B0909",
-    qrColor: "#681A16",
-    qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
-    avatarRing: "open",
-    colors: {
-      bg: "#0B0909",
-      bgElevated: "#120E0E",
-      text: "#FAF7F4", // Ivoire
-      textSoft: "#DAD2CE", // Brume
-      textMuted: "#A39894", // Pierre éclaircie pour le contraste sur fond sombre
-      glow: ["#681A16", "#4A1310", "#2A1614", "#3D1411"],
-      accent: { from: "#8A2520", via: "#681A16", to: "#4A1310" }, // Bordeaux Barreau
-      onAccent: "#FAF7F4",
-      ring: ["#F5EAE8", "#681A16", "#DAD2CE"], // Rosé, bordeaux, brume
-      ringGlow: 0.45,
-      subtitle: { from: "#F5EAE8", to: "#DAD2CE" },
-      verified: { from: "#7FA08A", to: "#6F8F7A" }, // Sauge : statut « vérifié »
-      avatar: { from: "#681A16", to: "#681A16" }, // Monogramme « avatar rond » sur bordeaux
-      cta: { from: "#7E1019", to: "#7E1019" }, // Grenat : réservé aux appels à l’action
-      confetti: ["#681A16", "#F5EAE8", "#FAF7F4", "#DAD2CE", "#A39894"],
-      categories: {
-        academique: { from: "#6A4640", to: "#3A2624" },
-        evenements: { from: "#8A3A34", to: "#5E1C18" },
-        carriere: { from: "#6E6663", to: "#45403E" },
-        representation: { from: "#7A221D", to: "#4A1310" },
-        services: { from: "#3A3432", to: "#221E1E" },
-      },
-      // Étiquettes en ivoire, rosé ou brume ; grenat réservé au point « à traiter » (charte, section 13).
-      badges: {
-        new: "#F5EAE8",
-        important: "#DAD2CE",
-        deadline: "#FAF7F4",
-        info: "#DAD2CE",
-      },
-      badgeDots: {
-        new: "#F5EAE8",
-        important: "#DAD2CE",
-        deadline: "#7E1019",
-        info: "#A39894",
-      },
-      badgeDotRing: "#F5EAE8",
-      danger: "#F0B8B2",
-      rule: "color-mix(in oklab, #681A16 80%, transparent)", // Filet bordeaux
-    },
-    noiseOpacity: 0.04,
   },
 };
 

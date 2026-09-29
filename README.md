@@ -1,7 +1,7 @@
 # AEEBM · Page de liens
 
 Page de liens officielle (alternative sur mesure à Linktree) de l’**Association étudiante de l’École du Barreau de Montréal**.
-Esthétique « Dark Luxury / Glassmorphism », code QR de partage, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
+Direction artistique bordeaux de la charte 2026-2027 (verre fumé sur fond sombre), code QR de partage, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
 
 - **Next.js 15** (App Router, React 19) · **TypeScript strict** · **Tailwind CSS v4**
 - **framer-motion** (retour tactile, survols, transitions d’état), **lucide-react**, **Radix UI Dialog**, **canvas-confetti**, **qrcode.react**
@@ -25,7 +25,7 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Publier une annonce en haut de page       | `alertBanner` : `enabled: true`, **nouvel `id`**, `message`, `endsAt` facultatif   |
 | Mettre un autre lien en vedette           | `spotlight`                                                                        |
 | Passer à la nouvelle année                | la constante `COHORTE`                                                             |
-| Passer à la charte bordeaux de l’AEEBM    | `theme: "barreau"`                                                                 |
+| Changer de thème                          | `theme: "bordeaux"` (charte, par défaut) ou `theme: "amethyste"`                   |
 
 Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit changes**. L’hébergeur (Vercel) redéploie automatiquement.
 
@@ -43,10 +43,23 @@ Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit ch
 
 Les couleurs vivent dans `src/config/themes.ts` (source unique : page, image de partage, icônes, manifeste).
 
-- `amethyste` (défaut) : pourpre, indigo et cobalt, Plus Jakarta Sans.
-- `barreau` : déclinaison sombre de la charte 2026-2027 : bordeaux Barreau `#681A16` en aplat, neutres chauds, sauge pour « vérifié », grenat réservé aux appels à l’action et au point « à traiter », Cormorant Garamond et Poppins, anneau de l’avatar ouvert comme le cercle de la charte.
+- `bordeaux` (défaut) : direction artistique de la charte 2026-2027 en version sombre. Bordeaux Barreau `#681A16` et ses nuances (bordeaux clair, grenat, cuir, bordeaux profond, bois de rose) pour le lien vedette, les halos et les icônes ; ivoire, rosé et brume pour le texte ; sauge réservée à « vérifié » ; grenat réservé aux appels à l’action et au point « à traiter » ; Cormorant Garamond et Poppins ; anneau de l’avatar ouvert comme le cercle de la charte.
+- `amethyste` : pourpre, indigo et cobalt, Plus Jakarta Sans. En y passant, inverser aussi les valeurs `preload` des polices dans `src/app/layout.tsx`.
 
 Dans les deux thèmes, le monogramme (avatar, favicon, icônes, centre du code QR, image de partage) reste la version officielle sur bordeaux.
+
+---
+
+## Voir le site en ligne
+
+GitHub conserve le code et affiche ce fichier explicatif : il n’exécute pas le site. Pour l’afficher, on relie le dépôt à Vercel (compte gratuit, aucune installation) :
+
+1. Aller sur <https://vercel.com/signup> et choisir **Continue with GitHub**.
+2. **Add New… › Project**, puis **Import** à côté du dépôt `aeebm`. S’il n’apparaît pas : **Adjust GitHub App Permissions** et autoriser ce dépôt.
+3. Ne rien changer (Next.js est détecté seul) et cliquer sur **Deploy**. Après une ou deux minutes, Vercel donne l’adresse du site (`….vercel.app`).
+4. Sur GitHub, l’adresse apparaît ensuite dans **Deployments** (colonne de droite du dépôt). Pour l’afficher en haut du dépôt : roue dentée ⚙️ à côté de **About › Website**.
+
+Chaque modification enregistrée sur GitHub redéploie le site automatiquement. L’infolettre ne fonctionne en ligne qu’une fois `MAILCHIMP_API_KEY` et `MAILCHIMP_AUDIENCE_ID` ajoutées dans Vercel › Settings › Environment Variables (puis **Redeploy**).
 
 ---
 

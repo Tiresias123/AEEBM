@@ -6,20 +6,20 @@
 /*
  * Système de design AEEBM.
  * Les couleurs proviennent de src/config/themes.ts (injectées en variables CSS sur <html>).
- * Valeurs de secours ci-dessous = thème « amethyste ».
+ * Valeurs de secours ci-dessous = thème « bordeaux » (polices : voir data-display-font et data-body-font).
  */
 
 :root {
-  --bg: #08090d;
-  --bg-elevated: #0d0e15;
-  --text: #ffffff;
-  --text-soft: #d4d4d8;
-  --text-muted: #a1a1aa;
-  --on-accent: #ffffff;
-  --noise-opacity: 0.035;
-  --ring-glow: 0.7;
-  --rule: rgb(255 255 255 / 0.14);
-  --danger: #fb7185;
+  --bg: #0b0909;
+  --bg-elevated: #120e0e;
+  --text: #faf7f4;
+  --text-soft: #dad2ce;
+  --text-muted: #a39894;
+  --on-accent: #faf7f4;
+  --noise-opacity: 0.04;
+  --ring-glow: 0.45;
+  --rule: color-mix(in oklab, #681a16 80%, transparent);
+  --danger: #f0b8b2;
   --font-display-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-body-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --display-weight: 800;
@@ -29,7 +29,7 @@
   color-scheme: dark;
 }
 
-/* Thème « barreau » : Cormorant Garamond pour le sigle, Poppins pour le texte (charte, section 12). */
+/* Thème « bordeaux » : Cormorant Garamond pour le sigle, Poppins pour le texte (charte, section 12). */
 :root[data-display-font="cormorant"] {
   --font-display-family: var(--font-cormorant), Georgia, serif;
   --display-weight: 600;
@@ -271,7 +271,7 @@
   background: conic-gradient(from 210deg, var(--ring-1), var(--ring-2), var(--ring-3), var(--ring-1));
 }
 
-/* Anneau ouvert (thème « barreau ») : interrompu dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
+/* Anneau ouvert (thème « bordeaux ») : interrompu dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
 [data-avatar-ring="open"] .avatar-ring-frame {
   -webkit-mask: conic-gradient(
     from 90deg,
@@ -298,7 +298,7 @@
   }
 }
 
-/* Filet des titres de section (bordeaux dans le thème « barreau »). */
+/* Filet des titres de section (bordeaux dans le thème « bordeaux »). */
 .section-rule {
   background-image: linear-gradient(90deg, var(--rule), transparent);
 }
