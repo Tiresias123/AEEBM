@@ -48,6 +48,10 @@ export interface AssociationConfig {
   tagline: string;
   /** Biographie courte (segments séparés par « • »). */
   bio: string;
+  /** Icônes des piliers de la bio (une par segment séparé par « • »), affichés en trois colonnes. */
+  bioIcons?: IconName[];
+  /** Inscription circulaire du sceau de l’en-tête (arc supérieur, arc inférieur). */
+  seal?: { top: string; bottom: string };
   /** Mission en une phrase (description SEO et image de partage). */
   mission: string;
   /** Pastille de vérification à côté du nom. */
@@ -78,6 +82,8 @@ export interface AlertBannerConfig extends Schedule {
   /** Étiquette courte, p. ex. « AGA », « Rappel » (6 caractères au plus conseillés : elle sert aussi de pastille repliée). */
   label: string;
   message: string;
+  /** Date de l’événement (« 2026-09-30 ») : affichée en vignette à gauche du message. */
+  date?: IsoDate;
   link?: { label: string; href: Href };
 }
 

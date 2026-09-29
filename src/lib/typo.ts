@@ -22,3 +22,34 @@ export function frTypo(text: string): string {
     .replace(/« /g, `«${NBSP}`)
     .replace(/\b(vice|ex)-(?!⁠)(?=\p{L})/giu, `$1-${WORD_JOINER}`);
 }
+
+const MOIS_ABREGES = [
+  "janv.",
+  "févr.",
+  "mars",
+  "avr.",
+  "mai",
+  "juin",
+  "juil.",
+  "août",
+  "sept.",
+  "oct.",
+  "nov.",
+  "déc.",
+];
+
+/** Jour et mois abrégé d’une date « AAAA-MM-JJ » (« 30 », « sept. »), ou null si la date est mal formée. */
+export function dateTile(isoDate: string): { day: string; month: string } | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(isoDate);
+  const month = match ? MOIS_ABREGES[Number(match[2]) - 1] : undefined;
+  if (!match || !month) return null;
+  return { day: String(Number(match[3])), month };
+}
+
+/** Retire les émojis (non inclus dans les polices embarquées). */
+export function stripEmoji(text: string): string {
+  return text
+    .replace(/[\p{Extended_Pictographic}️‍]/gu, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+}

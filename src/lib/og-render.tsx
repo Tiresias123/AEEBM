@@ -2,7 +2,8 @@ import { ImageResponse } from "next/og";
 import type { CSSProperties } from "react";
 import { CHECK_PATH, ROSETTE_PATH } from "@/components/brand/VerifiedBadge";
 import { siteConfig } from "@/config/links.config";
-import { loadThemeFonts, OG_SIZE, stripEmoji, themedMonogramUri } from "@/lib/brand-images";
+import { loadThemeFonts, OG_SIZE, themedMonogramUri } from "@/lib/brand-images";
+import { stripEmoji } from "@/lib/typo";
 import { activeTheme, getSiteUrl } from "@/lib/site";
 
 /** Anneau ouvert (thèmes de la charte) : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */

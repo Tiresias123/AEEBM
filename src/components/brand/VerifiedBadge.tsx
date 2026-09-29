@@ -13,7 +13,7 @@ export function VerifiedBadge({ label, className }: { label: string; className?:
 
   return (
     <span className={cn("relative inline-flex shrink-0", className)}>
-      <svg viewBox="0 0 24 24" className="size-full drop-shadow-[0_0_10px_var(--verified-to)]" role="img">
+      <svg viewBox="0 0 24 24" className="size-full drop-shadow-[0_2px_3px_rgb(0_0_0/0.18)]" role="img">
         <title>{label}</title>
         <defs>
           <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">

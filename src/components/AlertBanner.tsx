@@ -56,12 +56,14 @@ export interface AlertBannerProps {
   tone: AlertTone;
   label: string;
   message: string;
+  /** Vignette de date (jour, mois abrégé) : remplace l’étiquette à gauche, qui passe au-dessus du message. */
+  date?: { day: string; month: string };
   /** Lien facultatif (omis tant que l’adresse est provisoire). */
   link?: { label: string; href: string };
 }
 
 /** Bandeau d’information prioritaire, repliable en pastille et mémorisé par identifiant d’annonce. */
-export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps) {
+export function AlertBanner({ id, tone, label, message, date, link }: AlertBannerProps) {
   const state = useBannerState();
   const external = link ? isExternalHref(link.href) : false;
   const panelId = `annonce-${id}`;
@@ -101,46 +103,102 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
           }}
           className={clsx(toneClass[tone], "enter @container relative mb-5 overflow-hidden rounded-2xl")}
         >
-          {/* Une rangée ; sous 17 rem (texte agrandi), l’étiquette et × passent au-dessus du message. */}
-          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
-            <span className="tone-badge inline-flex max-w-full min-w-0 items-center justify-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
-              <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
-              <span className="min-w-0">{label}</span>
-            </span>
-            <p className="min-w-0 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft @max-[17rem]:col-span-full @max-[17rem]:row-start-2">
-              {message}
-              {link ? (
-                <>
-                  {" "}
-                  <a
-                    {...linkProps(link.href)}
-                    className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-current"
-                  >
-                    {link.label}
-                    <ArrowRight
-                      aria-hidden="true"
-                      className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
-                    />
-                    {external ? <span className="sr-only"> (nouvel onglet)</span> : null}
-                  </a>
-                </>
-              ) : null}
-            </p>
-            <button
-              ref={collapseRef}
-              type="button"
-              onClick={() => {
-                window.dispatchEvent(new Event(`${EVENT}:collapse`));
-                setBannerState(id, "collapsed");
-              }}
-              aria-label="Replier l’annonce"
-              aria-controls={panelId}
-              aria-expanded="true"
-              className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-line hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
-            >
-              <X aria-hidden="true" className="size-3.5" />
-            </button>
-          </div>
+          {date ? (
+            // Vignette de date, étiquette au-dessus du message, bouton de repli.
+            <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 rounded-2xl glass py-2 pr-2 pl-2">
+              <span
+                aria-hidden="true"
+                className="flex w-[3.25rem] flex-col items-center justify-center self-stretch rounded-xl bg-accent-gradient px-1 py-2 text-on-accent shadow-[inset_0_1px_0_0_rgb(255_255_255/0.2)] forced-colors:border"
+              >
+                <span className="font-display-name text-[length:calc(1.4rem*var(--display-scale))] leading-none [font-variant-numeric:lining-nums]">
+                  {date.day}
+                </span>
+                <span className="mt-1 text-[0.6rem] leading-none font-semibold tracking-[0.14em] uppercase">
+                  {date.month}
+                </span>
+              </span>
+              <div className="min-w-0 py-0.5">
+                <p className="flex items-center gap-1.5 text-[0.6875rem] leading-none font-bold tracking-[0.12em] text-[var(--tone)] uppercase">
+                  <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
+                  <span className="min-w-0 [overflow-wrap:anywhere]">{label}</span>
+                </p>
+                <p className="mt-1.5 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft">
+                  {message}
+                  {link ? (
+                    <>
+                      {" "}
+                      <a
+                        {...linkProps(link.href)}
+                        className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-current"
+                      >
+                        {link.label}
+                        <ArrowRight
+                          aria-hidden="true"
+                          className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                        />
+                        {external ? <span className="sr-only"> (nouvel onglet)</span> : null}
+                      </a>
+                    </>
+                  ) : null}
+                </p>
+              </div>
+              <button
+                ref={collapseRef}
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new Event(`${EVENT}:collapse`));
+                  setBannerState(id, "collapsed");
+                }}
+                aria-label="Replier l’annonce"
+                aria-controls={panelId}
+                aria-expanded="true"
+                className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-line hover:text-ink"
+              >
+                <X aria-hidden="true" className="size-3.5" />
+              </button>
+            </div>
+          ) : (
+            // Une rangée ; sous 17 rem (texte agrandi), l’étiquette et × passent au-dessus du message.
+            <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
+              <span className="tone-badge inline-flex max-w-full min-w-0 items-center justify-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
+                <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
+                <span className="min-w-0">{label}</span>
+              </span>
+              <p className="min-w-0 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft @max-[17rem]:col-span-full @max-[17rem]:row-start-2">
+                {message}
+                {link ? (
+                  <>
+                    {" "}
+                    <a
+                      {...linkProps(link.href)}
+                      className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-current"
+                    >
+                      {link.label}
+                      <ArrowRight
+                        aria-hidden="true"
+                        className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
+                      />
+                      {external ? <span className="sr-only"> (nouvel onglet)</span> : null}
+                    </a>
+                  </>
+                ) : null}
+              </p>
+              <button
+                ref={collapseRef}
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new Event(`${EVENT}:collapse`));
+                  setBannerState(id, "collapsed");
+                }}
+                aria-label="Replier l’annonce"
+                aria-controls={panelId}
+                aria-expanded="true"
+                className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-line hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
+              >
+                <X aria-hidden="true" className="size-3.5" />
+              </button>
+            </div>
+          )}
         </m.aside>
       ) : null}
     </AnimatePresence>

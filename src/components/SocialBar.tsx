@@ -14,19 +14,19 @@ export interface SocialItem {
   pending: boolean;
 }
 
-const BUTTON = "glass relative grid size-12 place-items-center rounded-full";
+const BUTTON = "relative grid size-11 place-items-center rounded-full";
 
-/** Barre des réseaux sociaux : pastilles en verre, élévation et halo au survol. */
+/** Barre des réseaux sociaux : une seule pastille en verre ; icônes aux couleurs des titres, relief au survol. */
 export function SocialBar({ items }: { items: SocialItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="Réseaux sociaux">
-      <ul className="flex flex-wrap items-center justify-center gap-3">
+    <nav aria-label="Réseaux sociaux" className="flex justify-center">
+      <ul className="inline-flex max-w-full flex-wrap items-center justify-center gap-1 rounded-full glass p-1.5 forced-colors:border">
         {items.map((item) => (
           <li key={item.label}>
             {item.pending ? (
-              <span className={`${BUTTON} cursor-default text-ink/35`}>
+              <span className={`${BUTTON} cursor-default text-ink/30`}>
                 {item.icon}
                 <span className="sr-only">{item.label} (bientôt disponible)</span>
               </span>
@@ -34,8 +34,8 @@ export function SocialBar({ items }: { items: SocialItem[] }) {
               <m.a
                 {...linkProps(item.href)}
                 aria-label={isExternalHref(item.href) ? `${item.label} (nouvel onglet)` : item.label}
-                className={`${BUTTON} text-ink/85 transition-[color,box-shadow] duration-300 hover:text-ink hover:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent),inset_0_0_0_1px_var(--line-strong)] focus-visible:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent)]`}
-                whileHover={{ scale: 1.1, y: -2 }}
+                className={`${BUTTON} text-heading transition-[background-color,box-shadow] duration-300 hover:bg-fill-hover hover:shadow-[var(--card-shadow),inset_0_0_0_1px_var(--line)] focus-visible:bg-fill-hover`}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.92 }}
                 transition={SPRING}
               >

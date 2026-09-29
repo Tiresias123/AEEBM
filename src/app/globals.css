@@ -239,10 +239,16 @@
   background-attachment: local;
 }
 
-/* Support de la page : plein écran sur téléphone ; dès 640 px, carte à double filet (papier à en-tête). */
+/*
+ * Support de la page : plein écran sur téléphone ; dès 640 px, carte à double filet (papier à en-tête).
+ * Contexte d’empilement propre (les ondes du sceau passent sous le contenu) et débordement rogné.
+ */
+.support {
+  isolation: isolate;
+  overflow: clip;
+}
 @media (min-width: 40rem) {
   .support {
-    isolation: isolate;
     border-radius: 2.25rem;
     box-shadow:
       inset 0 0 0 1px color-mix(in oklab, var(--ring-1) 14%, transparent),
@@ -258,6 +264,29 @@
     border: 1px solid color-mix(in oklab, var(--ring-1) 8%, transparent);
     border-radius: 1.75rem;
     pointer-events: none;
+  }
+}
+
+/*
+ * Sceau de l’en-tête : tracés qui se dessinent à l’arrivée (pathLength = 1), puis inscription en fondu.
+ * État final par défaut : sans animation (ou « réduire les animations »), le sceau est complet.
+ */
+.seal-draw {
+  stroke-dasharray: 1 1;
+  animation: seal-draw 1.8s var(--ease-out-expo) backwards;
+  animation-delay: var(--d, 0ms);
+}
+.seal-fade {
+  animation: seal-fade 1.2s ease-out 0.7s backwards;
+}
+@keyframes seal-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes seal-fade {
+  from {
+    opacity: 0;
   }
 }
 

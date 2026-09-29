@@ -88,6 +88,8 @@ export interface ThemeTokens {
       shadow: string;
       tileBg: string;
       tileFg: string;
+      /** Relief des grands titres (gaufrage sur papier) : ombre de texte, ou « none ». */
+      emboss: string;
     };
   };
   /** Opacité du voile de bruit. */
@@ -150,6 +152,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         shadow: "0 1px 2px rgb(74 35 28 / 0.05), 0 12px 28px -18px rgb(74 35 28 / 0.32)",
         tileBg: "10%",
         tileFg: "100%",
+        emboss: "0 1px 0 rgb(255 255 255 / 0.8), 0 -0.5px 0 rgb(60 14 10 / 0.12)",
       },
     },
     noiseOpacity: 0.04,
@@ -211,6 +214,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         shadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.04)",
         tileBg: "26%",
         tileFg: "22%",
+        emboss: "none",
       },
     },
     noiseOpacity: 0.04,
@@ -271,6 +275,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         shadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.04)",
         tileBg: "26%",
         tileFg: "22%",
+        emboss: "none",
       },
     },
     noiseOpacity: 0.035,
@@ -329,6 +334,7 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--card-shadow": c.surface.shadow,
     "--tile-bg": c.surface.tileBg,
     "--tile-fg": c.surface.tileFg,
+    "--emboss": c.surface.emboss,
   };
   for (const [category, color] of Object.entries(c.categories)) vars[`--cat-${category}`] = color;
   return vars;

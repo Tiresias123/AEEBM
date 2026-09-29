@@ -16,7 +16,7 @@ import { siteConfig } from "@/config/links.config";
 import { getIcon } from "@/lib/icons";
 import { isPendingHref } from "@/lib/pending";
 import { activeTheme, getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
-import { frTypo } from "@/lib/typo";
+import { dateTile, frTypo } from "@/lib/typo";
 
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
 function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
@@ -87,11 +87,12 @@ export default function HomePage() {
               tone={banner.tone}
               label={banner.label}
               message={frTypo(banner.message)}
+              date={banner.date ? (dateTile(banner.date) ?? undefined) : undefined}
               link={bannerLink}
             />
           ) : null}
 
-          <header className="relative pt-3">
+          <header className="relative pt-5">
             {banner ? (
               // Pastille bornée à l’espace à gauche de l’avatar ; plancher en rem pour rester lisible avec le texte agrandi.
               <div className="absolute top-0 left-0 z-20 max-w-[max(calc(50%-2.875rem),5.5rem)] sm:max-w-none">
@@ -111,9 +112,9 @@ export default function HomePage() {
             <ProfileHeader association={association} />
           </header>
 
-          <Enter index={4} className="mt-6">
+          <Enter index={4} className="mt-7">
             <SocialBar items={socialItems} />
-            <Ornament className="mt-7" />
+            <Ornament className="mt-8" />
           </Enter>
 
           <main id="contenu" tabIndex={-1} className="mt-7 flex flex-col outline-none">

@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "framer-motion";
-import { Ellipsis } from "lucide-react";
+import { Share } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
 import { SPRING } from "@/components/motion";
 import type { ShareDialogProps } from "@/components/ShareDialog";
@@ -109,7 +109,7 @@ export function ShareModal(props: ShareModalProps) {
         aria-label="Partager la page et afficher le code QR"
         className="grid size-11 place-items-center rounded-full glass text-ink/90 transition-colors hover:text-ink forced-colors:border"
       >
-        <Ellipsis aria-hidden="true" className="size-5" />
+        <Share aria-hidden="true" className="size-[1.15rem]" strokeWidth={1.8} />
       </m.button>
       <p
         role="status"

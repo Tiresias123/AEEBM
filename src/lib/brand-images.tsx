@@ -88,13 +88,5 @@ export async function loadThemeFonts() {
   return fonts;
 }
 
-/** Retire les émojis (non inclus dans les polices embarquées). */
-export function stripEmoji(text: string): string {
-  return text
-    .replace(/[\p{Extended_Pictographic}️‍]/gu, "")
-    .replace(/\s{2,}/g, " ")
-    .trim();
-}
-
 export const OG_SIZE = { width: 1200, height: 630 };
 export const OG_ALT = `${siteConfig.association.acronym} · ${siteConfig.association.displayName}`;

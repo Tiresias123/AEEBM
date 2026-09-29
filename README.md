@@ -24,6 +24,9 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Changer d’icône                           | `icon` : un nom de `src/lib/icons.ts` (catalogue : <https://lucide.dev/icons>)     |
 | Publier une annonce en haut de page       | `alertBanner` : `enabled: true`, **nouvel `id`**, `message`, `endsAt` facultatif   |
 | Mettre un autre lien en vedette           | `spotlight`                                                                        |
+| Changer l’inscription du sceau            | `association.seal` : `top` (arc supérieur) et `bottom` (arc inférieur)             |
+| Changer les icônes des piliers de la bio  | `association.bioIcons` : une icône par segment de `bio` (séparés par « • »)        |
+| Afficher la date d’un événement annoncé   | `alertBanner.date` : `"2026-09-30"` (vignette « 30 sept. » à gauche du message)    |
 | Passer à la nouvelle année                | la constante `COHORTE`                                                             |
 | Changer de thème                          | `theme: "ivoire"` (papier, par défaut), `"bordeaux"` (sombre) ou `"amethyste"`     |
 
@@ -123,7 +126,7 @@ src/
 │   └── favicon.svg/, favicon.ico/, qr-logo.svg/, icon-*.png/, apple-touch-icon.png/, manifest.ts, robots.ts, sitemap.ts
 ├── components/
 │   ├── BackgroundGlow.tsx      Halos radiaux, voile de bruit
-│   ├── ProfileHeader.tsx       Avatar à anneau ouvert, nom, pastille, accroche et biographie
+│   ├── ProfileHeader.tsx       Sceau et ondes, nom, pastille, accroche et piliers de la bio
 │   ├── SocialBar.tsx           Réseaux sociaux
 │   ├── SpotlightCard.tsx       Lien vedette
 │   ├── LinkCard.tsx            Carte de lien (tuile d’icône, titres, chevron animé)
@@ -144,7 +147,8 @@ src/
 
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
-- **Cercle ouvert** : anneau de l’avatar, interrompu dans l’axe du sigle, repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
+- **Sceau** : le monogramme au centre d’un sceau vectoriel calculé au rendu (`src/lib/seal.ts`) : bande guillochée (quatre sinusoïdes polaires entrelacées, comme la gravure des diplômes), inscription circulaire et deux filets, tous interrompus dans l’axe horizontal (cercle ouvert de la charte) où se posent deux losanges. Autour, les « ondes du cercle ouvert » : arcs concentriques très fins, estompés sous le sceau. Les tracés se dessinent à l’arrivée (animation CSS finie, désactivée par « réduire les animations »).
+- **Cercle ouvert** : repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
 - **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
 - **Titres** : sigle, titres de section, infolettre et fenêtre de partage en Cormorant Garamond ; texte courant en Poppins (charte, section 12).
 

@@ -51,6 +51,8 @@ export const siteConfig: SiteConfig = {
     cohort: COHORTE,
     tagline: `Cohorte ${COHORTE} • École du Barreau de Montréal`,
     bio: "Défense des droits des candidats • Tutorat & Entraide • Réseautage & Vie associative ⚖️",
+    bioIcons: ["Scale", "HeartHandshake", "UsersRound"], // Une icône par pilier de la bio, dans l’ordre
+    seal: { top: "Association étudiante", bottom: "École du Barreau · Montréal" }, // Inscription du sceau
     mission:
       "L’AEEBM représente les étudiantes et étudiants du Centre de Montréal de l’École du Barreau du Québec auprès de la direction de l’École et des partenaires, défend leurs droits et anime la vie du Centre.",
     verified: { enabled: true, label: "Page officielle de l’AEEBM" },
@@ -81,6 +83,7 @@ export const siteConfig: SiteConfig = {
     label: "AGA",
     // ⚠️ Ajouter l’heure et le lieu tirés de l’avis de convocation.
     message: "Assemblée générale annuelle le mercredi 30 septembre. Votre voix compte.",
+    date: "2026-09-30", // Vignette de date du bandeau (facultative)
     link: { label: "Avis de convocation", href: A_COMPLETER },
     endsAt: "2026-10-01", // Masqué automatiquement après l’assemblée (minuit, heure de Montréal).
   },
