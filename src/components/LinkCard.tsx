@@ -83,7 +83,7 @@ export function LinkCard({ title, subtitle, href, category, icon, badge, pending
       style={enterStyle(enterIndex)}
       className={clsx(
         CARD,
-        "enter group transition-[background-color,border-color] duration-500 ease-[var(--ease-out-expo)] hover:border-white/15 hover:bg-white/[0.075] focus-visible:border-white/20",
+        "enter group transition-[background-color,border-color] duration-500 ease-[var(--ease-out-expo)] hover:border-line-strong hover:bg-fill-hover focus-visible:border-line-strong",
       )}
     >
       {body}

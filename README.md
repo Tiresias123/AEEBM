@@ -1,7 +1,7 @@
 # AEEBM · Page de liens
 
 Page de liens officielle (alternative sur mesure à Linktree) de l’**Association étudiante de l’École du Barreau de Montréal**.
-Direction artistique bordeaux de la charte 2026-2027 (verre fumé sur fond sombre), code QR de partage, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
+Direction artistique de la charte 2026-2027 (papier blanc cassé grainé, encre et titres bordeaux), code QR de partage, infolettre à double consentement et contenu entièrement piloté par un seul fichier de configuration.
 
 - **Next.js 15** (App Router, React 19) · **TypeScript strict** · **Tailwind CSS v4**
 - **framer-motion** (retour tactile, survols, transitions d’état), **lucide-react**, **Radix UI Dialog**, **canvas-confetti**, **qrcode.react**
@@ -25,7 +25,7 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Publier une annonce en haut de page       | `alertBanner` : `enabled: true`, **nouvel `id`**, `message`, `endsAt` facultatif   |
 | Mettre un autre lien en vedette           | `spotlight`                                                                        |
 | Passer à la nouvelle année                | la constante `COHORTE`                                                             |
-| Changer de thème                          | `theme: "bordeaux"` (charte, par défaut) ou `theme: "amethyste"`                   |
+| Changer de thème                          | `theme: "ivoire"` (papier, par défaut), `"bordeaux"` (sombre) ou `"amethyste"`     |
 
 Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit changes**. L’hébergeur (Vercel) redéploie automatiquement.
 
@@ -43,7 +43,8 @@ Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit ch
 
 Les couleurs vivent dans `src/config/themes.ts` (source unique : page, image de partage, icônes, manifeste).
 
-- `bordeaux` (défaut) : direction artistique de la charte 2026-2027 en version sombre. Bordeaux Barreau `#681A16` et ses nuances (bordeaux clair, grenat, cuir, bordeaux profond, bois de rose) pour le lien vedette, les halos et les icônes ; ivoire, rosé et brume pour le texte ; sauge réservée à « vérifié » ; grenat réservé aux appels à l’action et au point « à traiter » ; Cormorant Garamond et Poppins ; anneau de l’avatar ouvert comme le cercle de la charte.
+- `ivoire` (défaut) : la charte 2026-2027 sur papier. Support blanc cassé à beige, légèrement grainé, posé sur un fond bordeaux sombre (grand écran) ; encre bordeaux-noir, texte secondaire en pierre ; titres de section, accroche et lien vedette en bordeaux Barreau ; bulles d’information blanches à filet chaud et ombre douce ; icônes de la couleur de leur catégorie sur tuile rosée ; sauge foncée pour « vérifié ».
+- `bordeaux` : direction artistique de la charte 2026-2027 en version sombre. Bordeaux Barreau `#681A16` et ses nuances (bordeaux clair, grenat, cuir, bordeaux profond, bois de rose) pour le lien vedette, les halos et les icônes ; ivoire, rosé et brume pour le texte ; sauge réservée à « vérifié » ; grenat réservé aux appels à l’action et au point « à traiter » ; Cormorant Garamond et Poppins ; anneau de l’avatar ouvert comme le cercle de la charte.
 - `amethyste` : pourpre, indigo et cobalt, Plus Jakarta Sans. En y passant, inverser aussi les valeurs `preload` des polices dans `src/app/layout.tsx`.
 
 Dans les deux thèmes, le monogramme (avatar, favicon, icônes, centre du code QR, image de partage) reste la version officielle sur bordeaux.
@@ -144,7 +145,7 @@ src/
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
 - **Cercle ouvert** : anneau de l’avatar, interrompu dans l’axe du sigle, repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
-- **Support** : surface bordeaux fumé, éclairée par le haut et légèrement grainée comme un papier vergé ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
+- **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
 - **Titres** : sigle, titres de section, infolettre et fenêtre de partage en Cormorant Garamond ; texte courant en Poppins (charte, section 12).
 
 ### Accessibilité et performance

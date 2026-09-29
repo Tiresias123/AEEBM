@@ -34,7 +34,7 @@ export function SocialBar({ items }: { items: SocialItem[] }) {
               <m.a
                 {...linkProps(item.href)}
                 aria-label={isExternalHref(item.href) ? `${item.label} (nouvel onglet)` : item.label}
-                className={`${BUTTON} text-ink/85 transition-[color,box-shadow] duration-300 hover:text-ink hover:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent),inset_0_0_0_1px_rgb(255_255_255/0.25)] focus-visible:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent)]`}
+                className={`${BUTTON} text-ink/85 transition-[color,box-shadow] duration-300 hover:text-ink hover:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent),inset_0_0_0_1px_var(--line-strong)] focus-visible:shadow-[0_0_26px_-4px_color-mix(in_oklab,var(--accent-via)_85%,transparent)]`}
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.92 }}
                 transition={SPRING}

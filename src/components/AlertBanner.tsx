@@ -114,7 +114,7 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
                   {" "}
                   <a
                     {...linkProps(link.href)}
-                    className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-white/25 underline-offset-[3px] transition-colors hover:decoration-white/70"
+                    className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-current"
                   >
                     {link.label}
                     <ArrowRight
@@ -136,7 +136,7 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
               aria-label="Replier l’annonce"
               aria-controls={panelId}
               aria-expanded="true"
-              className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
+              className="relative grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-line hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
             >
               <X aria-hidden="true" className="size-3.5" />
             </button>

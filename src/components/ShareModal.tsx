@@ -115,7 +115,7 @@ export function ShareModal(props: ShareModalProps) {
         role="status"
         className={
           notice
-            ? "absolute top-full right-0 z-30 mt-2 w-max max-w-56 rounded-xl border border-white/10 bg-bg-elevated px-3 py-2 text-left text-xs text-soft shadow-[0_12px_30px_-10px_rgb(0_0_0/0.9)]"
+            ? "absolute top-full right-0 z-30 mt-2 w-max max-w-56 rounded-xl border border-line bg-bg-elevated px-3 py-2 text-left text-xs text-soft shadow-[0_12px_30px_-10px_rgb(0_0_0/0.9)]"
             : "sr-only"
         }
       >

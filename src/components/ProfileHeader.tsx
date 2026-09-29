@@ -10,12 +10,12 @@ export function ProfileHeader({ association }: { association: AssociationConfig 
     <div className="flex flex-col items-center text-center">
       <Enter index={0} className="relative">
         <div className="relative size-[7rem] sm:size-[7.5rem]">
-          {/* Anneau satiné (ouvert dans le thème « bordeaux ») */}
+          {/* Anneau satiné (ouvert dans les thèmes de la charte) */}
           <div aria-hidden="true" className="avatar-ring-frame absolute inset-0 rounded-full">
             <div className="avatar-ring size-full rounded-full" />
           </div>
-          {/* Liseré sombre entre l’anneau et le disque */}
-          <div className="absolute inset-[3px] rounded-full bg-bg p-[4px]">
+          {/* Liseré de la couleur du support entre l’anneau et le disque */}
+          <div className="absolute inset-[3px] rounded-full bg-[var(--panel-from)] p-[4px]">
             <Monogram className="size-full" label={`Monogramme ${association.acronym}`} />
           </div>
         </div>

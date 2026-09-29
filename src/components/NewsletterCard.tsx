@@ -54,7 +54,7 @@ function AutoHeight({ children }: { children: ReactNode }) {
 
 function SuccessMark() {
   return (
-    <span className="text-white">
+    <span className="text-ink">
       <svg viewBox="0 0 52 52" className="size-12" aria-hidden="true">
         <m.circle
           cx="26"
@@ -215,7 +215,7 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
                   refocusInput.current = true;
                   setStatus("idle");
                 }}
-                className="mt-1 inline-flex min-h-6 items-center rounded text-xs font-medium text-muted underline decoration-white/20 underline-offset-4 transition-colors hover:text-ink"
+                className="mt-1 inline-flex min-h-6 items-center rounded text-xs font-medium text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-ink"
               >
                 {newsletter.resetLabel}
               </button>
@@ -260,10 +260,10 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
                       }
                     }}
                     className={clsx(
-                      "h-12 min-w-0 flex-none rounded-xl border bg-black/30 px-4 text-[0.9rem] text-ellipsis text-ink placeholder:text-muted/80 min-[360px]:flex-1",
+                      "h-12 min-w-0 flex-none rounded-xl border bg-fill-strong px-4 text-[0.9rem] text-ellipsis text-ink placeholder:text-muted min-[360px]:flex-1",
                       "transition-[border-color,box-shadow,background-color] duration-200 focus-visible:outline-offset-2",
-                      "focus:border-white/30 focus:bg-black/40 focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent-via)_22%,transparent)]",
-                      hasError ? "border-danger/60" : "border-white/10",
+                      "focus:border-line-strong focus:shadow-[0_0_0_4px_color-mix(in_oklab,var(--accent-via)_22%,transparent)]",
+                      hasError ? "border-danger/60" : "border-line",
                     )}
                   />
                   {/* Pot de miel anti-robots : invisible et hors de l’ordre de tabulation. */}
@@ -320,7 +320,7 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
                       {" "}
                       <a
                         href={privacyLink.href}
-                        className="rounded underline decoration-white/25 underline-offset-2 transition-colors hover:text-ink"
+                        className="rounded underline decoration-line-strong underline-offset-2 transition-colors hover:text-ink"
                       >
                         {privacyLink.label}
                       </a>

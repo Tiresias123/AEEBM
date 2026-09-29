@@ -74,7 +74,7 @@ export default function HomePage() {
     <>
       <a
         href="#contenu"
-        className="fixed bottom-full left-3 z-50 rounded-full border border-white/15 bg-bg-elevated px-4 py-2 text-[0.8rem] font-semibold text-ink focus:top-[max(0.75rem,env(safe-area-inset-top))] focus:bottom-auto focus:shadow-[0_10px_30px_-10px_rgb(0_0_0/0.9)]"
+        className="fixed bottom-full left-3 z-50 rounded-full border border-line-strong bg-bg-elevated px-4 py-2 text-[0.8rem] font-semibold text-ink focus:top-[max(0.75rem,env(safe-area-inset-top))] focus:bottom-auto focus:shadow-[0_10px_30px_-10px_rgb(0_0_0/0.9)]"
       >
         Aller au contenu principal
       </a>

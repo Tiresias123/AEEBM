@@ -15,7 +15,7 @@ import {
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
-// Préchargement : polices du thème par défaut (« bordeaux ») seulement. Le navigateur ne télécharge une police
+// Préchargement : polices des thèmes de la charte (« ivoire », « bordeaux ») seulement. Le navigateur ne télécharge une police
 // non préchargée que si le thème l’utilise. En passant au thème « amethyste », inverser les valeurs de preload.
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],

@@ -5,7 +5,7 @@ import { siteConfig } from "@/config/links.config";
 import { loadThemeFonts, OG_SIZE, stripEmoji, themedMonogramUri } from "@/lib/brand-images";
 import { activeTheme, getSiteUrl } from "@/lib/site";
 
-/** Anneau ouvert (thème « bordeaux ») : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */
+/** Anneau ouvert (thèmes de la charte) : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */
 const RING_R = 146;
 const RING_DX = +(RING_R * Math.cos((22 * Math.PI) / 180)).toFixed(2);
 const RING_DY = +(RING_R * Math.sin((22 * Math.PI) / 180)).toFixed(2);
@@ -40,6 +40,12 @@ function Segments({
   );
 }
 
+/** Couleur hexadécimale (#RRGGBB) avec opacité, au format rgba() reconnu par Satori. */
+function withAlpha(hex: string, alpha: number): string {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16));
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 /** Rendu PNG de l’image de partage (1200 × 630), à partir de la configuration et du thème actif. */
 export async function renderOgImage(): Promise<ArrayBuffer> {
   const { association } = siteConfig;
@@ -56,12 +62,12 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
         height: "100%",
         display: "flex",
         position: "relative",
-        backgroundColor: c.bg,
+        // Même support que la page : dégradé vertical éclairé par le haut.
+        backgroundColor: c.panel.to,
         backgroundImage: [
-          `radial-gradient(circle at 8% 10%, ${c.glow[0]} 0%, transparent 45%)`,
-          `radial-gradient(circle at 95% 20%, ${c.glow[1]} 0%, transparent 42%)`,
-          `radial-gradient(circle at 20% 110%, ${c.glow[2]} 0%, transparent 45%)`,
-          `radial-gradient(circle at 85% 105%, ${c.glow[3]} 0%, transparent 45%)`,
+          // Fin du halo dans sa propre teinte : Satori interpolerait « transparent » en passant par le noir.
+          `radial-gradient(circle at 18% 0%, ${c.panel.light} 0%, ${withAlpha(c.panel.light, 0)} 60%)`,
+          `linear-gradient(180deg, ${c.panel.from}, ${c.panel.to})`,
         ].join(", "),
         fontFamily: "Body",
         color: c.text,
@@ -77,13 +83,13 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
           width: 760,
           height: 760,
           borderRadius: 9999,
-          border: "1.5px solid rgba(255,255,255,0.14)",
+          border: `1.5px solid ${withAlpha(c.ring[0], 0.22)}`,
           display: "flex",
         }}
       />
 
       <div style={{ display: "flex", alignItems: "center", gap: 64, width: "100%" }}>
-        {/* Avatar avec anneau (continu, ou ouvert et sans halo dans le thème « bordeaux ») */}
+        {/* Avatar avec anneau (continu, ou ouvert et sans halo dans les thèmes de la charte) */}
         <div
           style={{
             display: "flex",
@@ -122,7 +128,7 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
               height: "100%",
               borderRadius: 9999,
               padding: 7,
-              backgroundColor: openRing ? "transparent" : c.bg,
+              backgroundColor: openRing ? "transparent" : c.panel.from,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- rendu Satori */}

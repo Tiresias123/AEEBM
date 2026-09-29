@@ -4,14 +4,17 @@
  * Source unique des couleurs : injectées en variables CSS sur <html>, et réutilisées
  * pour l’image OpenGraph, le manifeste PWA et la couleur de la barre du navigateur.
  *
- * - « bordeaux »  (défaut) : direction artistique de la charte AEEBM 2026-2027 en version sombre.
+ * - « ivoire »    (défaut) : charte AEEBM 2026-2027 sur papier blanc cassé légèrement grainé, encre
+ *                   bordeaux-noir, bulles blanches à filet chaud, bordeaux Barreau pour les titres et le lien
+ *                   vedette, posé sur un fond bordeaux sombre (grand écran).
+ * - « bordeaux »  : direction artistique de la charte AEEBM 2026-2027 en version sombre.
  *                   Bordeaux Barreau #681A16 et ses nuances (grenat, bordeaux profond), neutres chauds
  *                   (ivoire, rosé, brume, pierre), sauge réservée à « vérifié », grenat réservé aux appels
  *                   à l’action, Cormorant Garamond + Poppins, cercle ouvert.
  * - « amethyste » : direction « Dark Luxury / Glassmorphism » (pourpre, indigo, cobalt).
  */
 
-export type ThemeName = "bordeaux" | "amethyste";
+export type ThemeName = "ivoire" | "bordeaux" | "amethyste";
 
 export type BadgeTone = "new" | "important" | "deadline" | "info";
 
@@ -69,12 +72,88 @@ export interface ThemeTokens {
     badgeDotRing: string;
     /** Messages d’erreur des formulaires. */
     danger: string;
+    /** Titres de section. */
+    heading: string;
+    /**
+     * Bulles d’information posées sur le support (cartes, bandeau, boutons ronds, champs) : fond, fond au
+     * survol, fond des champs, filet, filet appuyé, ombre ; teinte des tuiles d’icônes (fond et icône, en %).
+     */
+    surface: {
+      scheme: "light" | "dark";
+      fill: string;
+      fillHover: string;
+      fillStrong: string;
+      line: string;
+      lineStrong: string;
+      shadow: string;
+      tileBg: string;
+      tileFg: string;
+    };
   };
   /** Opacité du voile de bruit. */
   noiseOpacity: number;
 }
 
 export const themes: Record<ThemeName, ThemeTokens> = {
+  ivoire: {
+    label: "Ivoire — charte AEEBM 2026-2027 (papier)",
+    fonts: { display: "cormorant", body: "poppins" },
+    browserColor: "#F6F0E7", // Haut du support sur téléphone
+    qrColor: "#681A16",
+    qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
+    avatarRing: "open",
+    colors: {
+      bg: "#0B0909", // Fond bordeaux sombre autour du support (grand écran)
+      bgElevated: "#FFFDF9",
+      text: "#1E1514", // Encre bordeaux-noir
+      textSoft: "#4A3C38",
+      textMuted: "#635B58", // Pierre (charte), à peine assombrie : 4,5:1 jusqu’au bas du support
+      glow: ["#7E211B", "#4A1310", "#2E1715", "#4E1511"],
+      panel: { from: "#F8F3EA", to: "#EEE4D5", light: "#FFFFFF" }, // Blanc cassé vers beige, lumière du haut
+      accent: { from: "#9E2B25", via: "#681A16", to: "#4A1310" }, // Bordeaux Barreau
+      onAccent: "#FAF7F4",
+      ring: ["#8A2520", "#681A16", "#C9A9A2"], // Bordeaux clair, bordeaux, rosé poudré
+      subtitle: { from: "#681A16", to: "#8A2520" },
+      verified: { from: "#5F8069", to: "#4E6E58" }, // Sauge foncée : contraste suffisant sur papier
+      avatar: { from: "#681A16", to: "#681A16" },
+      cta: { from: "#7E1019", to: "#7E1019" }, // Grenat : réservé aux appels à l’action
+      confetti: ["#681A16", "#7E1019", "#C9A9A2", "#6E6663", "#5F8069"],
+      categories: {
+        academique: "#9A3B32", // Bordeaux clair
+        evenements: "#A8243A", // Grenat
+        carriere: "#8C5E50", // Cuir
+        representation: "#681A16", // Bordeaux Barreau
+        services: "#8C4A4F", // Bois de rose
+      },
+      badges: {
+        new: "#681A16",
+        important: "#8A2520",
+        deadline: "#7E1019",
+        info: "#5A504C",
+      },
+      badgeDots: {
+        new: "#681A16",
+        important: "#8A2520",
+        deadline: "#7E1019",
+        info: "#6E6663",
+      },
+      badgeDotRing: "transparent",
+      danger: "#A1231C",
+      heading: "#681A16",
+      surface: {
+        scheme: "light",
+        fill: "rgb(255 253 249 / 0.84)",
+        fillHover: "#FFFFFF",
+        fillStrong: "#FFFFFF",
+        line: "rgb(104 26 22 / 0.13)",
+        lineStrong: "rgb(104 26 22 / 0.32)",
+        shadow: "0 1px 2px rgb(74 35 28 / 0.05), 0 12px 28px -18px rgb(74 35 28 / 0.32)",
+        tileBg: "10%",
+        tileFg: "100%",
+      },
+    },
+    noiseOpacity: 0.04,
+  },
   bordeaux: {
     label: "Bordeaux — charte AEEBM 2026-2027",
     fonts: { display: "cormorant", body: "poppins" },
@@ -121,6 +200,18 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       },
       badgeDotRing: "#F5EAE8",
       danger: "#F0B8B2",
+      heading: "#CFC6C2",
+      surface: {
+        scheme: "dark",
+        fill: "rgb(255 255 255 / 0.05)",
+        fillHover: "rgb(255 255 255 / 0.075)",
+        fillStrong: "rgb(0 0 0 / 0.3)",
+        line: "rgb(255 255 255 / 0.07)",
+        lineStrong: "rgb(255 255 255 / 0.22)",
+        shadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.04)",
+        tileBg: "26%",
+        tileFg: "22%",
+      },
     },
     noiseOpacity: 0.04,
   },
@@ -169,6 +260,18 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       },
       badgeDotRing: "transparent",
       danger: "#FB7185",
+      heading: "#C4C4CC",
+      surface: {
+        scheme: "dark",
+        fill: "rgb(255 255 255 / 0.05)",
+        fillHover: "rgb(255 255 255 / 0.075)",
+        fillStrong: "rgb(0 0 0 / 0.3)",
+        line: "rgb(255 255 255 / 0.07)",
+        lineStrong: "rgb(255 255 255 / 0.22)",
+        shadow: "inset 0 1px 0 0 rgb(255 255 255 / 0.04)",
+        tileBg: "26%",
+        tileFg: "22%",
+      },
     },
     noiseOpacity: 0.035,
   },
@@ -216,6 +319,16 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--badge-dot-ring": c.badgeDotRing,
     "--danger": c.danger,
     "--noise-opacity": String(theme.noiseOpacity),
+    "--heading": c.heading,
+    "--scheme": c.surface.scheme,
+    "--fill": c.surface.fill,
+    "--fill-hover": c.surface.fillHover,
+    "--fill-strong": c.surface.fillStrong,
+    "--line": c.surface.line,
+    "--line-strong": c.surface.lineStrong,
+    "--card-shadow": c.surface.shadow,
+    "--tile-bg": c.surface.tileBg,
+    "--tile-fg": c.surface.tileFg,
   };
   for (const [category, color] of Object.entries(c.categories)) vars[`--cat-${category}`] = color;
   return vars;

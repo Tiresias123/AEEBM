@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 function Section({ title, children, index }: { title: string; children: ReactNode; index: number }) {
   return (
-    <Enter index={index} className="border-t border-white/[0.08] pt-6">
+    <Enter index={index} className="border-t border-line pt-6">
       <h2 className="font-display-name text-[length:calc(1rem*var(--display-scale))] text-ink">{title}</h2>
       <div className="mt-2 space-y-2 text-[0.875rem] leading-relaxed text-soft/90">{children}</div>
     </Enter>
@@ -33,7 +33,7 @@ function Section({ title, children, index }: { title: string; children: ReactNod
 function Mail({ address }: { address: string }) {
   return (
     <a
-      className="[overflow-wrap:anywhere] text-ink underline decoration-white/30 underline-offset-2"
+      className="[overflow-wrap:anywhere] text-ink underline decoration-line-strong underline-offset-2"
       href={`mailto:${address}`}
     >
       {address}

@@ -107,7 +107,7 @@ function ActionButton({
     "group flex flex-[1_1_0] flex-col items-center gap-1.5 rounded-2xl py-2 text-center text-[0.7rem] font-medium text-soft transition-colors hover:text-ink";
   const inner = (
     <>
-      <span className="grid size-12 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10 transition-[background-color,box-shadow] duration-300 group-hover:bg-white/[0.1] group-hover:ring-white/25 forced-colors:border">
+      <span className="grid size-12 place-items-center rounded-full bg-fill ring-1 ring-line transition-[background-color,box-shadow] duration-300 group-hover:bg-fill-hover group-hover:ring-line-strong forced-colors:border">
         {children}
       </span>
       {label}
@@ -242,7 +242,7 @@ function ShareSheet({
           </Dialog.Description>
         </div>
         <Dialog.Close
-          className="-mt-1 -mr-1 grid size-10 shrink-0 place-items-center rounded-full bg-white/[0.06] text-soft ring-1 ring-white/10 transition-colors hover:bg-white/[0.12] hover:text-ink"
+          className="-mt-1 -mr-1 grid size-10 shrink-0 place-items-center rounded-full bg-fill text-soft ring-1 ring-line transition-colors hover:bg-fill-hover hover:text-ink"
           aria-label="Fermer"
         >
           <X aria-hidden="true" className="size-4" />
@@ -252,7 +252,7 @@ function ShareSheet({
       {/* Code QR */}
       <div className="relative mx-auto mt-5 w-fit short:mt-4">
         <div aria-hidden="true" className="avatar-ring absolute -inset-3 rounded-[2rem] opacity-40 blur-2xl" />
-        <div className="relative rounded-[1.6rem] bg-white p-4 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.8)] short:p-3">
+        <div className="relative rounded-[1.6rem] bg-white p-4 shadow-[0_20px_50px_-24px_rgb(0_0_0/0.6)] ring-1 ring-line short:p-3">
           <QRCodeSVG
             ref={qrRef}
             value={url}
@@ -275,7 +275,7 @@ function ShareSheet({
       </div>
 
       {/* Lien à copier */}
-      <div className="mt-6 flex items-center gap-2 rounded-2xl bg-black/30 p-1.5 pl-4 ring-1 ring-white/10 forced-colors:border short:mt-4">
+      <div className="mt-6 flex items-center gap-2 rounded-2xl bg-fill-strong p-1.5 pl-4 ring-1 ring-line forced-colors:border short:mt-4">
         <span ref={urlRef} className="min-w-0 flex-1 truncate text-[0.85rem] text-soft select-all" title={url}>
           {prettyUrl(url)}
         </span>
@@ -353,7 +353,7 @@ export default function ShareDialog({ open, onOpenChange, returnFocusTo, ...prop
             returnFocusTo.current?.focus();
           }}
           className={clsx(
-            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-white/10 surface p-5 shadow-2xl outline-none",
+            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-line surface p-5 shadow-2xl outline-none",
             "inset-x-0 bottom-0 rounded-t-[1.75rem] pt-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] short:pt-5",
             "sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-[24rem] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[1.75rem] sm:border sm:p-6",
           )}
