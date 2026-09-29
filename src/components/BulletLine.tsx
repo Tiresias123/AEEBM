@@ -30,6 +30,8 @@ export function BulletLine({ text, gradient = false }: { text: string; gradient?
         if (startsLine) lines.push([]);
         lines[lines.length - 1].push(item);
       });
+      // Les puces restent masquées en CSS tant que les lignes n’ont pas été mesurées (voir globals.css).
+      container.dataset.measured = "";
 
       if (!gradient) return;
       for (const line of lines) {
@@ -52,7 +54,7 @@ export function BulletLine({ text, gradient = false }: { text: string; gradient?
   }, [text, gradient]);
 
   return (
-    <span ref={ref} className="flex flex-wrap justify-center gap-x-[1.05em]">
+    <span ref={ref} data-bullets="" className="flex flex-wrap justify-center gap-x-[1.05em]">
       {parts.map((part, index) => (
         <span key={index} data-seg="" className="relative max-w-full text-balance">
           {index > 0 ? (

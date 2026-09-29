@@ -31,6 +31,8 @@ export interface ThemeTokens {
   qrColor: string;
   /** Couleur de la légende (URL) sous le code QR, sur fond blanc. */
   qrCaptionColor: string;
+  /** Anneau de l’avatar : continu, ou ouvert comme le cercle de la charte (interrompu dans l’axe du sigle). */
+  avatarRing: "closed" | "open";
   colors: {
     bg: string;
     bgElevated: string;
@@ -80,6 +82,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     browserColor: "#08090D",
     qrColor: "#141129",
     qrCaptionColor: "#6B6780",
+    avatarRing: "closed",
     colors: {
       bg: "#08090D",
       bgElevated: "#0D0E15",
@@ -94,7 +97,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       ringGlow: 0.7,
       subtitle: { from: "#F0ABFC", to: "#A5B4FC" },
       verified: { from: "#A855F7", to: "#6366F1" },
-      avatar: { from: "#7A221D", to: "#4A1310" }, // Monogramme officiel sur bordeaux (charte, section 10)
+      avatar: { from: "#681A16", to: "#681A16" }, // Monogramme officiel, aplat bordeaux Barreau (charte, section 10)
       cta: { from: "#C026D3", to: "#4F46E5" },
       confetti: ["#E879F9", "#A855F7", "#6366F1", "#3B82F6", "#FFFFFF"],
       categories: {
@@ -128,6 +131,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
     browserColor: "#0B0909",
     qrColor: "#681A16",
     qrCaptionColor: "#6E6663", // Pierre : texte secondaire sur fond clair
+    avatarRing: "open",
     colors: {
       bg: "#0B0909",
       bgElevated: "#120E0E",

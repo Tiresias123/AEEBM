@@ -27,11 +27,21 @@ export function toEpochMs(value: string, label: string): number {
     throw new Error(`${label} : date invalide « ${value} » (formats acceptés : AAAA-MM-JJ ou AAAA-MM-JJTHH:MM)`);
   }
   const [, year, month, day, hour = "00", minute = "00", second = "00", zone] = match;
+  const [y, mo, d, h, mi, s] = [year, month, day, hour, minute, second].map(Number);
+  const invalid = () =>
+    new Error(
+      `${label} : date inexistante « ${value} » (mois 01-12, jour valide pour le mois, heure 00-23, minutes 00-59)`,
+    );
+  if (mo < 1 || mo > 12 || d < 1 || d > new Date(Date.UTC(y, mo, 0)).getUTCDate() || h > 23 || mi > 59 || s > 59) {
+    throw invalid();
+  }
   if (zone) {
     const offset = zone === "Z" ? "Z" : zone.includes(":") ? zone : `${zone.slice(0, 3)}:${zone.slice(3)}`;
-    return Date.parse(`${year}-${month}-${day}T${hour}:${minute}:${second}${offset}`);
+    const epoch = Date.parse(`${year}-${month}-${day}T${hour}:${minute}:${second}${offset}`);
+    if (Number.isNaN(epoch)) throw invalid();
+    return epoch;
   }
-  const wallClockAsUtc = Date.UTC(+year, +month - 1, +day, +hour, +minute, +second);
+  const wallClockAsUtc = Date.UTC(y, mo - 1, d, h, mi, s);
   let epoch = wallClockAsUtc - montrealOffsetMinutes(wallClockAsUtc) * 60_000;
   // Ajustement autour des changements d’heure.
   epoch = wallClockAsUtc - montrealOffsetMinutes(epoch) * 60_000;
@@ -61,26 +71,39 @@ function inlineJson(value: unknown): string {
 }
 
 export interface ScheduledElement {
-  /** Valeur de l’attribut data-sched de l’élément (lettres, chiffres, tirets). */
+  /** Valeur de l’attribut data-sched de l’élément (identifiant opaque généré au build). */
   id: string;
   window: ResolvedWindow;
+}
+
+/** Groupe masqué quand tous ses membres le sont (p. ex. une section dont tous les liens sont datés). */
+export interface ScheduledGroup {
+  id: string;
+  members: string[];
 }
 
 /**
  * Script exécuté avant le premier affichage (sans décalage de mise en page) :
  * - bandeau : `data-banner="hidden"` hors période, `data-banner="collapsed"` s’il a été replié ;
- * - éléments datés (liens, pastilles, lien vedette) : masqués hors de leur période d’affichage.
+ * - éléments datés (liens, pastilles, lien vedette) : masqués hors de leur période d’affichage ;
+ * - groupes (sections) : masqués quand tous leurs éléments datés le sont.
  */
-export function prepaintScript(banner: AlertBannerConfig | null, elements: ScheduledElement[]): string {
+export function prepaintScript(
+  banner: AlertBannerConfig | null,
+  elements: ScheduledElement[],
+  groups: ScheduledGroup[] = [],
+): string {
   const bannerData = banner
     ? { ...resolveWindow(banner, "alertBanner"), key: BANNER_STORAGE_PREFIX + banner.id }
     : null;
   const items = elements.map((element) => [element.id, element.window.start, element.window.end]);
+  const sets = groups.map((group) => [group.id, group.members]);
   return (
-    `(function(){var d=document.documentElement,n=Date.now(),b=${inlineJson(bannerData)},l=${inlineJson(items)},h=[];` +
+    `(function(){var d=document.documentElement,n=Date.now(),b=${inlineJson(bannerData)},l=${inlineJson(items)},g=${inlineJson(sets)},h=[],x={};` +
     `function o(s,e){return(s!==null&&n<s)||(e!==null&&n>=e)}` +
     `if(b){if(o(b.start,b.end))d.setAttribute("data-banner","hidden");else try{if(localStorage.getItem(b.key)==="1")d.setAttribute("data-banner","collapsed")}catch(_){}}` +
-    `for(var i=0;i<l.length;i++)if(o(l[i][1],l[i][2]))h.push('[data-sched="'+l[i][0]+'"]');` +
+    `for(var i=0;i<l.length;i++)if(o(l[i][1],l[i][2])){x[l[i][0]]=1;h.push('[data-sched="'+l[i][0]+'"]')}` +
+    `for(var j=0;j<g.length;j++){var a=g[j][1],k=0;while(k<a.length&&x[a[k]])k++;if(k===a.length)h.push('[data-sched="'+g[j][0]+'"]')}` +
     `if(h.length){var t=document.createElement("style");t.textContent=h.join(",")+"{display:none!important}";document.head.appendChild(t)}})();`
   );
 }

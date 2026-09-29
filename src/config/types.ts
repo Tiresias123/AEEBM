@@ -75,7 +75,7 @@ export interface AlertBannerConfig extends Schedule {
    */
   id: string;
   tone: AlertTone;
-  /** Étiquette courte, p. ex. « AGA », « Rappel », « Urgent ». */
+  /** Étiquette courte, p. ex. « AGA », « Rappel » (6 caractères au plus conseillés : elle sert aussi de pastille repliée). */
   label: string;
   message: string;
   link?: { label: string; href: Href };
@@ -128,6 +128,7 @@ export interface LinkItem extends Schedule {
 }
 
 export interface LinkSection {
+  /** Identifiant (lettres, chiffres, tirets). */
   id: string;
   /** Titre de section facultatif (étiquette en petites capitales). */
   title?: string;
@@ -151,20 +152,22 @@ export interface NewsletterConfig {
   /** Bouton affiché après une inscription réussie. */
   resetLabel: string;
   invalidEmailMessage: string;
-  /** Adresse déjà abonnée (réponse de Mailchimp). */
-  alreadySubscribedMessage: string;
   /** Adresse retirée définitivement de l’audience : réinscription impossible depuis la page. */
   removedMessage: string;
   errorMessage: string;
-  /** Mention à la collecte (LCAP, art. 10 ; Loi 25, art. 8), suivie du lien vers la politique de confidentialité. */
+  /** Mention à la collecte (LCAP ; Loi 25), suivie du lien vers la politique de confidentialité. */
   consentNote: string;
+  /** Lien affiché après la mention de consentement. */
+  privacyLink?: LegalLink;
 }
 
 export interface PrivacyConfig {
   /** Personne responsable de la protection des renseignements personnels (Loi 25 : par défaut, la présidence). */
   officer: { title: string; email: string };
-  /** Date de la dernière mise à jour de la politique. */
+  /** Date de la dernière mise à jour de la politique (AAAA-MM-JJ). */
   updatedAt: IsoDate;
+  /** Mailchimp mesure-t-il l’ouverture des courriels et les clics ? (mentionné dans la politique) */
+  emailTracking: boolean;
   /** Fournisseurs qui traitent des renseignements pour l’AEEBM. */
   processors: { name: string; purpose: string; location: string }[];
 }
@@ -181,6 +184,8 @@ export interface SiteConfig {
   theme: ThemeName;
   /** URL publique canonique (partage, code QR, SEO). Surcharge possible : NEXT_PUBLIC_SITE_URL. */
   siteUrl: `https://${string}` | `http://${string}`;
+  /** Le domaine de siteUrl est-il confirmé ? Sinon, le build avertit s’il sert d’URL publique. */
+  siteUrlConfirmed?: boolean;
   association: AssociationConfig;
   alertBanner: AlertBannerConfig;
   socials: SocialLink[];

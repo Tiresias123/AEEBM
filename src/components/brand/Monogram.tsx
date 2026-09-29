@@ -11,12 +11,11 @@ interface MonogramProps {
 
 /**
  * Monogramme « avatar rond » de l’AEEBM : sigle en Cormorant Garamond inscrit dans le cercle ouvert,
- * sur un disque aux couleurs du thème. Entièrement vectoriel (net à toute taille).
+ * sur son disque bordeaux en aplat (sans effet ajouté : charte, section 10). Entièrement vectoriel.
  */
 export function Monogram({ className, label }: MonogramProps) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const discId = `mono-disc-${uid}`;
-  const sheenId = `mono-sheen-${uid}`;
 
   return (
     <svg
@@ -33,15 +32,9 @@ export function Monogram({ className, label }: MonogramProps) {
           <stop offset="0" style={{ stopColor: "var(--avatar-from)" }} />
           <stop offset="1" style={{ stopColor: "var(--avatar-to)" }} />
         </linearGradient>
-        <radialGradient id={sheenId} cx="0.32" cy="0.22" r="0.85">
-          <stop offset="0" stopColor="#fff" stopOpacity="0.16" />
-          <stop offset="0.55" stopColor="#fff" stopOpacity="0.02" />
-          <stop offset="1" stopColor="#fff" stopOpacity="0" />
-        </radialGradient>
       </defs>
       <circle cx="100" cy="100" r="100" fill={`url(#${discId})`} />
-      <circle cx="100" cy="100" r="100" fill={`url(#${sheenId})`} />
-      <g fill="none" style={{ stroke: "var(--on-accent)" }} strokeWidth="1.6" strokeLinecap="round" opacity="0.92">
+      <g fill="none" style={{ stroke: "var(--on-accent)" }} strokeWidth="1.6" strokeLinecap="round">
         <path d={MONOGRAM_ARCS.top} />
         <path d={MONOGRAM_ARCS.bottom} />
       </g>

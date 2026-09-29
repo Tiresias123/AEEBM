@@ -5,6 +5,15 @@ import { siteConfig } from "@/config/links.config";
 import { loadThemeFonts, OG_SIZE, stripEmoji, themedMonogramUri } from "@/lib/brand-images";
 import { activeTheme, getSiteUrl } from "@/lib/site";
 
+/** Anneau ouvert (thème « barreau ») : deux arcs interrompus dans l’axe du sigle, comme le cercle de la charte. */
+const RING_R = 146;
+const RING_DX = +(RING_R * Math.cos((22 * Math.PI) / 180)).toFixed(2);
+const RING_DY = +(RING_R * Math.sin((22 * Math.PI) / 180)).toFixed(2);
+const RING_ARCS = [
+  `M${150 - RING_DX} ${150 - RING_DY}A${RING_R} ${RING_R} 0 0 1 ${150 + RING_DX} ${150 - RING_DY}`,
+  `M${150 - RING_DX} ${150 + RING_DY}A${RING_R} ${RING_R} 0 0 0 ${150 + RING_DX} ${150 + RING_DY}`,
+];
+
 /** Segments « A • B • C » insécables pour Satori : la puce reste en fin de segment, jamais en début de ligne. */
 function Segments({
   text,
@@ -37,6 +46,7 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
   const c = activeTheme.colors;
   const fonts = await loadThemeFonts();
   const isSerif = activeTheme.fonts.display === "cormorant";
+  const openRing = activeTheme.avatarRing === "open";
   const host = getSiteUrl().replace(/^https?:\/\//, "");
 
   const response = new ImageResponse(
@@ -73,19 +83,38 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
       />
 
       <div style={{ display: "flex", alignItems: "center", gap: 64, width: "100%" }}>
-        {/* Avatar avec anneau */}
+        {/* Avatar avec anneau (continu, ou ouvert et sans halo dans le thème « barreau ») */}
         <div
           style={{
             display: "flex",
+            position: "relative",
             width: 300,
             height: 300,
             flexShrink: 0,
             borderRadius: 9999,
             padding: 8,
-            backgroundImage: `linear-gradient(135deg, ${c.ring[0]}, ${c.ring[1]} 50%, ${c.ring[2]})`,
-            boxShadow: `0 0 90px 10px ${c.ring[1]}55`,
+            ...(openRing
+              ? {}
+              : {
+                  backgroundImage: `linear-gradient(135deg, ${c.ring[0]}, ${c.ring[1]} 50%, ${c.ring[2]})`,
+                  boxShadow: `0 0 90px 10px ${c.ring[1]}55`,
+                }),
           }}
         >
+          {openRing ? (
+            <svg width="300" height="300" viewBox="0 0 300 300" style={{ position: "absolute", left: 0, top: 0 }}>
+              <defs>
+                <linearGradient id="r" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stopColor={c.ring[0]} />
+                  <stop offset="0.5" stopColor={c.ring[1]} />
+                  <stop offset="1" stopColor={c.ring[2]} />
+                </linearGradient>
+              </defs>
+              {RING_ARCS.map((d) => (
+                <path key={d} d={d} fill="none" stroke="url(#r)" strokeWidth="6" strokeLinecap="round" />
+              ))}
+            </svg>
+          ) : null}
           <div
             style={{
               display: "flex",
@@ -93,7 +122,7 @@ export async function renderOgImage(): Promise<ArrayBuffer> {
               height: "100%",
               borderRadius: 9999,
               padding: 7,
-              backgroundColor: c.bg,
+              backgroundColor: openRing ? "transparent" : c.bg,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- rendu Satori */}

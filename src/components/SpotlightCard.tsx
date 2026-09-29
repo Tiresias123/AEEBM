@@ -5,6 +5,7 @@ import { m } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
 import { SPRING, TAP_SCALE } from "@/components/motion";
+import { PendingLabel } from "@/components/PendingLabel";
 import { enterStyle } from "@/lib/enter";
 import { isExternalHref, linkProps } from "@/lib/links";
 
@@ -35,7 +36,8 @@ export function SpotlightCard({
   schedId,
 }: SpotlightCardProps) {
   const external = isExternalHref(href);
-  const shownBadge = badge;
+  // Un lien vedette pas encore disponible n’affiche pas sa pastille (« Nouveau » contredirait « Bientôt »).
+  const shownBadge = pending ? undefined : badge;
   const style = {
     ...enterStyle(enterIndex),
     ...(gradient
@@ -58,7 +60,7 @@ export function SpotlightCard({
         )}
       />
 
-      <span className="relative flex items-center gap-3.5 overflow-hidden rounded-[1.4rem] bg-accent-gradient py-[1.05rem] pr-[calc(0.875rem+1px)] pl-[calc(0.75rem+1px)] text-on-accent shadow-[inset_0_1px_0_0_rgb(255_255_255/0.35),inset_0_-1px_0_0_rgb(0_0_0/0.15),0_20px_50px_-18px_var(--spot-from,var(--accent-from)),0_12px_40px_-20px_var(--spot-to,var(--accent-to))] ring-1 ring-white/10 forced-colors:border">
+      <span className="relative flex items-center gap-3.5 overflow-hidden rounded-[1.4rem] bg-accent-gradient py-[1.05rem] pr-[calc(0.875rem+1px)] pl-[calc(0.75rem+1px)] text-on-accent shadow-[inset_0_1px_0_0_rgb(255_255_255/0.35),inset_0_-1px_0_0_rgb(0_0_0/0.15),0_20px_50px_-18px_var(--spot-from,var(--accent-from)),0_12px_40px_-20px_var(--spot-to,var(--accent-to))] inset-ring inset-ring-white/12 forced-colors:border">
         {/* Brillance supérieure */}
         <span
           aria-hidden="true"
@@ -77,7 +79,7 @@ export function SpotlightCard({
         <span className="relative flex min-w-0 flex-1 flex-col text-left">
           <span className="text-[1.02rem] leading-tight font-semibold tracking-[-0.01em] text-pretty">{title}</span>
           {shownBadge ? (
-            <span className="order-first mb-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-black/20 px-2 py-[0.2rem] text-[0.625rem] leading-none font-semibold tracking-[0.06em] uppercase ring-1 ring-white/30">
+            <span className="order-first mb-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-black/20 px-2 py-[0.2rem] text-[0.6875rem] leading-none font-semibold tracking-[0.04em] uppercase ring-1 ring-white/30">
               <span aria-hidden="true" className="size-1.5 animate-pulse-soft rounded-full bg-current" />
               <span className="sr-only">(</span>
               {shownBadge}
@@ -91,9 +93,7 @@ export function SpotlightCard({
         </span>
 
         {pending ? (
-          <span className="relative shrink-0 rounded-full bg-black/20 px-2 py-1 text-[0.6rem] leading-none font-semibold tracking-[0.1em] uppercase ring-1 ring-white/30">
-            Bientôt<span className="sr-only"> disponible</span>
-          </span>
+          <PendingLabel onAccent />
         ) : (
           <ChevronRight
             aria-hidden="true"

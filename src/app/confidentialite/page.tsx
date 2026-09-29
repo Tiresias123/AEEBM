@@ -4,13 +4,21 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { BackgroundGlow } from "@/components/BackgroundGlow";
 import { Enter } from "@/components/Enter";
+import { PostalAddress } from "@/components/PostalAddress";
 import { siteConfig } from "@/config/links.config";
-import { formatAddress } from "@/lib/site";
+import { socialMetadata } from "@/lib/metadata";
+import { toEpochMs } from "@/lib/schedule";
+import { frTypo } from "@/lib/typo";
+
+const { acronym } = siteConfig.association;
+const TITLE = "Politique de confidentialité";
+const DESCRIPTION = `Comment l’${acronym} recueille, utilise et protège les renseignements personnels.`;
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité",
-  description: `Comment l’${siteConfig.association.acronym} recueille, utilise et protège les renseignements personnels.`,
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "/confidentialite" },
+  ...socialMetadata("/confidentialite", `${TITLE} · ${acronym}`, DESCRIPTION),
 };
 
 function Section({ title, children, index }: { title: string; children: ReactNode; index: number }) {
@@ -22,20 +30,30 @@ function Section({ title, children, index }: { title: string; children: ReactNod
   );
 }
 
+function Mail({ address }: { address: string }) {
+  return (
+    <a
+      className="[overflow-wrap:anywhere] text-ink underline decoration-white/30 underline-offset-2"
+      href={`mailto:${address}`}
+    >
+      {address}
+    </a>
+  );
+}
+
 /*
- * Politique rédigée à partir de la configuration (responsable, fournisseurs, date).
+ * Politique rédigée à partir de la configuration (responsable, fournisseurs, suivi des envois, date).
  * À faire valider par l’exécutif lors de l’adoption des politiques internes (feuille de route, section 16).
  */
 export default function PrivacyPage() {
   const { association, privacy } = siteConfig;
-  const address = formatAddress(association.address);
   const updated = new Intl.DateTimeFormat("fr-CA", { dateStyle: "long", timeZone: "America/Toronto" }).format(
-    new Date(`${privacy.updatedAt}T12:00:00-04:00`),
+    toEpochMs(privacy.updatedAt, "privacy.updatedAt"),
   );
 
   return (
     <>
-      <BackgroundGlow />
+      <BackgroundGlow circles={false} />
       <main className="relative z-10 mx-auto w-full max-w-[40rem] px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-16 sm:px-8 lg:pt-14">
         <Enter index={0}>
           <Link
@@ -43,13 +61,13 @@ export default function PrivacyPage() {
             className="inline-flex min-h-11 items-center gap-2 rounded-full pr-2 text-[0.85rem] font-medium text-muted transition-colors hover:text-ink"
           >
             <ArrowLeft aria-hidden="true" className="size-4" />
-            Retour à la page de l’{association.acronym}
+            Retour à la page de l’{acronym}
           </Link>
         </Enter>
 
         <Enter index={1} className="mt-6">
           <h1 className="font-display-name text-[length:calc(1.9rem*var(--display-scale))] leading-tight text-ink">
-            Politique de confidentialité
+            {TITLE}
           </h1>
           <p className="mt-2 text-[0.8rem] text-muted">Mise à jour le {updated}</p>
         </Enter>
@@ -57,17 +75,29 @@ export default function PrivacyPage() {
         <div className="mt-8 space-y-6 rounded-[1.4rem] glass p-6 sm:p-8">
           <Enter index={2}>
             <p className="text-[0.9rem] leading-relaxed text-soft">
-              L’{association.legalName} ({association.acronym}) protège les renseignements personnels qu’elle recueille
-              sur cette page, conformément à la Loi sur la protection des renseignements personnels dans le secteur
-              privé (Loi 25).
+              L’{association.legalName} ({acronym}) protège les renseignements personnels qu’elle recueille par ce site
+              et son infolettre, conformément à la{" "}
+              <i>Loi sur la protection des renseignements personnels dans le secteur privé</i> (RLRQ, c.&nbsp;P-39.1).
             </p>
           </Enter>
 
           <Section index={3} title="Renseignements recueillis">
             <p>
-              Seulement l’adresse courriel que vous fournissez volontairement pour recevoir l’infolettre. La page
-              n’utilise ni témoin (cookie) de suivi ni outil de mesure d’audience.
+              Votre adresse courriel, fournie volontairement pour recevoir l’infolettre. Le site n’utilise ni témoin
+              (cookie) de suivi ni outil de mesure d’audience.
             </p>
+            {privacy.emailTracking ? (
+              <p>
+                Pour chaque envoi, le service d’infolettre enregistre l’ouverture des courriels, les clics sur les liens
+                et une localisation approximative. Il conserve aussi la date et l’adresse IP de votre confirmation,
+                comme preuve de votre consentement.
+              </p>
+            ) : (
+              <p>
+                Le service d’infolettre conserve la date et l’adresse IP de votre confirmation, comme preuve de votre
+                consentement.
+              </p>
+            )}
             <p>
               Votre navigateur mémorise localement si vous avez replié une annonce. Cette information reste sur votre
               appareil et n’est jamais transmise.
@@ -76,7 +106,7 @@ export default function PrivacyPage() {
 
           <Section index={4} title="Utilisation">
             <p>
-              Votre adresse sert uniquement à vous envoyer l’infolettre de l’{association.acronym} : avis, assemblées et
+              Votre adresse sert uniquement à vous envoyer l’infolettre de l’{acronym}&nbsp;: avis, assemblées et
               événements. Elle n’est ni vendue, ni louée, ni cédée.
             </p>
           </Section>
@@ -85,35 +115,28 @@ export default function PrivacyPage() {
             <p>
               Un courriel de confirmation vous est envoyé avant tout abonnement (double consentement). Vous pouvez
               retirer votre consentement en tout temps par le lien de désabonnement présent dans chaque envoi, ou en
-              écrivant à{" "}
-              <a
-                className="text-ink underline decoration-white/30 underline-offset-2"
-                href={`mailto:${privacy.officer.email}`}
-              >
-                {privacy.officer.email}
-              </a>
-              .
+              écrivant à <Mail address={privacy.officer.email} />.
             </p>
           </Section>
 
           <Section index={6} title="Fournisseurs et communication à l’extérieur du Québec">
-            <p>Pour ces seules fins, votre adresse est traitée par :</p>
+            <p>Pour ces seules fins, vos renseignements sont traités par&nbsp;:</p>
             <ul className="list-disc space-y-1 pl-5">
               {privacy.processors.map((processor) => (
                 <li key={processor.name}>
-                  {processor.name} : {processor.purpose} ({processor.location})
+                  {frTypo(`${processor.name} : ${processor.purpose} (${processor.location})`)}
                 </li>
               ))}
             </ul>
             <p>
-              Vos renseignements peuvent donc être communiqués à l’extérieur du Québec. L’{association.acronym} retient
-              des fournisseurs qui offrent une protection adéquate et limite leur accès à ce qui est nécessaire.
+              Ces renseignements peuvent donc être conservés à l’extérieur du Québec, où ils sont soumis aux lois
+              locales. L’{acronym} limite ce qu’elle confie à ces fournisseurs à ce qui est nécessaire au service.
             </p>
           </Section>
 
           <Section index={7} title="Conservation">
             <p>
-              Votre adresse est conservée jusqu’à votre désabonnement. Le fournisseur d’envoi peut garder une trace de
+              Votre adresse est conservée jusqu’à votre désabonnement. Le service d’infolettre peut garder une trace de
               votre refus afin de ne plus vous écrire.
             </p>
           </Section>
@@ -127,25 +150,21 @@ export default function PrivacyPage() {
           </Section>
 
           <Section index={9} title="Personne responsable">
-            <p>
-              {privacy.officer.title}
-              <br />
-              <a
-                className="text-ink underline decoration-white/30 underline-offset-2"
-                href={`mailto:${privacy.officer.email}`}
-              >
-                {privacy.officer.email}
-              </a>
-              <br />
-              <span className="whitespace-nowrap">{address.street},</span>{" "}
-              <span className="whitespace-nowrap">{address.locality}</span>
-            </p>
+            <div>
+              <p>{privacy.officer.title}</p>
+              <p>
+                <Mail address={privacy.officer.email} />
+              </p>
+              <PostalAddress address={association.address} />
+            </div>
           </Section>
 
-          <Section index={10} title="Liens vers d’autres sites">
+          <Section index={10} title="Formulaires et liens">
             <p>
-              Cette page renvoie vers des services tiers (formulaires, dossiers partagés, réseaux sociaux, billetterie)
-              qui appliquent leurs propres politiques de confidentialité.
+              Les formulaires de l’{acronym} (plaintes, jumelages, billetterie) peuvent être hébergés par des services
+              tiers pour son compte&nbsp;; l’{acronym} demeure responsable des renseignements qui y sont recueillis. Les
+              autres liens (réseaux sociaux, sites externes) mènent à des services qui appliquent leurs propres
+              politiques de confidentialité.
             </p>
           </Section>
         </div>

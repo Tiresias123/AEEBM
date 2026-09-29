@@ -104,7 +104,7 @@ function ActionButton({
   ariaLabel?: string;
 }) {
   const classes =
-    "group flex flex-col items-center gap-1.5 rounded-2xl px-1 py-2 text-[0.7rem] font-medium text-soft transition-colors hover:text-ink";
+    "group flex flex-[1_1_0] flex-col items-center gap-1.5 rounded-2xl py-2 text-center text-[0.7rem] font-medium text-soft transition-colors hover:text-ink";
   const inner = (
     <>
       <span className="grid size-12 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10 transition-[background-color,box-shadow] duration-300 group-hover:bg-white/[0.1] group-hover:ring-white/25 forced-colors:border">
@@ -250,9 +250,9 @@ function ShareSheet({
       </div>
 
       {/* Code QR */}
-      <div className="relative mx-auto mt-5 w-fit">
+      <div className="relative mx-auto mt-5 w-fit short:mt-4">
         <div aria-hidden="true" className="avatar-ring absolute -inset-3 rounded-[2rem] opacity-40 blur-2xl" />
-        <div className="relative rounded-[1.6rem] bg-white p-4 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.8)]">
+        <div className="relative rounded-[1.6rem] bg-white p-4 shadow-[0_20px_50px_-20px_rgb(0_0_0/0.8)] short:p-3">
           <QRCodeSVG
             ref={qrRef}
             value={url}
@@ -263,10 +263,10 @@ function ShareSheet({
             fgColor={qrColor}
             title={`Code QR vers ${prettyUrl(url)}`}
             imageSettings={{ src: qrLogoSrc, height: 52, width: 52, excavate: true }}
-            className="block size-[13rem]"
+            className="block size-[min(13rem,calc(100vw-4.5rem))] short:size-[9.5rem]"
           />
           <p
-            className="mt-3 text-center text-[0.68rem] font-semibold tracking-[0.2em] uppercase"
+            className="mt-3 text-center text-[0.68rem] font-semibold tracking-[0.2em] uppercase short:hidden"
             style={{ color: qrCaptionColor }}
           >
             {prettyUrl(url)}
@@ -275,7 +275,7 @@ function ShareSheet({
       </div>
 
       {/* Lien à copier */}
-      <div className="mt-6 flex items-center gap-2 rounded-2xl bg-black/30 p-1.5 pl-4 ring-1 ring-white/10 forced-colors:border">
+      <div className="mt-6 flex items-center gap-2 rounded-2xl bg-black/30 p-1.5 pl-4 ring-1 ring-white/10 forced-colors:border short:mt-4">
         <span ref={urlRef} className="min-w-0 flex-1 truncate text-[0.85rem] text-soft select-all" title={url}>
           {prettyUrl(url)}
         </span>
@@ -299,12 +299,12 @@ function ShareSheet({
         {copyState === "copied"
           ? "Lien copié dans le presse-papiers."
           : copyState === "failed"
-            ? "Copie automatique impossible : l’adresse est sélectionnée, copiez-la manuellement."
+            ? "Copie automatique impossible\u00A0: l’adresse est sélectionnée, copiez-la manuellement."
             : ""}
       </p>
 
       {/* Partage direct */}
-      <div className="mt-4 grid grid-cols-5 gap-1">
+      <div className="mt-4 flex flex-wrap justify-center gap-x-1 gap-y-3">
         {canNativeShare ? (
           <ActionButton label="Partager" ariaLabel="Partager avec une autre application" onClick={nativeShare}>
             <Share aria-hidden="true" className="size-[1.15rem]" strokeWidth={1.8} />
@@ -347,13 +347,14 @@ export default function ShareDialog({ open, onOpenChange, returnFocusTo, ...prop
       <Dialog.Portal>
         <Dialog.Overlay className="dialog-overlay fixed inset-0 z-50 bg-black/65 backdrop-blur-sm" />
         <Dialog.Content
+          aria-modal="true"
           onCloseAutoFocus={(event) => {
             event.preventDefault();
             returnFocusTo.current?.focus();
           }}
           className={clsx(
-            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-white/10 bg-bg-elevated/95 p-5 shadow-2xl backdrop-blur-2xl outline-none",
-            "inset-x-0 bottom-0 rounded-t-[1.75rem] pt-6 pb-[max(1.25rem,env(safe-area-inset-bottom))]",
+            "dialog-sheet fixed z-50 max-h-[92dvh] scrollbar-thin overflow-y-auto border-t border-white/10 bg-bg-elevated p-5 shadow-2xl outline-none",
+            "inset-x-0 bottom-0 rounded-t-[1.75rem] pt-6 pb-[max(1.25rem,env(safe-area-inset-bottom))] short:pt-5",
             "sm:inset-x-auto sm:top-1/2 sm:bottom-auto sm:left-1/2 sm:w-[24rem] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:rounded-[1.75rem] sm:border sm:p-6",
           )}
         >

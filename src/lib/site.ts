@@ -2,7 +2,13 @@ import { siteConfig } from "@/config/links.config";
 import { themes, type ThemeTokens } from "@/config/themes";
 import type { AlertBannerConfig, LinkItem, LinkSection, PostalAddress, SpotlightConfig } from "@/config/types";
 import { isPendingHref } from "@/lib/pending";
-import { hasEnded, resolveWindow, type ResolvedWindow, type ScheduledElement } from "@/lib/schedule";
+import {
+  hasEnded,
+  resolveWindow,
+  type ResolvedWindow,
+  type ScheduledElement,
+  type ScheduledGroup,
+} from "@/lib/schedule";
 import { NBSP } from "@/lib/typo";
 
 /** Jetons du thème actif. */
@@ -89,10 +95,16 @@ export function isNewsletterMisconfigured(): boolean {
   );
 }
 
-/** Adresse postale québécoise en deux segments insécables : rue, puis « Montréal (Québec) H2Y 2Y7 ». */
-export function formatAddress(address: PostalAddress): { street: string; locality: string } {
+/**
+ * Adresse postale québécoise : parties de la rue (coupure possible seulement entre elles, jamais après
+ * le numéro civique) puis « Montréal (Québec) H2Y 2Y7 », insécable.
+ */
+export function formatAddress(address: PostalAddress): { street: string; streetParts: string[]; locality: string } {
+  const parts = address.street.split(/,\s*/).filter(Boolean);
+  if (parts.length > 1 && /^\d+[A-Za-z]?$/.test(parts[0])) parts.splice(0, 2, `${parts[0]},${NBSP}${parts[1]}`);
   return {
     street: address.street,
+    streetParts: parts,
     locality: `${address.city} (${address.province})${NBSP}${address.postalCode.replace(/\s+/g, NBSP)}`,
   };
 }
@@ -106,12 +118,22 @@ export interface LinkModel {
   badgeSchedId?: string;
 }
 
+export interface SectionModel {
+  id: string;
+  title?: string;
+  links: LinkModel[];
+  /** Identifiant de période de la section, quand tous ses liens sont datés (masquée avec eux). */
+  schedId?: string;
+}
+
 export interface PageModel {
-  sections: { id: string; title?: string; links: LinkModel[] }[];
+  sections: SectionModel[];
   spotlight: { config: SpotlightConfig; schedId?: string } | null;
   banner: AlertBannerConfig | null;
   /** Éléments datés, masqués avant le premier affichage hors de leur période (script de préaffichage). */
   scheduled: ScheduledElement[];
+  /** Sections dont tous les liens sont datés : masquées quand tous leurs liens le sont. */
+  groups: ScheduledGroup[];
 }
 
 function isDated(window: ResolvedWindow): boolean {
@@ -124,33 +146,37 @@ function isDated(window: ResolvedWindow): boolean {
  */
 export function getPageModel(now: number = Date.now()): PageModel {
   const scheduled: ScheduledElement[] = [];
+  const groups: ScheduledGroup[] = [];
+  // Identifiants opaques et déterministes (même ordre au build de la page et du layout).
+  const schedule = (window: ResolvedWindow): string => {
+    const id = `s${scheduled.length}`;
+    scheduled.push({ id, window });
+    return id;
+  };
 
   const sections = siteConfig.sections
-    .map((section) => ({
-      id: section.id,
-      title: section.title,
-      links: section.links.flatMap((link, index): LinkModel[] => {
+    .map((section, sectionIndex): SectionModel => {
+      const links = section.links.flatMap((link, index): LinkModel[] => {
         if (link.hidden) return [];
         const key = `${section.id}-${index}`;
         const window = resolveWindow(link, `Lien « ${link.title} »`);
         if (hasEnded(window, now)) return [];
         const model: LinkModel = { key, link };
-        if (isDated(window)) {
-          model.schedId = `l-${key}`;
-          scheduled.push({ id: model.schedId, window });
-        }
+        if (isDated(window)) model.schedId = schedule(window);
         if (link.badge) {
           const badgeWindow = resolveWindow(link.badge, `Pastille « ${link.badge.label} »`);
-          if (hasEnded(badgeWindow, now)) {
-            model.link = { ...link, badge: undefined };
-          } else if (isDated(badgeWindow)) {
-            model.badgeSchedId = `b-${key}`;
-            scheduled.push({ id: model.badgeSchedId, window: badgeWindow });
-          }
+          if (hasEnded(badgeWindow, now)) model.link = { ...link, badge: undefined };
+          else if (isDated(badgeWindow)) model.badgeSchedId = schedule(badgeWindow);
         }
         return [model];
-      }),
-    }))
+      });
+      const model: SectionModel = { id: section.id, title: section.title, links };
+      if (links.length > 0 && links.every((link) => link.schedId)) {
+        model.schedId = `g${sectionIndex}`;
+        groups.push({ id: model.schedId, members: links.map((link) => link.schedId as string) });
+      }
+      return model;
+    })
     .filter((section) => section.links.length > 0);
 
   let spotlight: PageModel["spotlight"] = null;
@@ -158,10 +184,7 @@ export function getPageModel(now: number = Date.now()): PageModel {
     const window = resolveWindow(siteConfig.spotlight, "Lien vedette");
     if (!hasEnded(window, now)) {
       spotlight = { config: siteConfig.spotlight };
-      if (isDated(window)) {
-        spotlight.schedId = "spotlight";
-        scheduled.push({ id: "spotlight", window });
-      }
+      if (isDated(window)) spotlight.schedId = schedule(window);
     }
   }
 
@@ -169,5 +192,5 @@ export function getPageModel(now: number = Date.now()): PageModel {
   const banner =
     bannerConfig.enabled && !hasEnded(resolveWindow(bannerConfig, "alertBanner"), now) ? bannerConfig : null;
 
-  return { sections, spotlight, banner, scheduled };
+  return { sections, spotlight, banner, scheduled, groups };
 }

@@ -32,6 +32,8 @@ function useBannerState(): BannerState {
 
 function setBannerState(id: string, state: "open" | "collapsed") {
   const root = document.documentElement;
+  // Changement fait par la personne : la règle CSS de préaffichage cesse de s’appliquer et l’animation se joue.
+  root.setAttribute("data-banner-live", "");
   if (state === "collapsed") root.setAttribute("data-banner", "collapsed");
   else root.removeAttribute("data-banner");
   try {
@@ -97,19 +99,20 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
             marginBottom: 20,
             transition: { duration: 0.45, ease: EASE_OUT_EXPO },
           }}
-          className={clsx(toneClass[tone], "enter relative mb-5 overflow-hidden rounded-2xl")}
+          className={clsx(toneClass[tone], "enter @container relative mb-5 overflow-hidden rounded-2xl")}
         >
-          <div className="relative flex items-start gap-3 rounded-2xl glass py-2.5 pr-2 pl-3.5">
+          {/* Une rangée ; sous 17 rem (texte agrandi), l’étiquette et × passent au-dessus du message. */}
+          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3.5 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
             <span
               aria-hidden="true"
               className="absolute inset-y-3 left-0.5 w-[3px] rounded-full"
               style={{ background: "var(--tone)", boxShadow: "0 0 12px var(--tone)" }}
             />
-            <span className="tone-badge mt-[0.1rem] inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-[0.3rem] text-[0.62rem] leading-none font-bold tracking-[0.1em] uppercase">
+            <span className="tone-badge mt-[0.1rem] inline-flex items-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] uppercase">
               <span aria-hidden="true" className="tone-dot size-1.5 animate-pulse-soft rounded-full" />
               {label}
             </span>
-            <p className="min-w-0 flex-1 text-[0.8rem] leading-snug text-balance text-soft">
+            <p className="min-w-0 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft @max-[17rem]:col-span-full @max-[17rem]:row-start-2">
               {message}
               {link ? (
                 <>
@@ -138,7 +141,7 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
               aria-label="Replier l’annonce"
               aria-controls={panelId}
               aria-expanded="true"
-              className="relative -my-0.5 grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink"
+              className="relative -my-0.5 grid size-7 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink @max-[17rem]:col-start-2 @max-[17rem]:row-start-1"
             >
               <X aria-hidden="true" className="size-3.5" />
             </button>
@@ -187,17 +190,17 @@ export function AlertBannerPill({ id, tone, label }: Pick<AlertBannerProps, "id"
             window.dispatchEvent(new Event(`${EVENT}:reopen`));
             setBannerState(id, "open");
           }}
-          aria-label={`Afficher l’annonce : ${label}`}
+          aria-label={`Afficher l’annonce\u00A0: ${label}`}
           aria-controls={`annonce-${id}`}
           aria-expanded="false"
           className={clsx(
             toneClass[tone],
-            "inline-flex h-11 items-center gap-1.5 rounded-full glass pr-3 pl-3.5 text-[0.66rem] font-bold tracking-[0.1em] text-[var(--tone)] uppercase forced-colors:border",
+            "inline-flex h-11 max-w-full items-center gap-1.5 rounded-full glass pr-3 pl-3.5 text-[0.6875rem] font-bold tracking-[0.06em] text-[var(--tone)] uppercase forced-colors:border",
           )}
         >
-          <span aria-hidden="true" className="tone-dot size-1.5 rounded-full" />
-          {label}
-          <ChevronDown aria-hidden="true" className="size-3.5 opacity-80" />
+          <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
+          <span className="min-w-0 truncate">{label}</span>
+          <ChevronDown aria-hidden="true" className="size-3.5 shrink-0 opacity-80" />
         </m.button>
       ) : null}
     </AnimatePresence>

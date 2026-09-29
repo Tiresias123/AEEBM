@@ -2,10 +2,11 @@ import { Heart } from "lucide-react";
 import Image from "next/image";
 import { CurrentYear } from "@/components/CurrentYear";
 import { Enter } from "@/components/Enter";
+import { PostalAddress } from "@/components/PostalAddress";
 import type { AssociationConfig, FooterConfig, LegalLink } from "@/config/types";
-import { isPendingHref } from "@/lib/pending";
-import { formatAddress } from "@/lib/site";
 import { isExternalHref, linkProps } from "@/lib/links";
+import { isPendingHref } from "@/lib/pending";
+import { frTypo, NBSP } from "@/lib/typo";
 
 function Signature({ text }: { text: string }) {
   const [before, after] = text.split("{heart}");
@@ -23,6 +24,21 @@ function Signature({ text }: { text: string }) {
   );
 }
 
+/** Mention légale avec le titre de la loi en italique (« … de la Loi sur les compagnies (RLRQ, c. C-38) »). */
+function LegalStatus({ text }: { text: string }) {
+  const typeset = frTypo(text);
+  const match = /(Loi sur [^()]+?)(?=\s*\()/.exec(typeset);
+  if (!match) return <>{typeset}</>;
+  const start = match.index;
+  return (
+    <>
+      {typeset.slice(0, start)}
+      <i>{match[1]}</i>
+      {typeset.slice(start + match[1].length)}
+    </>
+  );
+}
+
 function LinkList({ links }: { links: LegalLink[] }) {
   return (
     <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
@@ -32,7 +48,7 @@ function LinkList({ links }: { links: LegalLink[] }) {
             {...linkProps(link.href)}
             className="inline-flex min-h-6 items-center rounded px-1 text-muted underline-offset-4 transition-colors hover:text-ink hover:underline"
           >
-            {link.label}
+            {frTypo(link.label)}
             {isExternalHref(link.href) ? <span className="sr-only"> (nouvel onglet)</span> : null}
           </a>
         </li>
@@ -53,7 +69,6 @@ export function Footer({
   buildYear: number;
   enterIndex: number;
 }) {
-  const address = formatAddress(association.address);
   // Les adresses encore provisoires ne sont pas affichées dans le pied de page.
   const links = [...association.legalLinks, ...footer.links].filter((link) => !isPendingHref(link.href));
 
@@ -66,26 +81,34 @@ export function Footer({
           className="mb-8 h-px w-16 bg-gradient-to-r from-transparent via-white/25 to-transparent"
         />
 
-        {/* Logo officiel, version blanche, au-dessus de la taille minimale de 110 px (charte, section 10). */}
-        <Image src={association.logo.src} alt={association.logo.alt} sizes="120px" className="h-auto w-[7.5rem]" />
+        {/*
+         * Logo officiel, version principale « blanc sur bordeaux » (charte, section 10) : plaque bordeaux en aplat,
+         * marge intérieure au moins égale à la hauteur du « B » (zone de protection), largeur au-dessus de 110 px.
+         */}
+        <div className="rounded-2xl bg-[#681A16] px-5 py-4 forced-colors:border">
+          <Image
+            src={association.logo.src}
+            alt={association.logo.alt}
+            sizes="120px"
+            className="block h-auto w-[7.5rem]"
+          />
+        </div>
 
         <p className="mt-6 text-[0.8rem] text-soft/85">
           <Signature text={footer.signature} />
         </p>
-        <p className="mt-1.5 text-[0.75rem] text-muted">
-          © <CurrentYear initial={buildYear} /> {association.acronym} · Tous droits réservés · Depuis{" "}
+        <p className="mt-1.5 text-[0.75rem] text-balance text-muted">
+          © <CurrentYear initial={buildYear} /> {association.acronym} · Tous droits réservés · Depuis{NBSP}
           {association.foundingDate.slice(0, 4)}
         </p>
 
         <div className="mt-5 max-w-[22rem] space-y-1 text-[0.72rem] leading-relaxed text-balance text-muted">
           <p>{association.legalName}</p>
           <p>
-            {association.legalStatus} · <span className="whitespace-nowrap">NEQ {association.neq}</span>
+            <LegalStatus text={association.legalStatus} /> ·{" "}
+            <span className="whitespace-nowrap">NEQ {association.neq}</span>
           </p>
-          <address className="not-italic">
-            <span className="whitespace-nowrap">{address.street},</span>{" "}
-            <span className="whitespace-nowrap">{address.locality}</span>
-          </address>
+          <PostalAddress address={association.address} />
         </div>
 
         <nav aria-label="Liens institutionnels" className="mt-5 text-[0.72rem]">

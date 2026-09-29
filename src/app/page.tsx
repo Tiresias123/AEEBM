@@ -17,8 +17,6 @@ import { isPendingHref } from "@/lib/pending";
 import { activeTheme, getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
 import { frTypo } from "@/lib/typo";
 
-const PRIVACY_HREF = "/confidentialite";
-
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
 function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
   const { association, socials } = siteConfig;
@@ -94,7 +92,8 @@ export default function HomePage() {
 
           <header className="relative pt-3">
             {banner ? (
-              <div className="absolute top-0 left-0 z-20">
+              // Pastille bornée à l’espace à gauche de l’avatar (rayon 58 px + pastille 22 px, marge de sécurité).
+              <div className="absolute top-0 left-0 z-20 max-w-[calc(50%-2.875rem)] sm:max-w-none">
                 <AlertBannerPill id={banner.id} tone={banner.tone} label={banner.label} />
               </div>
             ) : null}
@@ -133,6 +132,7 @@ export default function HomePage() {
             {sections.map((section) => (
               <section
                 key={section.id}
+                data-sched={section.schedId}
                 aria-labelledby={section.title ? `section-${section.id}` : undefined}
                 aria-label={section.title ? undefined : "Liens"}
                 className="mt-8"
@@ -160,7 +160,7 @@ export default function HomePage() {
                           icon={
                             <Icon
                               aria-hidden="true"
-                              className="size-[1.35rem] text-white drop-shadow-[0_1px_1px_rgb(0_0_0/0.25)]"
+                              className="size-[1.35rem] drop-shadow-[0_1px_1px_rgb(0_0_0/0.25)] forced-colors:drop-shadow-none"
                               strokeWidth={1.9}
                             />
                           }
@@ -174,11 +174,7 @@ export default function HomePage() {
 
             {newsletter.enabled ? (
               <div className="mt-10">
-                <NewsletterCard
-                  newsletter={{ ...newsletter, description: frTypo(newsletter.description) }}
-                  privacyHref={PRIVACY_HREF}
-                  enterIndex={next()}
-                />
+                <NewsletterCard newsletter={newsletter} enterIndex={next()} />
               </div>
             ) : null}
           </main>

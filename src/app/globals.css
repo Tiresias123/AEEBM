@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Écrans bas (iPhone SE dans Safari, portable 13 po) : fenêtre de partage compacte. */
+@custom-variant short (@media (max-height: 42rem));
+
 /*
  * Système de design AEEBM.
  * Les couleurs proviennent de src/config/themes.ts (injectées en variables CSS sur <html>).
@@ -132,6 +135,7 @@
 /* ───────────────────────────── Entrée en cascade ─────────────────────────────
  * Animation CSS (et non JavaScript) : le contenu est présent dès le premier affichage, même si le
  * JavaScript tarde ou échoue. Chaque élément reçoit son rang via --i (voir <Enter> et la page).
+ * Opacité de départ 0.01 (invisible) plutôt que 0 : le premier affichage compte ainsi pour le LCP.
  */
 
 .enter {
@@ -145,13 +149,13 @@
 
 @keyframes enter-up {
   from {
-    opacity: 0;
+    opacity: 0.01;
     translate: 0 16px;
   }
 }
 @keyframes enter-pop {
   from {
-    opacity: 0;
+    opacity: 0.01;
     scale: 0.88;
   }
 }
@@ -267,8 +271,8 @@
   background: conic-gradient(from 210deg, var(--ring-1), var(--ring-2), var(--ring-3), var(--ring-1));
 }
 
-/* Thème « barreau » : l’anneau s’interrompt dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
-[data-theme="barreau"] .avatar-ring-frame {
+/* Anneau ouvert (thème « barreau ») : interrompu dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
+[data-avatar-ring="open"] .avatar-ring-frame {
   -webkit-mask: conic-gradient(
     from 90deg,
     transparent 0 22deg,
@@ -287,6 +291,13 @@
   );
 }
 
+/* Puces de <BulletLine> : masquées jusqu’à la mesure des lignes, pour qu’aucune ne commence une ligne. */
+@media (scripting: enabled) {
+  [data-bullets]:not([data-measured]) [data-bullet] {
+    visibility: hidden;
+  }
+}
+
 /* Filet des titres de section (bordeaux dans le thème « barreau »). */
 .section-rule {
   background-image: linear-gradient(90deg, var(--rule), transparent);
@@ -300,9 +311,12 @@
 
 /* ───────────────────────────── Bandeau & fenêtre modale ───────────────────────────── */
 
-/* État décidé avant le premier affichage par le script de src/lib/schedule.ts. */
+/*
+ * État décidé avant le premier affichage par le script de src/lib/schedule.ts. Un bandeau replié par
+ * la personne pendant la visite (data-banner-live) n’est pas masqué ici : son animation de repli se joue.
+ */
 [data-banner="hidden"] [data-alert-banner],
-[data-banner="collapsed"] [data-alert-banner] {
+[data-banner="collapsed"]:not([data-banner-live]) [data-alert-banner] {
   display: none !important;
 }
 

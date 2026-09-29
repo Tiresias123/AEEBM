@@ -112,10 +112,20 @@ if (process.env.NODE_ENV === "production") {
         pending.map((label) => `   • ${label}`).join("\n"),
     );
   }
-  if (getSiteUrlSource() === "config") {
+  if (getSiteUrlSource() === "config" && !siteConfig.siteUrlConfirmed) {
     warnings.push(
       `URL publique = siteUrl de repli (${siteConfig.siteUrl}). Le code QR, le partage et l’URL canonique y pointeront :\n` +
         "   définir NEXT_PUBLIC_SITE_URL ou déployer sur Vercel (domaine de production détecté automatiquement).",
+    );
+  }
+  if (
+    getSiteUrlSource() !== "config" &&
+    !siteConfig.siteUrlConfirmed &&
+    new URL(siteUrl).host === new URL(siteConfig.siteUrl).host
+  ) {
+    warnings.push(
+      `L’URL publique pointe vers ${new URL(siteUrl).host}, domaine non confirmé : le code QR, le partage et l’URL canonique y pointeront.\n` +
+        "   Passer siteUrlConfirmed à true une fois le domaine repris, ou définir une autre URL (NEXT_PUBLIC_SITE_URL).",
     );
   }
   if (isNewsletterMisconfigured()) {
@@ -124,6 +134,11 @@ if (process.env.NODE_ENV === "production") {
         "   Ajouter les deux variables chez l’hébergeur, ou mettre newsletter.enabled à false.",
     );
   }
+  for (const section of siteConfig.sections) {
+    if (!/^[a-z0-9-]+$/i.test(section.id)) {
+      warnings.push(`sections.id « ${section.id} » : utiliser seulement lettres, chiffres et tirets.`);
+    }
+  }
   if (!/^[a-z0-9-]+$/i.test(siteConfig.alertBanner.id)) {
     warnings.push(`alertBanner.id « ${siteConfig.alertBanner.id} » : utiliser seulement lettres, chiffres et tirets.`);
   }
@@ -131,7 +146,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const { banner, scheduled } = getPageModel();
+  const { banner, scheduled, groups } = getPageModel();
   const needsPrepaint = banner !== null || scheduled.length > 0;
   return (
     <html
@@ -139,6 +154,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       data-theme={siteConfig.theme}
       data-display-font={activeTheme.fonts.display}
       data-body-font={activeTheme.fonts.body}
+      data-avatar-ring={activeTheme.avatarRing}
       data-confetti={activeTheme.colors.confetti.join(",")}
       style={themeToCssVariables(activeTheme) as CSSProperties}
       className={cn(jakarta.variable, cormorant.variable, poppins.variable)}
@@ -146,7 +162,9 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
       suppressHydrationWarning
     >
       <head>
-        {needsPrepaint ? <script dangerouslySetInnerHTML={{ __html: prepaintScript(banner, scheduled) }} /> : null}
+        {needsPrepaint ? (
+          <script dangerouslySetInnerHTML={{ __html: prepaintScript(banner, scheduled, groups) }} />
+        ) : null}
       </head>
       <body className="min-h-dvh font-sans">{children}</body>
     </html>

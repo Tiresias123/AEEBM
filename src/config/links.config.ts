@@ -19,8 +19,8 @@
  *   • Thème visuel .............................. theme: "amethyste" | "barreau" (charte bordeaux de l’AEEBM)
  *   • Nouvelle année ............................ changer COHORTE ci-dessous
  *
- * Adresses provisoires : tant qu’un lien vaut A_COMPLETER, la carte s’affiche « Bientôt disponible »
- * (non cliquable) et chaque build le signale dans la console.
+ * Adresses provisoires : tant qu’un lien vaut A_COMPLETER, la carte s’affiche « Bientôt » (non cliquable,
+ * sans pastille « Nouveau ») et chaque build le signale dans la console.
  */
 
 import logoBlanc from "@/assets/brand/aeebm-logo-blanc.png";
@@ -33,13 +33,15 @@ export { A_COMPLETER };
 /** Cohorte et mandat de l’exécutif : à changer une fois par an. */
 const COHORTE = "2026-2027";
 const COURRIEL = "aeebm.contact@gmail.com";
+const POLITIQUE_CONFIDENTIALITE = { label: "Politique de confidentialité", href: "/confidentialite" } as const;
 
 export const siteConfig: SiteConfig = {
   theme: "amethyste",
 
   // URL publique (code QR, partage, SEO). Sur Vercel, le domaine de production est détecté automatiquement ;
   // NEXT_PUBLIC_SITE_URL a priorité. Cette valeur ne sert qu’en dernier recours.
-  siteUrl: "https://aeebm.ca", // ⚠️ À confirmer : domaine à reprendre auprès de l’ancien prestataire (fiche, section 08)
+  siteUrl: "https://aeebm.ca",
+  siteUrlConfirmed: false, // ⚠️ Passer à true une fois le domaine repris auprès de l’ancien prestataire (fiche, section 08)
 
   /* ───────────────────────────── 1. IDENTITÉ ───────────────────────────── */
   association: {
@@ -69,7 +71,7 @@ export const siteConfig: SiteConfig = {
       "Personne morale sans but lucratif constituée en vertu de la partie III de la Loi sur les compagnies (RLRQ, c. C-38)",
     foundingDate: "1988-01-21", // Lettres patentes du 21 janvier 1988
     legalLinks: [
-      { label: "Politique de confidentialité", href: "/confidentialite" },
+      POLITIQUE_CONFIDENTIALITE,
       { label: "Règlements généraux", href: A_COMPLETER },
       { label: "Loi sur les compagnies, partie III", href: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-38" },
     ],
@@ -136,7 +138,7 @@ export const siteConfig: SiteConfig = {
           category: "academique",
         },
         {
-          title: "Tutorat & entraide",
+          title: "Tutorat et entraide",
           subtitle: "Jumelage entre pairs par matière, en présentiel ou à distance",
           href: A_COMPLETER,
           icon: "UsersRound",
@@ -146,7 +148,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       id: "carriere",
-      title: "Carrière & stages",
+      title: "Carrière et stages",
       links: [
         {
           title: "Programme de mentorat",
@@ -165,7 +167,7 @@ export const siteConfig: SiteConfig = {
           category: "carriere",
         },
         {
-          title: "Clinique juridique & pro bono",
+          title: "Clinique juridique et pro bono",
           subtitle: "Engagement bénévole auprès d’organismes montréalais",
           href: A_COMPLETER,
           icon: "Scale",
@@ -210,7 +212,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       id: "representation",
-      title: "Représentation & services",
+      title: "Représentation et services",
       links: [
         {
           title: "Signaler une situation",
@@ -221,7 +223,7 @@ export const siteConfig: SiteConfig = {
         },
         {
           // Procès-verbaux : consultables par les membres (art. 20) ; les réserver à un dossier restreint.
-          title: "Assemblées & documents officiels",
+          title: "Assemblées et documents officiels",
           subtitle: "Avis de convocation, ordres du jour et règlements généraux",
           href: A_COMPLETER,
           icon: "ScrollText",
@@ -229,7 +231,7 @@ export const siteConfig: SiteConfig = {
           badge: { label: "AGA · 30 sept.", tone: "important", endsAt: "2026-10-01" },
         },
         {
-          title: "Assurance santé & dentaire",
+          title: "Assurance santé et dentaire",
           subtitle: "Régime collectif Alumo (anciennement ASEQ), couverture du 1er septembre au 31 août",
           href: "https://www.alumo.ca", // ⚠️ Remplacer par le portail du régime de l’AEEBM (https://…alumo.ca)
           icon: "HeartPulse",
@@ -252,28 +254,32 @@ export const siteConfig: SiteConfig = {
     title: "Restez informés",
     description: "Ne manquez aucun avis ni événement du Barreau.",
     inputLabel: "Adresse courriel",
-    placeholder: "Votre courriel",
+    placeholder: "Adresse courriel",
     buttonLabel: "S’abonner",
     loadingLabel: "Inscription en cours…",
     endpoint: "/api/newsletter",
-    successTitle: "Plus qu’une étape",
+    // Réponse identique pour une nouvelle adresse et une adresse déjà abonnée : la page ne révèle pas qui est inscrit.
+    successTitle: "Vérifiez vos courriels",
     successMessage:
-      "Cliquez sur le lien du courriel de confirmation pour activer votre abonnement. Rien reçu ? Consultez vos courriels indésirables.",
+      "Si cette adresse n’est pas déjà abonnée, un lien de confirmation vient de vous être envoyé. Rien reçu ? Consultez vos courriels indésirables.",
     resetLabel: "Inscrire une autre adresse",
     invalidEmailMessage: "Veuillez entrer une adresse courriel valide.",
-    alreadySubscribedMessage:
-      "Cette adresse est déjà abonnée à l’infolettre. À bientôt dans votre boîte de réception !",
     removedMessage: `Cette adresse a été retirée de notre liste et ne peut pas être réinscrite ici. Écrivez-nous à ${COURRIEL}.`,
     errorMessage: `Inscription impossible pour le moment. Écrivez-nous à ${COURRIEL}.`,
-    consentNote: "Une infolettre par mois au plus. Désabonnement en un clic.",
+    consentNote: "Avis, assemblées et événements de l’AEEBM. Désabonnement en un clic.",
+    privacyLink: POLITIQUE_CONFIDENTIALITE,
   },
 
   /* ───────────────────────── CONFIDENTIALITÉ (Loi 25) ───────────────────────── */
   privacy: {
     officer: { title: "Présidence de l’AEEBM", email: COURRIEL },
     updatedAt: "2026-09-29",
+    // Mailchimp mesure par défaut l’ouverture des courriels et les clics (Campagne › Settings & Tracking).
+    // Passer à false seulement si « Track opens » et « Track clicks » sont décochés pour chaque envoi.
+    emailTracking: true,
     processors: [
       { name: "Mailchimp (Intuit)", purpose: "envoi de l’infolettre", location: "États-Unis" },
+      { name: "Google (Gmail)", purpose: "réception de vos courriels et demandes", location: "États-Unis" },
       // ⚠️ Ajuster selon l’hébergeur retenu pour le site.
       { name: "Vercel", purpose: "hébergement du site et transmission des inscriptions", location: "États-Unis" },
     ],
