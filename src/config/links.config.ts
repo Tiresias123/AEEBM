@@ -124,15 +124,6 @@ export const siteConfig: SiteConfig = {
       title: "Réussir l’École",
       links: [
         {
-          // Ne jamais y verser d’examens (finaux ou simulés) ni de corrigés de l’École du Barreau :
-          // ce matériel est protégé. Résumés et outils rédigés par les membres seulement.
-          title: "Banque de résumés",
-          subtitle: "Résumés et outils d’étude par matière",
-          href: A_COMPLETER,
-          icon: "Library",
-          category: "academique",
-        },
-        {
           title: "Cliniques de préparation",
           subtitle: "Ateliers de révision avant l’examen",
           href: A_COMPLETER,
@@ -146,33 +137,11 @@ export const siteConfig: SiteConfig = {
           icon: "UsersRound",
           category: "academique",
         },
-      ],
-    },
-    {
-      id: "carriere",
-      title: "Carrière et stages",
-      links: [
-        {
-          title: "Programme de mentorat",
-          subtitle: "Jumelage avec des juristes en exercice",
-          href: A_COMPLETER,
-          icon: "Handshake",
-          category: "carriere",
-          // Exemple de pastille datée, retirée seule après la date limite :
-          // badge: { label: "Date limite · 15 oct.", tone: "deadline", endsAt: "2026-10-16" },
-        },
         {
           title: "Guide des stages",
           subtitle: "Recherche de stage et entrevues",
           href: A_COMPLETER,
           icon: "BriefcaseBusiness",
-          category: "carriere",
-        },
-        {
-          title: "Clinique juridique et pro bono",
-          subtitle: "Bénévolat auprès d’organismes montréalais",
-          href: A_COMPLETER,
-          icon: "Scale",
           category: "carriere",
         },
       ],
