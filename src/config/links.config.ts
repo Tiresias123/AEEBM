@@ -193,13 +193,6 @@ export const siteConfig: SiteConfig = {
           badge: { label: "Nouveau", tone: "new" },
         },
         {
-          title: "Photos des finissantes et finissants",
-          subtitle: "Séances photo avec Juristas",
-          href: A_COMPLETER,
-          icon: "Camera",
-          category: "evenements",
-        },
-        {
           title: "Boutique AEEBM",
           subtitle: "Vêtements et objets de l’AEEBM",
           href: A_COMPLETER,
