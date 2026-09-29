@@ -121,11 +121,11 @@ src/
 │   ├── opengraph-image.tsx     Image de partage 1200 × 630 (JPEG) générée au build
 │   └── favicon.svg/, favicon.ico/, qr-logo.svg/, icon-*.png/, apple-touch-icon.png/, manifest.ts, robots.ts, sitemap.ts
 ├── components/
-│   ├── BackgroundGlow.tsx      Halos radiaux, cercle ouvert, voile de bruit
-│   ├── ProfileHeader.tsx       Avatar à anneau lumineux, nom, pastille, accroche et biographie
+│   ├── BackgroundGlow.tsx      Halos radiaux, voile de bruit
+│   ├── ProfileHeader.tsx       Avatar à anneau ouvert, nom, pastille, accroche et biographie
 │   ├── SocialBar.tsx           Réseaux sociaux
 │   ├── SpotlightCard.tsx       Lien vedette
-│   ├── LinkCard.tsx            Carte de lien (squircle, titres, chevron animé)
+│   ├── LinkCard.tsx            Carte de lien (tuile d’icône, titres, chevron animé)
 │   ├── NewsletterCard.tsx      Formulaire d’infolettre avec états, annonces et confettis
 │   ├── ShareModal.tsx          Bouton de partage (la fenêtre ShareDialog est chargée à la demande)
 │   ├── ShareDialog.tsx         Copie du lien, partage direct, code QR téléchargeable
@@ -143,11 +143,11 @@ src/
 
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
-- **Cercle ouvert** : motif d’arrière-plan qui sort de la page par un angle, affiché sur grand écran, toujours tenu à l’écart de la colonne de texte et absent des pages intérieures.
+- **Cercle ouvert** : anneau de l’avatar, interrompu dans l’axe du sigle.
 
 ### Accessibilité et performance
 
 - WCAG 2.2 AA : contrastes, focus visibles, lien d’évitement, libellés et annonces ARIA, liens externes signalés, fenêtre modale Radix, cibles tactiles.
-- Toutes les animations sont finies (page immobile en moins de 5 s) et neutralisées par « réduire les animations ».
+- Animations limitées à l’apparition des blocs (page immobile en moins de 2 s) et neutralisées par « réduire les animations ». Aucun flou recalculé au défilement.
 - Entrée en cascade en CSS : aucun contenu n’attend le JavaScript ; fenêtre de partage et code QR chargés à la demande (avec repli si le chargement échoue).
 - `100dvh`, zones sûres iOS et `viewport-fit=cover` pour les navigateurs intégrés (Instagram, LinkedIn).

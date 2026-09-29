@@ -24,21 +24,6 @@ function Signature({ text }: { text: string }) {
   );
 }
 
-/** Mention légale avec le titre de la loi en italique (« … de la Loi sur les compagnies (RLRQ, c. C-38) »). */
-function LegalStatus({ text }: { text: string }) {
-  const typeset = frTypo(text);
-  const match = /(Loi sur [^()]+?)(?=\s*\()/.exec(typeset);
-  if (!match) return <>{typeset}</>;
-  const start = match.index;
-  return (
-    <>
-      {typeset.slice(0, start)}
-      <i>{match[1]}</i>
-      {typeset.slice(start + match[1].length)}
-    </>
-  );
-}
-
 function LinkList({ links }: { links: LegalLink[] }) {
   return (
     <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-0.5">
@@ -73,14 +58,8 @@ export function Footer({
   const links = [...association.legalLinks, ...footer.links].filter((link) => !isPendingHref(link.href));
 
   return (
-    <Enter index={enterIndex} className="mt-12">
+    <Enter index={enterIndex} className="mt-14">
       <footer className="flex flex-col items-center text-center">
-        {/* Filet (charte, section 13) */}
-        <span
-          aria-hidden="true"
-          className="mb-8 h-px w-16 bg-gradient-to-r from-transparent via-white/25 to-transparent"
-        />
-
         {/*
          * Logo officiel, version principale « blanc sur bordeaux » (charte, section 10) : plaque bordeaux en aplat,
          * marge intérieure au moins égale à la hauteur du « B » (zone de protection), largeur au-dessus de 110 px.
@@ -97,21 +76,20 @@ export function Footer({
         <p className="mt-6 text-[0.8rem] text-soft/85">
           <Signature text={footer.signature} />
         </p>
-        <p className="mt-1.5 text-[0.75rem] text-balance text-muted">
-          © <CurrentYear initial={buildYear} /> {association.acronym} · Tous droits réservés · Depuis{NBSP}
-          {association.foundingDate.slice(0, 4)}
-        </p>
 
-        <div className="mt-5 max-w-[22rem] space-y-1 text-[0.72rem] leading-relaxed text-balance text-muted">
+        <div className="mt-4 max-w-[22rem] space-y-0.5 text-[0.72rem] leading-relaxed text-balance text-muted">
+          <p>
+            © <CurrentYear initial={buildYear} /> {association.acronym} · Tous droits réservés
+          </p>
           <p>{association.legalName}</p>
           <p>
-            <LegalStatus text={association.legalStatus} /> ·{" "}
-            <span className="whitespace-nowrap">NEQ {association.neq}</span>
+            {frTypo(association.legalStatus)} depuis{NBSP}
+            {association.foundingDate.slice(0, 4)} · <span className="whitespace-nowrap">NEQ {association.neq}</span>
           </p>
           <PostalAddress address={association.address} />
         </div>
 
-        <nav aria-label="Liens institutionnels" className="mt-5 text-[0.72rem]">
+        <nav aria-label="Liens institutionnels" className="mt-4 text-[0.72rem]">
           <LinkList links={links} />
         </nav>
       </footer>

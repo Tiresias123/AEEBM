@@ -102,14 +102,9 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
           className={clsx(toneClass[tone], "enter @container relative mb-5 overflow-hidden rounded-2xl")}
         >
           {/* Une rangée ; sous 17 rem (texte agrandi), l’étiquette et × passent au-dessus du message. */}
-          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3.5 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
-            <span
-              aria-hidden="true"
-              className="absolute inset-y-3 left-0.5 w-[3px] rounded-full"
-              style={{ background: "var(--tone)", boxShadow: "0 0 12px var(--tone)" }}
-            />
+          <div className="relative grid grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-x-3 gap-y-2 rounded-2xl glass py-2.5 pr-2 pl-3 @max-[17rem]:grid-cols-[minmax(0,1fr)_auto]">
             <span className="tone-badge mt-[0.1rem] inline-flex max-w-full min-w-0 items-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
-              <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 animate-pulse-soft rounded-full" />
+              <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 rounded-full" />
               <span className="min-w-0">{label}</span>
             </span>
             <p className="min-w-0 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft @max-[17rem]:col-span-full @max-[17rem]:row-start-2">

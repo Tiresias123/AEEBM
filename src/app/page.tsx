@@ -79,7 +79,7 @@ export default function HomePage() {
       </a>
       <BackgroundGlow />
       <MotionProvider>
-        <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6 lg:my-12 lg:min-h-0 lg:rounded-[2.25rem] lg:border lg:border-white/[0.06] lg:bg-white/[0.018] lg:px-8 lg:pt-8 lg:pb-10 lg:shadow-[0_40px_120px_-40px_rgb(0_0_0/0.9)]">
+        <div className="relative z-10 mx-auto flex min-h-dvh w-full max-w-[30rem] flex-col px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-6 lg:pt-12 lg:pb-14">
           {banner ? (
             <AlertBanner
               id={banner.id}
@@ -125,7 +125,7 @@ export default function HomePage() {
                 pending={isPendingHref(spotlight.config.href)}
                 schedId={spotlight.schedId}
                 enterIndex={next()}
-                icon={<SpotlightIcon aria-hidden="true" className="size-6" strokeWidth={1.9} />}
+                icon={<SpotlightIcon aria-hidden="true" className="size-[1.4rem]" strokeWidth={1.75} />}
               />
             ) : null}
 
@@ -135,12 +135,12 @@ export default function HomePage() {
                 data-sched={section.schedId}
                 aria-labelledby={section.title ? `section-${section.id}` : undefined}
                 aria-label={section.title ? undefined : "Liens"}
-                className="mt-8"
+                className="mt-9"
               >
                 {section.title ? (
                   <SectionHeading id={`section-${section.id}`} title={section.title} enterIndex={next()} />
                 ) : null}
-                <ul className="mt-3 flex flex-col gap-3">
+                <ul className="mt-3 flex flex-col gap-2.5">
                   {section.links.map(({ key, link, schedId, badgeSchedId }) => {
                     const Icon = getIcon(link.icon);
                     return (
@@ -157,13 +157,7 @@ export default function HomePage() {
                               : undefined
                           }
                           enterIndex={next()}
-                          icon={
-                            <Icon
-                              aria-hidden="true"
-                              className="size-[1.35rem] drop-shadow-[0_1px_1px_rgb(0_0_0/0.25)] forced-colors:drop-shadow-none"
-                              strokeWidth={1.9}
-                            />
-                          }
+                          icon={<Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />}
                         />
                       </li>
                     );

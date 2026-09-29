@@ -23,7 +23,7 @@ export interface SpotlightCardProps {
   schedId?: string;
 }
 
-/** Lien phare : grand format, dégradé satiné, reflet animé et halo coloré accordé au dégradé. */
+/** Lien phare : grand format sur dégradé satiné, ombre douce accordée au dégradé. */
 export function SpotlightCard({
   title,
   subtitle,
@@ -50,59 +50,42 @@ export function SpotlightCard({
   } as CSSProperties;
 
   const card = (
-    <>
-      {/* Halo extérieur accordé au dégradé */}
-      <span
-        aria-hidden="true"
-        className={clsx(
-          "absolute -inset-x-1 top-4 -bottom-5 -z-10 rounded-[1.6rem] bg-accent-gradient blur-[30px] transition-opacity duration-500",
-          pending ? "opacity-40" : "opacity-70 group-hover:opacity-90",
-        )}
-      />
+    <span
+      className={clsx(
+        "relative flex items-center gap-3.5 overflow-hidden rounded-[1.4rem] bg-accent-gradient py-4 pr-[calc(0.875rem+1px)] pl-[calc(0.75rem+1px)] text-on-accent inset-ring inset-ring-white/10 transition-shadow duration-500 forced-colors:border",
+        "shadow-[inset_0_1px_0_0_rgb(255_255_255/0.18),0_16px_36px_-22px_var(--spot-from,var(--accent-from))]",
+        !pending &&
+          "group-hover:shadow-[inset_0_1px_0_0_rgb(255_255_255/0.18),0_20px_44px_-20px_var(--spot-from,var(--accent-from))]",
+      )}
+    >
+      <span className="relative grid size-11 shrink-0 place-items-center rounded-xl bg-white/[0.12]">{icon}</span>
 
-      <span className="relative flex items-center gap-3.5 overflow-hidden rounded-[1.4rem] bg-accent-gradient py-[1.05rem] pr-[calc(0.875rem+1px)] pl-[calc(0.75rem+1px)] text-on-accent shadow-[inset_0_1px_0_0_rgb(255_255_255/0.35),inset_0_-1px_0_0_rgb(0_0_0/0.15),0_20px_50px_-18px_var(--spot-from,var(--accent-from)),0_12px_40px_-20px_var(--spot-to,var(--accent-to))] inset-ring inset-ring-white/12 forced-colors:border">
-        {/* Brillance supérieure */}
-        <span
-          aria-hidden="true"
-          className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/[0.12] to-transparent"
-        />
-        {/* Reflet satiné (deux passages à l’arrivée) */}
-        <span
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-y-0 left-0 w-2/5 animate-sheen bg-gradient-to-r from-transparent via-white/15 to-transparent motion-reduce:hidden"
-        />
-
-        <span className="relative grid size-12 shrink-0 place-items-center rounded-2xl bg-white/[0.16] shadow-[inset_0_1px_0_0_rgb(255_255_255/0.35)] ring-1 ring-white/25">
-          {icon}
-        </span>
-
-        <span className="relative flex min-w-0 flex-1 flex-col text-left">
-          <span className="text-[1.02rem] leading-tight font-semibold tracking-[-0.01em] text-pretty">{title}</span>
-          {shownBadge ? (
-            <span className="order-first mb-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-black/20 px-2 py-[0.2rem] text-[0.6875rem] leading-none font-semibold tracking-[0.04em] uppercase ring-1 ring-white/30">
-              <span aria-hidden="true" className="size-1.5 animate-pulse-soft rounded-full bg-current" />
-              <span className="sr-only">(</span>
-              {shownBadge}
-              <span className="sr-only">)</span>
-            </span>
-          ) : null}
-          <span className="mt-1 text-[0.8rem] leading-snug text-balance text-on-accent/90">
-            <span className="sr-only"> — </span>
-            {subtitle}
+      <span className="relative flex min-w-0 flex-1 flex-col text-left">
+        <span className="text-[1.02rem] leading-tight font-semibold tracking-[-0.01em] text-pretty">{title}</span>
+        {shownBadge ? (
+          <span className="order-first mb-1.5 inline-flex w-fit items-center gap-1 rounded-full bg-black/20 px-2 py-[0.2rem] text-[0.6875rem] leading-none font-semibold tracking-[0.04em] uppercase ring-1 ring-white/25">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-current" />
+            <span className="sr-only">(</span>
+            {shownBadge}
+            <span className="sr-only">)</span>
           </span>
+        ) : null}
+        <span className="mt-1 text-[0.8rem] leading-snug text-pretty text-on-accent/90">
+          <span className="sr-only"> — </span>
+          {subtitle}
         </span>
-
-        {pending ? (
-          <PendingLabel onAccent />
-        ) : (
-          <ChevronRight
-            aria-hidden="true"
-            className="relative size-5 shrink-0 opacity-90 transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-1"
-          />
-        )}
-        {external ? <span className="sr-only"> (nouvel onglet)</span> : null}
       </span>
-    </>
+
+      {pending ? (
+        <PendingLabel onAccent />
+      ) : (
+        <ChevronRight
+          aria-hidden="true"
+          className="relative size-5 shrink-0 opacity-90 transition-transform duration-300 ease-[var(--ease-out-expo)] group-hover:translate-x-1"
+        />
+      )}
+      {external ? <span className="sr-only"> (nouvel onglet)</span> : null}
+    </span>
   );
 
   if (pending) {
@@ -117,7 +100,7 @@ export function SpotlightCard({
     <m.a
       {...linkProps(href)}
       data-sched={schedId}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -1 }}
       whileTap={{ scale: TAP_SCALE }}
       transition={SPRING}
       style={style}

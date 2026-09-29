@@ -48,8 +48,6 @@ export interface ThemeTokens {
     onAccent: string;
     /** Anneau lumineux de l’avatar (dégradé conique). */
     ring: [string, string, string];
-    /** Intensité du halo de l’anneau (0 à 1). */
-    ringGlow: number;
     /** Dégradé du sous-titre. */
     subtitle: Gradient;
     /** Pastille de vérification. */
@@ -60,8 +58,8 @@ export interface ThemeTokens {
     cta: Gradient;
     /** Couleurs des confettis. */
     confetti: string[];
-    /** Squircles d’icônes par catégorie. */
-    categories: Record<LinkCategory, Gradient>;
+    /** Teinte des tuiles d’icônes par catégorie. */
+    categories: Record<LinkCategory, string>;
     /** Pastilles de statut des liens : couleur du libellé, puis du point. */
     badges: Record<BadgeTone, string>;
     badgeDots: Record<BadgeTone, string>;
@@ -69,8 +67,6 @@ export interface ThemeTokens {
     badgeDotRing: string;
     /** Messages d’erreur des formulaires. */
     danger: string;
-    /** Filet des titres de section. */
-    rule: string;
   };
   /** Opacité du voile de bruit. */
   noiseOpacity: number;
@@ -94,19 +90,18 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       accent: { from: "#8A2520", via: "#681A16", to: "#4A1310" }, // Bordeaux Barreau
       onAccent: "#FAF7F4",
       ring: ["#F5EAE8", "#681A16", "#DAD2CE"], // Rosé, bordeaux, brume
-      ringGlow: 0.45,
       subtitle: { from: "#F5EAE8", to: "#DAD2CE" },
       verified: { from: "#7FA08A", to: "#6F8F7A" }, // Sauge : statut « vérifié »
       avatar: { from: "#681A16", to: "#681A16" }, // Monogramme « avatar rond » sur bordeaux
       cta: { from: "#7E1019", to: "#7E1019" }, // Grenat : réservé aux appels à l’action
       confetti: ["#681A16", "#F5EAE8", "#FAF7F4", "#DAD2CE", "#A39894"],
-      // Nuancier dérivé de la charte : icônes blanches à 5:1 ou plus sur toute la surface.
+      // Nuancier dérivé de la charte.
       categories: {
-        academique: { from: "#9A3B32", to: "#521510" }, // Bordeaux clair
-        evenements: { from: "#A8243A", to: "#5A0B1A" }, // Grenat
-        carriere: { from: "#8C5E50", to: "#44291F" }, // Cuir (bordeaux et pierre)
-        representation: { from: "#84231D", to: "#3A0C0A" }, // Bordeaux Barreau profond
-        services: { from: "#8C4A4F", to: "#431F24" }, // Bois de rose (bordeaux et rosé)
+        academique: "#9A3B32", // Bordeaux clair
+        evenements: "#A8243A", // Grenat
+        carriere: "#8C5E50", // Cuir (bordeaux et pierre)
+        representation: "#84231D", // Bordeaux Barreau profond
+        services: "#8C4A4F", // Bois de rose (bordeaux et rosé)
       },
       // Étiquettes en ivoire, rosé ou brume ; grenat réservé au point « à traiter » (charte, section 13).
       badges: {
@@ -123,7 +118,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       },
       badgeDotRing: "#F5EAE8",
       danger: "#F0B8B2",
-      rule: "color-mix(in oklab, #681A16 80%, transparent)", // Filet bordeaux
     },
     noiseOpacity: 0.04,
   },
@@ -145,18 +139,17 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       accent: { from: "#A21CAF", via: "#4F46E5", to: "#2563EB" },
       onAccent: "#FFFFFF",
       ring: ["#E879F9", "#8B5CF6", "#3B82F6"],
-      ringGlow: 0.7,
       subtitle: { from: "#F0ABFC", to: "#A5B4FC" },
       verified: { from: "#A855F7", to: "#6366F1" },
       avatar: { from: "#681A16", to: "#681A16" }, // Monogramme officiel, aplat bordeaux Barreau (charte, section 10)
       cta: { from: "#C026D3", to: "#4F46E5" },
       confetti: ["#E879F9", "#A855F7", "#6366F1", "#3B82F6", "#FFFFFF"],
       categories: {
-        academique: { from: "#818CF8", to: "#4F46E5" },
-        evenements: { from: "#F472B6", to: "#C026D3" },
-        carriere: { from: "#60A5FA", to: "#1D4ED8" },
-        representation: { from: "#A855F7", to: "#6D28D9" },
-        services: { from: "#2DD4BF", to: "#0F766E" },
+        academique: "#818CF8",
+        evenements: "#F472B6",
+        carriere: "#60A5FA",
+        representation: "#A855F7",
+        services: "#2DD4BF",
       },
       badges: {
         new: "#E879F9",
@@ -172,7 +165,6 @@ export const themes: Record<ThemeName, ThemeTokens> = {
       },
       badgeDotRing: "transparent",
       danger: "#FB7185",
-      rule: "rgb(255 255 255 / 0.14)",
     },
     noiseOpacity: 0.035,
   },
@@ -198,7 +190,6 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--ring-1": c.ring[0],
     "--ring-2": c.ring[1],
     "--ring-3": c.ring[2],
-    "--ring-glow": String(c.ringGlow),
     "--subtitle-from": c.subtitle.from,
     "--subtitle-to": c.subtitle.to,
     "--verified-from": c.verified.from,
@@ -217,12 +208,8 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--badge-info-dot": c.badgeDots.info,
     "--badge-dot-ring": c.badgeDotRing,
     "--danger": c.danger,
-    "--rule": c.rule,
     "--noise-opacity": String(theme.noiseOpacity),
   };
-  for (const [category, gradient] of Object.entries(c.categories)) {
-    vars[`--cat-${category}-from`] = gradient.from;
-    vars[`--cat-${category}-to`] = gradient.to;
-  }
+  for (const [category, color] of Object.entries(c.categories)) vars[`--cat-${category}`] = color;
   return vars;
 }

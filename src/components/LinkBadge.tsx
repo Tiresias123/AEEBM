@@ -23,7 +23,7 @@ export function LinkBadge({
       )}
     >
       {tone === "deadline" || tone === "new" || tone === "important" ? (
-        <span aria-hidden="true" className="tone-dot size-1.5 animate-pulse-soft rounded-full" />
+        <span aria-hidden="true" className="tone-dot size-1.5 rounded-full" />
       ) : null}
       <span className="sr-only">(</span>
       {label}

@@ -67,14 +67,10 @@ export const siteConfig: SiteConfig = {
       postalCode: "H2Y 2Y7",
     },
     neq: "1148601249",
-    legalStatus:
-      "Personne morale sans but lucratif constituée en vertu de la partie III de la Loi sur les compagnies (RLRQ, c. C-38)",
+    // Personne morale sans but lucratif constituée en vertu de la partie III de la Loi sur les compagnies (RLRQ, c. C-38).
+    legalStatus: "Organisme sans but lucratif",
     foundingDate: "1988-01-21", // Lettres patentes du 21 janvier 1988
-    legalLinks: [
-      POLITIQUE_CONFIDENTIALITE,
-      { label: "Règlements généraux", href: A_COMPLETER },
-      { label: "Loi sur les compagnies, partie III", href: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-38" },
-    ],
+    legalLinks: [POLITIQUE_CONFIDENTIALITE, { label: "Règlements généraux", href: A_COMPLETER }],
   },
 
   /* ─────────────────────── 2. BANDEAU D’ANNONCE PRIORITAIRE ─────────────────────── */
@@ -105,7 +101,7 @@ export const siteConfig: SiteConfig = {
   spotlight: {
     enabled: true,
     title: `Guide de la rentrée ${COHORTE}`,
-    subtitle: "Calendrier, services, contacts et ressources essentielles",
+    subtitle: "Calendrier, services et contacts utiles",
     href: A_COMPLETER,
     icon: "BookOpen",
     badge: "Nouveau",
@@ -126,21 +122,21 @@ export const siteConfig: SiteConfig = {
           // Ne jamais y verser d’examens (finaux ou simulés) ni de corrigés de l’École du Barreau :
           // ce matériel est protégé. Résumés et outils rédigés par les membres seulement.
           title: "Banque de résumés",
-          subtitle: "Résumés par matière et outils d’étude partagés entre membres",
+          subtitle: "Résumés et outils d’étude par matière",
           href: A_COMPLETER,
           icon: "Library",
           category: "academique",
         },
         {
           title: "Cliniques de préparation",
-          subtitle: "Horaire des ateliers et séances de révision avant l’examen",
+          subtitle: "Ateliers de révision avant l’examen",
           href: A_COMPLETER,
           icon: "NotebookPen",
           category: "academique",
         },
         {
           title: "Tutorat et entraide",
-          subtitle: "Jumelage entre pairs par matière, en présentiel ou à distance",
+          subtitle: "Jumelage entre pairs, par matière",
           href: A_COMPLETER,
           icon: "UsersRound",
           category: "academique",
@@ -162,14 +158,14 @@ export const siteConfig: SiteConfig = {
         },
         {
           title: "Guide des stages",
-          subtitle: "Recherche de stage, entrevues et options après l’École",
+          subtitle: "Recherche de stage et entrevues",
           href: A_COMPLETER,
           icon: "BriefcaseBusiness",
           category: "carriere",
         },
         {
           title: "Clinique juridique et pro bono",
-          subtitle: "Engagement bénévole auprès d’organismes montréalais",
+          subtitle: "Bénévolat auprès d’organismes montréalais",
           href: A_COMPLETER,
           icon: "Scale",
           category: "carriere",
@@ -182,14 +178,14 @@ export const siteConfig: SiteConfig = {
       links: [
         {
           title: "Calendrier des événements",
-          subtitle: "5 à 7, réseautage et fêtes d’après examens",
+          subtitle: "5 à 7, réseautage et soirées",
           href: A_COMPLETER,
           icon: "CalendarDays",
           category: "evenements",
         },
         {
           title: "Billetterie",
-          subtitle: "Réservez vos places pour les prochaines soirées",
+          subtitle: "Vos places pour les prochaines soirées",
           href: A_COMPLETER,
           icon: "Ticket",
           category: "evenements",
@@ -204,7 +200,7 @@ export const siteConfig: SiteConfig = {
         },
         {
           title: "Boutique AEEBM",
-          subtitle: "Vêtements et objets aux couleurs de l’Association",
+          subtitle: "Vêtements et objets de l’AEEBM",
           href: A_COMPLETER,
           icon: "ShoppingBag",
           category: "evenements",
@@ -217,7 +213,7 @@ export const siteConfig: SiteConfig = {
       links: [
         {
           title: "Signaler une situation",
-          subtitle: "Plainte ou préoccupation académique, reçue par la vice-présidence aux affaires académiques",
+          subtitle: "Plainte ou préoccupation académique",
           href: A_COMPLETER,
           icon: "MessageSquareWarning",
           category: "representation",
@@ -225,7 +221,7 @@ export const siteConfig: SiteConfig = {
         {
           // Procès-verbaux : consultables par les membres (art. 20) ; les réserver à un dossier restreint.
           title: "Assemblées et documents officiels",
-          subtitle: "Avis de convocation, ordres du jour et règlements généraux",
+          subtitle: "Convocations, ordres du jour, règlements",
           href: A_COMPLETER,
           icon: "ScrollText",
           category: "representation",
@@ -233,7 +229,7 @@ export const siteConfig: SiteConfig = {
         },
         {
           title: "Assurance santé et dentaire",
-          subtitle: "Régime collectif Alumo (anciennement ASEQ), couverture du 1er septembre au 31 août",
+          subtitle: "Régime Alumo (anciennement ASEQ)",
           href: "https://www.alumo.ca", // ⚠️ Remplacer par le portail du régime de l’AEEBM (https://…alumo.ca)
           icon: "HeartPulse",
           category: "services",

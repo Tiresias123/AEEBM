@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import { AnimatePresence, m } from "framer-motion";
-import { BellRing, LoaderCircle } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 import { useCallback, useId, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { EASE_OUT_EXPO, SPRING, TAP_SCALE } from "@/components/motion";
 import type { NewsletterConfig } from "@/config/types";
@@ -180,11 +180,6 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-10 -top-px h-px bg-gradient-to-r from-transparent via-[var(--ring-1)] to-transparent opacity-70"
       />
-      <span
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-16 left-1/2 h-32 w-3/4 -translate-x-1/2 rounded-full opacity-25 blur-3xl"
-        style={{ background: "var(--accent-from)" }}
-      />
 
       {/* Région d’annonce permanente (role=status : polie et atomique), hors des transitions. */}
       <p role="status" className="sr-only">
@@ -234,12 +229,8 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
               transition={{ duration: 0.25 }}
               className="relative"
             >
-              <h2
-                id={titleId}
-                className="inline-flex items-center gap-2 text-[1.02rem] font-semibold tracking-[-0.01em]"
-              >
+              <h2 id={titleId} className="text-[1.02rem] font-semibold tracking-[-0.01em]">
                 <span className="text-gradient-subtitle">{newsletter.title}</span>
-                <BellRing aria-hidden="true" className="size-4 text-[var(--ring-1)]" strokeWidth={2} />
               </h2>
               <p className="mt-1 text-[0.8rem] text-balance text-soft/85">{frTypo(newsletter.description)}</p>
 

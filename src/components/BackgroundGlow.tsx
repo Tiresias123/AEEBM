@@ -1,9 +1,8 @@
 /**
- * Arrière-plan d’ambiance : fond minéral, halos radiaux fixes, cercle ouvert de la charte (page d’accueil,
- * grands écrans, toujours hors de la colonne de texte), voile de bruit et vignettage. Purement CSS, sans animation
- * permanente : les cartes en verre n’ont pas à recalculer leur flou à chaque image.
+ * Arrière-plan d’ambiance : fond minéral, halos radiaux fixes, voile de bruit et vignettage.
+ * Purement CSS et immobile.
  */
-export function BackgroundGlow({ circles = true }: { circles?: boolean }) {
+export function BackgroundGlow() {
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-x-0 top-0 z-0 h-lvh overflow-hidden bg-bg">
       <div
@@ -17,30 +16,6 @@ export function BackgroundGlow({ circles = true }: { circles?: boolean }) {
           ].join(", "),
         }}
       />
-
-      {/* Les pages intérieures ne portent pas le cercle ouvert (charte, section 13). */}
-      {circles ? (
-        <>
-          {/*
-           * Cercle ouvert agrandi qui sort par un angle (charte, section 13). Position bornée pour rester
-           * à 1,5 rem de la colonne de 30 rem : le cercle ne passe jamais derrière un texte.
-           */}
-          <svg
-            className="absolute -top-[22vmin] left-[max(100%-56vmin,50%+16.5rem)] hidden size-[78vmin] opacity-[0.09] lg:block"
-            viewBox="0 0 200 200"
-            fill="none"
-          >
-            <circle cx="100" cy="100" r="99" stroke="white" strokeWidth="0.35" />
-          </svg>
-          <svg
-            className="absolute right-[max(100%-38vmin,50%+16.5rem)] -bottom-[30vmin] hidden size-[64vmin] opacity-[0.06] lg:block"
-            viewBox="0 0 200 200"
-            fill="none"
-          >
-            <circle cx="100" cy="100" r="99" stroke="white" strokeWidth="0.4" />
-          </svg>
-        </>
-      ) : null}
 
       {/* Colonne centrale plus sombre pour la lisibilité, puis vignettage. */}
       <div

@@ -4,23 +4,18 @@ import { Monogram } from "@/components/brand/Monogram";
 import { VerifiedBadge } from "@/components/brand/VerifiedBadge";
 import type { AssociationConfig } from "@/config/types";
 
-/** Avatar à anneau lumineux, nom, pastille de vérification, accroche et biographie. */
+/** Avatar à anneau fin, nom, pastille de vérification, accroche et biographie. */
 export function ProfileHeader({ association }: { association: AssociationConfig }) {
   return (
     <div className="flex flex-col items-center text-center">
-      <Enter index={0} pop className="relative">
-        <div className="relative size-[7.25rem] sm:size-[7.75rem]">
-          {/* Halo diffus */}
-          <div
-            aria-hidden="true"
-            className="avatar-ring absolute -inset-4 animate-ring-spin rounded-full opacity-[var(--ring-glow)] blur-xl"
-          />
+      <Enter index={0} className="relative">
+        <div className="relative size-[7rem] sm:size-[7.5rem]">
           {/* Anneau satiné (ouvert dans le thème « bordeaux ») */}
           <div aria-hidden="true" className="avatar-ring-frame absolute inset-0 rounded-full">
-            <div className="avatar-ring size-full animate-ring-spin rounded-full" />
+            <div className="avatar-ring size-full rounded-full" />
           </div>
           {/* Liseré sombre entre l’anneau et le disque */}
-          <div className="absolute inset-[4px] rounded-full bg-bg p-[3px]">
+          <div className="absolute inset-[3px] rounded-full bg-bg p-[4px]">
             <Monogram className="size-full" label={`Monogramme ${association.acronym}`} />
           </div>
         </div>

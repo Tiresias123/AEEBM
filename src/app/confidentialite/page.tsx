@@ -53,7 +53,7 @@ export default function PrivacyPage() {
 
   return (
     <>
-      <BackgroundGlow circles={false} />
+      <BackgroundGlow />
       <main className="relative z-10 mx-auto w-full max-w-[40rem] px-5 pt-[max(1.5rem,env(safe-area-inset-top))] pb-16 sm:px-8 lg:pt-14">
         <Enter index={0}>
           <Link

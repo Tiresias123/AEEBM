@@ -119,7 +119,7 @@ export interface LinkItem extends Schedule {
   subtitle: string;
   href: Href;
   icon: IconName;
-  /** Catégorie : détermine la couleur du squircle d’icône. */
+  /** Catégorie : détermine la teinte de la tuile d’icône. */
   category: LinkCategory;
   /** Pastille facultative (avec sa propre période d’affichage, p. ex. jusqu’à la date limite). */
   badge?: LinkBadge;
