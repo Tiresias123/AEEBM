@@ -106,7 +106,7 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 - [ ] Remplacer les adresses `A_COMPLETER` (réseaux sociaux, Drive, formulaires, billetterie, règlements).
 - [ ] Définir l’URL publique (`NEXT_PUBLIC_SITE_URL` ou domaine Vercel) **avant d’imprimer le code QR**.
 - [ ] Configurer Mailchimp (variables ci-dessus, langue française).
-- [ ] Faire valider la politique de confidentialité (`/confidentialite`), la personne responsable et la liste des fournisseurs (`privacy`).
+- [ ] Faire valider la politique de confidentialité (`/confidentialite`), la personne responsable et la liste des fournisseurs (`privacy`). Elle n’est plus liée depuis la page (ni infolettre ni pied de page) : la Loi 25 demande de publier sur le site une politique de confidentialité dès que des renseignements personnels y sont recueillis (adresses courriel de l’infolettre). Pour rétablir les liens : `privacyLink` dans `newsletter` et une entrée dans `association.legalLinks`.
 - [ ] Remplacer `https://www.alumo.ca` par le portail du régime de l’AEEBM.
 - [ ] Ajouter l’heure et le lieu de l’AGA au bandeau.
 

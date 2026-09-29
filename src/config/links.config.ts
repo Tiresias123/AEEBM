@@ -33,7 +33,6 @@ export { A_COMPLETER };
 /** Cohorte et mandat de l’exécutif : à changer une fois par an. */
 const COHORTE = "2026-2027";
 const COURRIEL = "aeebm.contact@gmail.com";
-const POLITIQUE_CONFIDENTIALITE = { label: "Politique de confidentialité", href: "/confidentialite" } as const;
 
 export const siteConfig: SiteConfig = {
   theme: "ivoire",
@@ -72,7 +71,8 @@ export const siteConfig: SiteConfig = {
     // Personne morale sans but lucratif constituée en vertu de la partie III de la Loi sur les compagnies (RLRQ, c. C-38).
     legalStatus: "Organisme sans but lucratif",
     foundingDate: "1988-01-21", // Lettres patentes du 21 janvier 1988
-    legalLinks: [POLITIQUE_CONFIDENTIALITE, { label: "Règlements généraux", href: A_COMPLETER }],
+    // La politique de confidentialité reste publiée à /confidentialite, sans lien depuis la page.
+    legalLinks: [{ label: "Règlements généraux", href: A_COMPLETER }],
   },
 
   /* ─────────────────────── 2. PROCHAIN ÉVÉNEMENT (BANDEAU) ─────────────────────── */
@@ -261,7 +261,6 @@ export const siteConfig: SiteConfig = {
     removedMessage: `Cette adresse a été retirée de notre liste et ne peut pas être réinscrite ici. Écrivez-nous à ${COURRIEL}.`,
     errorMessage: `Inscription impossible pour le moment. Écrivez-nous à ${COURRIEL}.`,
     consentNote: "Avis, assemblées et événements de l’AEEBM. Désabonnement en un clic.",
-    privacyLink: POLITIQUE_CONFIDENTIALITE,
   },
 
   /* ───────────────────────── CONFIDENTIALITÉ (Loi 25) ───────────────────────── */
