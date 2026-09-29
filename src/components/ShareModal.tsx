@@ -25,19 +25,32 @@ function loadDialog(): Promise<DialogComponent> {
   return dialogPromise;
 }
 
-/** Repli si la fenêtre ne peut pas être chargée (réseau coupé, déploiement en cours) : partage natif ou copie. */
-async function fallbackShare(url: string, title: string, text: string): Promise<boolean> {
-  try {
-    if (typeof navigator.share === "function") {
+type FallbackResult = "shared" | "copied" | "cancelled" | "failed";
+
+/** Repli si la fenêtre ne peut pas être chargée (réseau coupé, déploiement en cours) : partage natif, sinon copie. */
+async function fallbackShare(url: string, title: string, text: string): Promise<FallbackResult> {
+  if (typeof navigator.share === "function") {
+    try {
       await navigator.share({ title, text, url });
-      return true;
+      return "shared";
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return "cancelled";
     }
+  }
+  try {
     await navigator.clipboard.writeText(url);
-    return true;
+    return "copied";
   } catch {
-    return false;
+    return "failed";
   }
 }
+
+const FALLBACK_NOTICE: Record<FallbackResult, string> = {
+  shared: "",
+  cancelled: "",
+  copied: "Lien copié dans le presse-papiers.",
+  failed: "Partage indisponible pour le moment. Réessayez.",
+};
 
 /**
  * Bouton d’action rapide (en haut à droite) ouvrant la fenêtre de partage et le code QR.
@@ -63,6 +76,12 @@ export function ShareModal(props: ShareModalProps) {
     return () => cancel(handle);
   }, [preload]);
 
+  useEffect(() => {
+    if (!notice) return;
+    const timer = window.setTimeout(() => setNotice(""), 4000);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
+
   async function handleClick() {
     setNotice("");
     try {
@@ -70,8 +89,7 @@ export function ShareModal(props: ShareModalProps) {
       setDialog(() => component);
       setOpen(true);
     } catch {
-      const ok = await fallbackShare(props.url, props.title, props.text);
-      setNotice(ok ? "Lien copié dans le presse-papiers." : "Partage indisponible pour le moment. Réessayez.");
+      setNotice(FALLBACK_NOTICE[await fallbackShare(props.url, props.title, props.text)]);
     }
   }
 
@@ -93,7 +111,14 @@ export function ShareModal(props: ShareModalProps) {
       >
         <Ellipsis aria-hidden="true" className="size-5" />
       </m.button>
-      <p role="status" className="sr-only">
+      <p
+        role="status"
+        className={
+          notice
+            ? "absolute top-full right-0 z-30 mt-2 w-max max-w-56 rounded-xl border border-white/10 bg-bg-elevated px-3 py-2 text-left text-xs text-soft shadow-[0_12px_30px_-10px_rgb(0_0_0/0.9)]"
+            : "sr-only"
+        }
+      >
         {notice}
       </p>
       {Dialog ? <Dialog {...props} open={open} onOpenChange={setOpen} returnFocusTo={triggerRef} /> : null}

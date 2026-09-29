@@ -108,9 +108,9 @@ export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps
               className="absolute inset-y-3 left-0.5 w-[3px] rounded-full"
               style={{ background: "var(--tone)", boxShadow: "0 0 12px var(--tone)" }}
             />
-            <span className="tone-badge mt-[0.1rem] inline-flex items-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] uppercase">
-              <span aria-hidden="true" className="tone-dot size-1.5 animate-pulse-soft rounded-full" />
-              {label}
+            <span className="tone-badge mt-[0.1rem] inline-flex max-w-full min-w-0 items-center gap-1.5 justify-self-start rounded-full px-2 py-[0.3rem] text-[0.6875rem] leading-none font-bold tracking-[0.06em] [overflow-wrap:anywhere] uppercase">
+              <span aria-hidden="true" className="tone-dot size-1.5 shrink-0 animate-pulse-soft rounded-full" />
+              <span className="min-w-0">{label}</span>
             </span>
             <p className="min-w-0 text-[0.8rem] leading-snug text-balance [overflow-wrap:break-word] text-soft @max-[17rem]:col-span-full @max-[17rem]:row-start-2">
               {message}

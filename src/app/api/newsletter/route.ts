@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { after, NextResponse } from "next/server";
 import { siteConfig } from "@/config/links.config";
 import { isValidEmail } from "@/lib/email";
+import { activeTheme } from "@/lib/site";
 import { frTypo } from "@/lib/typo";
 
 /**
@@ -73,7 +74,8 @@ function escapeHtml(text: string): string {
 function htmlPage({ ok, message }: Payload, status: number): Response {
   const title = ok ? newsletter.successTitle : "Inscription impossible";
   const text = frTypo(message ?? (ok ? newsletter.successMessage : newsletter.errorMessage));
-  const body = `<!doctype html><html lang="fr-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${escapeHtml(title)} · ${escapeHtml(association.acronym)}</title></head><body style="margin:0;min-height:100vh;display:grid;place-items:center;background:#08090d;color:#fff;font:16px/1.55 system-ui,sans-serif"><main style="max-width:28rem;padding:2rem;text-align:center"><h1 style="font-size:1.4rem">${escapeHtml(title)}</h1><p style="color:#d4d4d8">${escapeHtml(text)}</p><p><a href="/" style="color:#f0abfc">Retour à la page de l’${escapeHtml(association.acronym)}</a></p></main></body></html>`;
+  const c = activeTheme.colors;
+  const body = `<!doctype html><html lang="fr-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${escapeHtml(title)} · ${escapeHtml(association.acronym)}</title></head><body style="margin:0;min-height:100vh;display:grid;place-items:center;background:${c.bg};color:${c.text};font:16px/1.55 system-ui,sans-serif"><main style="max-width:28rem;padding:2rem;text-align:center"><h1 style="font-size:1.4rem">${escapeHtml(title)}</h1><p style="color:${c.textSoft}">${escapeHtml(text)}</p><p><a href="/" style="color:${c.subtitle.from}">Retour à la page de l’${escapeHtml(association.acronym)}</a></p></main></body></html>`;
   return new Response(body, {
     status,
     headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" },

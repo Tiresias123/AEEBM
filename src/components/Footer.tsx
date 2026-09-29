@@ -17,7 +17,7 @@ function Signature({ text }: { text: string }) {
       <Heart
         aria-label="amour"
         role="img"
-        className="mx-0.5 inline size-3.5 -translate-y-px fill-[var(--ring-1)] text-[var(--ring-1)]"
+        className="mx-0.5 inline size-3.5 -translate-y-px fill-[var(--ring-1)] text-[var(--ring-1)] forced-colors:fill-[CanvasText] forced-colors:text-[CanvasText]"
       />
       {after}
     </>
@@ -85,7 +85,7 @@ export function Footer({
          * Logo officiel, version principale « blanc sur bordeaux » (charte, section 10) : plaque bordeaux en aplat,
          * marge intérieure au moins égale à la hauteur du « B » (zone de protection), largeur au-dessus de 110 px.
          */}
-        <div className="rounded-2xl bg-[#681A16] px-5 py-4 forced-colors:border">
+        <div className="rounded-2xl bg-[#681A16] px-5 py-4 forced-color-adjust-none">
           <Image
             src={association.logo.src}
             alt={association.logo.alt}

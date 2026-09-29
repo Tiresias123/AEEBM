@@ -92,8 +92,8 @@ export default function HomePage() {
 
           <header className="relative pt-3">
             {banner ? (
-              // Pastille bornée à l’espace à gauche de l’avatar (rayon 58 px + pastille 22 px, marge de sécurité).
-              <div className="absolute top-0 left-0 z-20 max-w-[calc(50%-2.875rem)] sm:max-w-none">
+              // Pastille bornée à l’espace à gauche de l’avatar ; plancher en rem pour rester lisible avec le texte agrandi.
+              <div className="absolute top-0 left-0 z-20 max-w-[max(calc(50%-2.875rem),5.5rem)] sm:max-w-none">
                 <AlertBannerPill id={banner.id} tone={banner.tone} label={banner.label} />
               </div>
             ) : null}
