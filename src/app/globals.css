@@ -14,6 +14,9 @@
   --text-muted: #a1a1aa;
   --on-accent: #ffffff;
   --noise-opacity: 0.035;
+  --ring-glow: 0.7;
+  --rule: rgb(255 255 255 / 0.14);
+  --danger: #fb7185;
   --font-display-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-body-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --display-weight: 800;
@@ -23,6 +26,7 @@
   color-scheme: dark;
 }
 
+/* Thème « barreau » : Cormorant Garamond pour le sigle, Poppins pour le texte (charte, section 12). */
 :root[data-display-font="cormorant"] {
   --font-display-family: var(--font-cormorant), Georgia, serif;
   --display-weight: 600;
@@ -32,6 +36,9 @@
 
 :root[data-body-font="poppins"] {
   --font-body-family: var(--font-poppins), Arial, sans-serif;
+  /* Poppins Regular, Medium et Bold seulement : les demi-gras passent en Medium. */
+  --font-weight-semibold: 500;
+  --font-weight-bold: 500;
 }
 
 @theme inline {
@@ -41,48 +48,31 @@
   --color-soft: var(--text-soft);
   --color-muted: var(--text-muted);
   --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
   --font-sans: var(--font-body-family);
   --font-display: var(--font-display-family);
 }
 
+/*
+ * Animations : toutes finies (la page redevient immobile en moins de 5 s, WCAG 2.2.2)
+ * et neutralisées par « réduire les animations ».
+ */
 @theme {
-  --animate-drift-a: drift-a 28s ease-in-out infinite alternate;
-  --animate-drift-b: drift-b 34s ease-in-out infinite alternate;
-  --animate-drift-c: drift-c 40s ease-in-out infinite alternate;
-  --animate-spin-slow: spin 9s linear infinite;
-  --animate-sheen: sheen 5.5s ease-in-out infinite;
-  --animate-pulse-soft: pulse-soft 2.4s ease-in-out infinite;
+  --animate-ring-spin: ring-spin 4.2s var(--ease-out-expo) 0.2s 1 backwards;
+  --animate-sheen: sheen 1.7s ease-in-out 1.3s 2 both;
+  --animate-sheen-hover: sheen 0.9s ease-in-out 1 both;
+  --animate-pulse-soft: pulse-soft 2.4s ease-in-out 2;
 
-  @keyframes drift-a {
+  @keyframes ring-spin {
     from {
-      transform: translate3d(-4%, -3%, 0) scale(1);
-    }
-    to {
-      transform: translate3d(6%, 5%, 0) scale(1.12);
-    }
-  }
-  @keyframes drift-b {
-    from {
-      transform: translate3d(5%, -2%, 0) scale(1.08);
-    }
-    to {
-      transform: translate3d(-6%, 6%, 0) scale(0.96);
-    }
-  }
-  @keyframes drift-c {
-    from {
-      transform: translate3d(0, 4%, 0) scale(1);
-    }
-    to {
-      transform: translate3d(-5%, -5%, 0) scale(1.15);
+      rotate: -1turn;
     }
   }
   @keyframes sheen {
-    0%,
-    55% {
+    from {
       transform: translateX(-120%) skewX(-18deg);
     }
-    100% {
+    to {
       transform: translateX(260%) skewX(-18deg);
     }
   }
@@ -90,11 +80,11 @@
     0%,
     100% {
       opacity: 1;
-      transform: scale(1);
+      scale: 1;
     }
     50% {
       opacity: 0.45;
-      transform: scale(0.8);
+      scale: 0.8;
     }
   }
 }
@@ -136,6 +126,33 @@
   :focus-visible {
     outline: 2px solid color-mix(in oklab, var(--ring-1) 85%, white);
     outline-offset: 3px;
+  }
+}
+
+/* ───────────────────────────── Entrée en cascade ─────────────────────────────
+ * Animation CSS (et non JavaScript) : le contenu est présent dès le premier affichage, même si le
+ * JavaScript tarde ou échoue. Chaque élément reçoit son rang via --i (voir <Enter> et la page).
+ */
+
+.enter {
+  animation: enter-up 0.8s var(--ease-out-expo) backwards;
+  animation-delay: calc(60ms + min(var(--i, 0), 14) * 55ms);
+}
+.enter-pop {
+  animation-name: enter-pop;
+  animation-duration: 1s;
+}
+
+@keyframes enter-up {
+  from {
+    opacity: 0;
+    translate: 0 16px;
+  }
+}
+@keyframes enter-pop {
+  from {
+    opacity: 0;
+    scale: 0.88;
   }
 }
 
@@ -211,23 +228,31 @@
   --cat-to: var(--cat-services-to);
 }
 
-/* Pastilles de statut. */
+/* Pastilles de statut : libellé (--tone) et point (--tone-dot). */
 .tone-new {
   --tone: var(--badge-new);
+  --tone-dot: var(--badge-new-dot);
 }
 .tone-important {
   --tone: var(--badge-important);
+  --tone-dot: var(--badge-important-dot);
 }
 .tone-deadline {
   --tone: var(--badge-deadline);
+  --tone-dot: var(--badge-deadline-dot);
 }
 .tone-info {
   --tone: var(--badge-info);
+  --tone-dot: var(--badge-info-dot);
 }
 .tone-badge {
   color: var(--tone);
   background-color: color-mix(in oklab, var(--tone) 13%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--tone) 32%, transparent);
+}
+.tone-dot {
+  background-color: var(--tone-dot, currentColor);
+  box-shadow: 0 0 0 1px var(--badge-dot-ring, transparent);
 }
 
 /* Voile de bruit tactile (SVG feTurbulence). */
@@ -242,30 +267,42 @@
   background: conic-gradient(from 210deg, var(--ring-1), var(--ring-2), var(--ring-3), var(--ring-1));
 }
 
-/* Défilement vertical sans barre visible dans la fenêtre modale. */
-.scrollbar-none {
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+/* Thème « barreau » : l’anneau s’interrompt dans l’axe du monogramme, car le cercle ne se ferme jamais (charte, section 09). */
+[data-theme="barreau"] .avatar-ring-frame {
+  -webkit-mask: conic-gradient(
+    from 90deg,
+    transparent 0 22deg,
+    #000 0 158deg,
+    transparent 0 202deg,
+    #000 0 338deg,
+    transparent 0
+  );
+  mask: conic-gradient(
+    from 90deg,
+    transparent 0 22deg,
+    #000 0 158deg,
+    transparent 0 202deg,
+    #000 0 338deg,
+    transparent 0
+  );
 }
 
-/* ───────────────────────────── Mouvement réduit ───────────────────────────── */
+/* Filet des titres de section (bordeaux dans le thème « barreau »). */
+.section-rule {
+  background-image: linear-gradient(90deg, var(--rule), transparent);
+}
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
+/* Défilement vertical discret dans la fenêtre modale. */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.18) transparent;
 }
 
 /* ───────────────────────────── Bandeau & fenêtre modale ───────────────────────────── */
 
-[data-banner-hidden] [data-alert-banner] {
+/* État décidé avant le premier affichage par le script de src/lib/schedule.ts. */
+[data-banner="hidden"] [data-alert-banner],
+[data-banner="collapsed"] [data-alert-banner] {
   display: none !important;
 }
 
@@ -323,5 +360,19 @@
   to {
     opacity: 0;
     transform: scale(0.96);
+  }
+}
+
+/* ───────────────────────────── Mouvement réduit ───────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

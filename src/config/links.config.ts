@@ -10,45 +10,51 @@
  *
  * Repères :
  *   • Masquer un lien sans le supprimer ......... hidden: true
+ *   • Afficher un lien ou une pastille un temps .. startsAt / endsAt : "2026-10-15" (heure de Montréal)
  *   • Changer l’ordre des liens ................. déplacer le bloc { … } voulu
  *   • Couleur de l’icône ........................ category: "academique" | "evenements" | "carriere" | "representation" | "services"
  *   • Pastille .................................. badge: { label: "Nouveau", tone: "new" | "important" | "deadline" | "info" }
  *   • Icônes disponibles ........................ voir src/lib/icons.ts (catalogue : https://lucide.dev/icons)
  *   • Bandeau d’annonce ......................... alertBanner.enabled + changer alertBanner.id à chaque nouvelle annonce
  *   • Thème visuel .............................. theme: "amethyste" | "barreau" (charte bordeaux de l’AEEBM)
+ *   • Nouvelle année ............................ changer COHORTE ci-dessous
  *
- * Les adresses marquées A_COMPLETER sont signalées dans la console à chaque build
- * tant qu’elles n’ont pas été remplacées par la vraie adresse.
+ * Adresses provisoires : tant qu’un lien vaut A_COMPLETER, la carte s’affiche « Bientôt disponible »
+ * (non cliquable) et chaque build le signale dans la console.
  */
 
+import logoBlanc from "@/assets/brand/aeebm-logo-blanc.png";
 import type { SiteConfig } from "@/config/types";
+import { A_COMPLETER } from "@/lib/pending";
 
 /** Adresse provisoire : à remplacer par l’URL définitive (Google Drive, formulaire, billetterie, etc.). */
-export const A_COMPLETER = "#a-completer" as const;
+export { A_COMPLETER };
 
+/** Cohorte et mandat de l’exécutif : à changer une fois par an. */
+const COHORTE = "2026-2027";
 const COURRIEL = "aeebm.contact@gmail.com";
 
 export const siteConfig: SiteConfig = {
   theme: "amethyste",
 
-  // URL publique de la page (code QR, partage, SEO). Peut être surchargée par NEXT_PUBLIC_SITE_URL.
-  siteUrl: "https://aeebm.ca", // ⚠️ À confirmer : domaine repris ou nouveau (feuille de route, section 16)
+  // URL publique (code QR, partage, SEO). Sur Vercel, le domaine de production est détecté automatiquement ;
+  // NEXT_PUBLIC_SITE_URL a priorité. Cette valeur ne sert qu’en dernier recours.
+  siteUrl: "https://aeebm.ca", // ⚠️ À confirmer : domaine à reprendre auprès de l’ancien prestataire (fiche, section 08)
 
   /* ───────────────────────────── 1. IDENTITÉ ───────────────────────────── */
   association: {
     acronym: "AEEBM",
     displayName: "Association étudiante de l’École du Barreau de Montréal",
     legalName: "Association des étudiants de l’École du Barreau du Québec à Montréal",
-    tagline: "Cohorte 2026-2027 • École du Barreau de Montréal",
+    cohort: COHORTE,
+    tagline: `Cohorte ${COHORTE} • École du Barreau de Montréal`,
     bio: "Défense des droits des candidats • Tutorat & Entraide • Réseautage & Vie associative ⚖️",
     mission:
       "L’AEEBM représente les étudiantes et étudiants du Centre de Montréal de l’École du Barreau du Québec auprès de la direction de l’École et des partenaires, défend leurs droits et anime la vie du Centre.",
-    verified: { enabled: true, label: "Compte officiel de l’AEEBM" },
+    verified: { enabled: true, label: "Page officielle de l’AEEBM" },
     logo: {
-      src: "/brand/aeebm-logo-blanc.png",
+      src: logoBlanc,
       alt: "Logo de l’Association étudiante de l’École du Barreau de Montréal",
-      width: 533,
-      height: 567,
     },
     email: COURRIEL,
     address: {
@@ -62,8 +68,8 @@ export const siteConfig: SiteConfig = {
     legalStatus:
       "Personne morale sans but lucratif constituée en vertu de la partie III de la Loi sur les compagnies (RLRQ, c. C-38)",
     foundingDate: "1988-01-21", // Lettres patentes du 21 janvier 1988
-    executive: "Exécutif 2026-2027",
     legalLinks: [
+      { label: "Politique de confidentialité", href: "/confidentialite" },
       { label: "Règlements généraux", href: A_COMPLETER },
       { label: "Loi sur les compagnies, partie III", href: "https://www.legisquebec.gouv.qc.ca/fr/document/lc/C-38" },
     ],
@@ -72,12 +78,13 @@ export const siteConfig: SiteConfig = {
   /* ─────────────────────── 2. BANDEAU D’ANNONCE PRIORITAIRE ─────────────────────── */
   alertBanner: {
     enabled: true,
-    id: "aga-2026-09-30", // Changer l’identifiant pour réafficher le bandeau à tout le monde.
+    id: "aga-2026-09-30", // Changer l’identifiant pour réafficher le bandeau déplié à tout le monde.
     tone: "important",
     label: "AGA",
+    // ⚠️ Ajouter l’heure et le lieu tirés de l’avis de convocation.
     message: "Assemblée générale annuelle le mercredi 30 septembre. Votre voix compte.",
     link: { label: "Avis de convocation", href: A_COMPLETER },
-    endsAt: "2026-10-01T00:00:00-04:00", // Masqué automatiquement après l’assemblée.
+    endsAt: "2026-10-01", // Masqué automatiquement après l’assemblée (minuit, heure de Montréal).
   },
 
   /* ───────────────────────────── 3. RÉSEAUX SOCIAUX ───────────────────────────── */
@@ -85,6 +92,8 @@ export const siteConfig: SiteConfig = {
   socials: [
     { platform: "instagram", href: A_COMPLETER, label: "Instagram de l’AEEBM" },
     { platform: "linkedin", href: A_COMPLETER, label: "LinkedIn de l’AEEBM" },
+    // Groupe de cohorte : préférer une Communauté WhatsApp (numéros masqués entre membres)
+    // ou activer « Approuver les nouveaux participants ». Pour Discord : platform: "discord".
     { platform: "whatsapp", href: A_COMPLETER, label: "Groupe WhatsApp de la cohorte" },
     { platform: "facebook", href: A_COMPLETER, label: "Page Facebook de l’AEEBM" },
     { platform: "email", href: `mailto:${COURRIEL}`, label: `Écrire à ${COURRIEL}` },
@@ -93,12 +102,15 @@ export const siteConfig: SiteConfig = {
   /* ───────────────────────────── 4. LIEN VEDETTE ───────────────────────────── */
   spotlight: {
     enabled: true,
-    title: "Guide de la rentrée 2026-2027",
+    title: `Guide de la rentrée ${COHORTE}`,
     subtitle: "Calendrier, services, contacts et ressources essentielles",
     href: A_COMPLETER,
     icon: "BookOpen",
     badge: "Nouveau",
-    gradient: { from: "#A21CAF", via: "#6366F1", to: "#3B82F6" }, // Retirer pour reprendre le dégradé du thème.
+    // Dégradé propre au lien vedette, par thème (un thème absent reprend son dégradé d’accent).
+    gradient: {
+      amethyste: { from: "#A21CAF", via: "#4F46E5", to: "#2563EB" },
+    },
   },
 
   /* ───────────────────────────── 5. LIENS ───────────────────────────── */
@@ -108,12 +120,13 @@ export const siteConfig: SiteConfig = {
       title: "Réussir l’École",
       links: [
         {
-          title: "Banque de résumés & annales",
-          subtitle: "Résumés par matière, examens simulés et corrigés",
+          // Ne jamais y verser d’examens (finaux ou simulés) ni de corrigés de l’École du Barreau :
+          // ce matériel est protégé. Résumés et outils rédigés par les membres seulement.
+          title: "Banque de résumés",
+          subtitle: "Résumés par matière et outils d’étude partagés entre membres",
           href: A_COMPLETER,
           icon: "Library",
           category: "academique",
-          badge: { label: "Mis à jour", tone: "new" },
         },
         {
           title: "Cliniques de préparation",
@@ -133,7 +146,7 @@ export const siteConfig: SiteConfig = {
     },
     {
       id: "carriere",
-      title: "Carrière & stage",
+      title: "Carrière & stages",
       links: [
         {
           title: "Programme de mentorat",
@@ -141,13 +154,21 @@ export const siteConfig: SiteConfig = {
           href: A_COMPLETER,
           icon: "Handshake",
           category: "carriere",
-          badge: { label: "Date limite · 15 oct.", tone: "deadline" }, // Exemple : ajuster la date.
+          // Exemple de pastille datée, retirée seule après la date limite :
+          // badge: { label: "Date limite · 15 oct.", tone: "deadline", endsAt: "2026-10-16" },
         },
         {
           title: "Guide des stages",
           subtitle: "Recherche de stage, entrevues et options après l’École",
           href: A_COMPLETER,
           icon: "BriefcaseBusiness",
+          category: "carriere",
+        },
+        {
+          title: "Clinique juridique & pro bono",
+          subtitle: "Engagement bénévole auprès d’organismes montréalais",
+          href: A_COMPLETER,
+          icon: "Scale",
           category: "carriere",
         },
       ],
@@ -193,23 +214,24 @@ export const siteConfig: SiteConfig = {
       links: [
         {
           title: "Signaler une situation",
-          subtitle: "Plainte ou préoccupation académique, traitée en toute confidentialité",
+          subtitle: "Plainte ou préoccupation académique, reçue par la vice-présidence aux affaires académiques",
           href: A_COMPLETER,
           icon: "MessageSquareWarning",
           category: "representation",
-          badge: { label: "Confidentiel", tone: "info" },
         },
         {
+          // Procès-verbaux : consultables par les membres (art. 20) ; les réserver à un dossier restreint.
           title: "Assemblées & documents officiels",
-          subtitle: "Avis de convocation, procès-verbaux et règlements généraux",
+          subtitle: "Avis de convocation, ordres du jour et règlements généraux",
           href: A_COMPLETER,
           icon: "ScrollText",
           category: "representation",
+          badge: { label: "AGA · 30 sept.", tone: "important", endsAt: "2026-10-01" },
         },
         {
           title: "Assurance santé & dentaire",
-          subtitle: "Régime collectif ASEQ, couverture du 1er septembre au 31 août",
-          href: "https://www.aseq.ca",
+          subtitle: "Régime collectif Alumo (anciennement ASEQ), couverture du 1er septembre au 31 août",
+          href: "https://www.alumo.ca", // ⚠️ Remplacer par le portail du régime de l’AEEBM (https://…alumo.ca)
           icon: "HeartPulse",
           category: "services",
         },
@@ -227,20 +249,39 @@ export const siteConfig: SiteConfig = {
   /* ───────────────────────────── 6. INFOLETTRE ───────────────────────────── */
   newsletter: {
     enabled: true,
-    title: "Restez informé·es",
+    title: "Restez informés",
     description: "Ne manquez aucun avis ni événement du Barreau.",
-    placeholder: "Votre adresse courriel",
+    inputLabel: "Adresse courriel",
+    placeholder: "Votre courriel",
     buttonLabel: "S’abonner",
+    loadingLabel: "Inscription en cours…",
     endpoint: "/api/newsletter",
-    successTitle: "Inscription confirmée",
-    successMessage: "Surveillez votre boîte de réception : un courriel de confirmation vous attend.",
+    successTitle: "Plus qu’une étape",
+    successMessage:
+      "Cliquez sur le lien du courriel de confirmation pour activer votre abonnement. Rien reçu ? Consultez vos courriels indésirables.",
+    resetLabel: "Inscrire une autre adresse",
+    invalidEmailMessage: "Veuillez entrer une adresse courriel valide.",
+    alreadySubscribedMessage:
+      "Cette adresse est déjà abonnée à l’infolettre. À bientôt dans votre boîte de réception !",
+    removedMessage: `Cette adresse a été retirée de notre liste et ne peut pas être réinscrite ici. Écrivez-nous à ${COURRIEL}.`,
     errorMessage: `Inscription impossible pour le moment. Écrivez-nous à ${COURRIEL}.`,
-    consentNote: "Une infolettre par mois, au plus. Désabonnement en un clic.",
+    consentNote: "Une infolettre par mois au plus. Désabonnement en un clic.",
+  },
+
+  /* ───────────────────────── CONFIDENTIALITÉ (Loi 25) ───────────────────────── */
+  privacy: {
+    officer: { title: "Présidence de l’AEEBM", email: COURRIEL },
+    updatedAt: "2026-09-29",
+    processors: [
+      { name: "Mailchimp (Intuit)", purpose: "envoi de l’infolettre", location: "États-Unis" },
+      // ⚠️ Ajuster selon l’hébergeur retenu pour le site.
+      { name: "Vercel", purpose: "hébergement du site et transmission des inscriptions", location: "États-Unis" },
+    ],
   },
 
   /* ───────────────────────────── PIED DE PAGE ───────────────────────────── */
   footer: {
-    signature: "Conçu avec {heart} par l’exécutif 2026-2027",
+    signature: `Conçu avec {heart} par l’exécutif ${COHORTE}`,
     links: [
       { label: "École du Barreau du Québec", href: "https://www.ecoledubarreau.qc.ca" },
       { label: "Barreau du Québec", href: "https://www.barreau.qc.ca" },

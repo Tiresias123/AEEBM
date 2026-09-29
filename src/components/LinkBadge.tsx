@@ -1,19 +1,33 @@
-import type { LinkBadge as LinkBadgeConfig } from "@/config/types";
-import { cn } from "@/lib/utils";
+import { clsx } from "clsx";
+import type { BadgeTone } from "@/config/types";
 
 /** Pastille de statut d’un lien : « Nouveau », « Important », « Date limite »… */
-export function LinkBadge({ badge, className }: { badge: LinkBadgeConfig; className?: string }) {
+export function LinkBadge({
+  label,
+  tone,
+  schedId,
+  className,
+}: {
+  label: string;
+  tone: BadgeTone;
+  /** Identifiant de période d’affichage (pastille datée). */
+  schedId?: string;
+  className?: string;
+}) {
   return (
     <span
-      className={cn(
-        `tone-${badge.tone} tone-badge inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-[0.2rem] text-[0.625rem] leading-none font-semibold tracking-[0.06em] uppercase`,
+      data-sched={schedId}
+      className={clsx(
+        `tone-${tone} tone-badge inline-flex w-fit shrink-0 items-center gap-1 rounded-full px-2 py-[0.2rem] text-[0.625rem] leading-none font-semibold tracking-[0.06em] uppercase`,
         className,
       )}
     >
-      {badge.tone === "deadline" || badge.tone === "new" ? (
-        <span aria-hidden="true" className="size-1.5 animate-pulse-soft rounded-full bg-current" />
+      {tone === "deadline" || tone === "new" || tone === "important" ? (
+        <span aria-hidden="true" className="tone-dot size-1.5 animate-pulse-soft rounded-full" />
       ) : null}
-      {badge.label}
+      <span className="sr-only">(</span>
+      {label}
+      <span className="sr-only">)</span>
     </span>
   );
 }

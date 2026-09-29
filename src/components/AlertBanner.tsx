@@ -1,70 +1,124 @@
 "use client";
 
+import { clsx } from "clsx";
 import { AnimatePresence, m } from "framer-motion";
-import { ArrowRight, X } from "lucide-react";
-import { useEffect, useState } from "react";
-import type { AlertBannerConfig } from "@/config/types";
-import { BANNER_STORAGE_PREFIX } from "@/lib/banner";
-import { cn, isExternalHref, linkProps } from "@/lib/utils";
+import { ArrowRight, ChevronDown, X } from "lucide-react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
+import { EASE_OUT_EXPO, SPRING } from "@/components/motion";
+import type { AlertTone } from "@/config/types";
+import { BANNER_STORAGE_PREFIX } from "@/lib/schedule";
+import { isExternalHref, linkProps } from "@/lib/links";
 
-const toneClass: Record<AlertBannerConfig["tone"], string> = {
+/*
+ * État du bandeau (« open », « collapsed », « hidden ») : attribut data-banner de <html>, fixé avant
+ * le premier affichage par le script de src/lib/schedule.ts, puis partagé entre le bandeau et sa pastille.
+ */
+type BannerState = "open" | "collapsed" | "hidden";
+const EVENT = "aeebm:bandeau";
+
+function readState(): BannerState {
+  const value = document.documentElement.getAttribute("data-banner");
+  return value === "collapsed" || value === "hidden" ? value : "open";
+}
+
+function subscribe(callback: () => void) {
+  window.addEventListener(EVENT, callback);
+  return () => window.removeEventListener(EVENT, callback);
+}
+
+function useBannerState(): BannerState {
+  return useSyncExternalStore(subscribe, readState, () => "open");
+}
+
+function setBannerState(id: string, state: "open" | "collapsed") {
+  const root = document.documentElement;
+  if (state === "collapsed") root.setAttribute("data-banner", "collapsed");
+  else root.removeAttribute("data-banner");
+  try {
+    if (state === "collapsed") localStorage.setItem(BANNER_STORAGE_PREFIX + id, "1");
+    else localStorage.removeItem(BANNER_STORAGE_PREFIX + id);
+  } catch {
+    // Stockage indisponible (navigation privée) : état conservé pour cette visite seulement.
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+const toneClass: Record<AlertTone, string> = {
   info: "tone-info",
   important: "tone-important",
   urgent: "tone-deadline",
 };
 
-/** Bandeau d’information prioritaire, rétractable et mémorisé par identifiant d’annonce. */
-export function AlertBanner({ banner }: { banner: AlertBannerConfig }) {
-  const [open, setOpen] = useState(true);
+export interface AlertBannerProps {
+  id: string;
+  tone: AlertTone;
+  label: string;
+  message: string;
+  /** Lien facultatif (omis tant que l’adresse est provisoire). */
+  link?: { label: string; href: string };
+}
+
+/** Bandeau d’information prioritaire, repliable en pastille et mémorisé par identifiant d’annonce. */
+export function AlertBanner({ id, tone, label, message, link }: AlertBannerProps) {
+  const state = useBannerState();
+  const external = link ? isExternalHref(link.href) : false;
+  const panelId = `annonce-${id}`;
+  const collapseRef = useRef<HTMLButtonElement>(null);
+  const reopened = useRef(false);
 
   useEffect(() => {
-    if (document.documentElement.hasAttribute("data-banner-hidden")) setOpen(false);
+    if (state === "open" && reopened.current) {
+      reopened.current = false;
+      collapseRef.current?.focus({ preventScroll: true });
+    }
+  }, [state]);
+
+  useEffect(() => {
+    const onReopen = () => {
+      reopened.current = true;
+    };
+    window.addEventListener(`${EVENT}:reopen`, onReopen);
+    return () => window.removeEventListener(`${EVENT}:reopen`, onReopen);
   }, []);
 
-  function dismiss() {
-    setOpen(false);
-    try {
-      localStorage.setItem(BANNER_STORAGE_PREFIX + banner.id, "1");
-    } catch {
-      // Stockage indisponible (navigation privée) : fermeture pour cette visite seulement.
-    }
-  }
-
-  if (!banner.enabled) return null;
-  const external = banner.link ? isExternalHref(banner.link.href) : false;
-
   return (
-    <AnimatePresence>
-      {open ? (
+    <AnimatePresence initial={false}>
+      {state === "open" ? (
         <m.aside
-          key={banner.id}
+          key="banner"
+          id={panelId}
           data-alert-banner=""
           aria-label="Annonce"
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] } }}
           exit={{ opacity: 0, height: 0, marginBottom: 0, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } }}
-          className={cn(toneClass[banner.tone], "relative mb-5 overflow-hidden")}
+          initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+          animate={{
+            opacity: 1,
+            height: "auto",
+            marginBottom: 20,
+            transition: { duration: 0.45, ease: EASE_OUT_EXPO },
+          }}
+          className={clsx(toneClass[tone], "enter relative mb-5 overflow-hidden rounded-2xl")}
         >
-          <div className="relative flex items-start gap-3 rounded-2xl glass py-2.5 pr-2 pl-3">
+          <div className="relative flex items-start gap-3 rounded-2xl glass py-2.5 pr-2 pl-3.5">
             <span
               aria-hidden="true"
-              className="absolute inset-y-2 left-0 w-[3px] rounded-full"
+              className="absolute inset-y-3 left-0.5 w-[3px] rounded-full"
               style={{ background: "var(--tone)", boxShadow: "0 0 12px var(--tone)" }}
             />
             <span className="tone-badge mt-[0.1rem] inline-flex shrink-0 items-center gap-1.5 rounded-full px-2 py-[0.3rem] text-[0.62rem] leading-none font-bold tracking-[0.1em] uppercase">
-              <span aria-hidden="true" className="size-1.5 animate-pulse-soft rounded-full bg-current" />
-              {banner.label}
+              <span aria-hidden="true" className="tone-dot size-1.5 animate-pulse-soft rounded-full" />
+              {label}
             </span>
-            <p className="min-w-0 flex-1 text-[0.8rem] leading-snug text-soft">
-              {banner.message}
-              {banner.link ? (
+            <p className="min-w-0 flex-1 text-[0.8rem] leading-snug text-balance text-soft">
+              {message}
+              {link ? (
                 <>
                   {" "}
                   <a
-                    {...linkProps(banner.link.href)}
-                    className="group inline-flex items-center gap-0.5 font-semibold whitespace-nowrap text-ink underline decoration-white/25 underline-offset-[3px] transition-colors hover:decoration-white/70"
+                    {...linkProps(link.href)}
+                    className="group inline-flex items-center gap-0.5 rounded font-semibold text-ink underline decoration-white/25 underline-offset-[3px] transition-colors hover:decoration-white/70"
                   >
-                    {banner.link.label}
+                    {link.label}
                     <ArrowRight
                       aria-hidden="true"
                       className="size-3.5 transition-transform duration-300 group-hover:translate-x-0.5"
@@ -75,15 +129,76 @@ export function AlertBanner({ banner }: { banner: AlertBannerConfig }) {
               ) : null}
             </p>
             <button
+              ref={collapseRef}
               type="button"
-              onClick={dismiss}
-              aria-label="Masquer l’annonce"
-              className="-my-0.5 grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors hover:bg-white/10 hover:text-ink"
+              onClick={() => {
+                window.dispatchEvent(new Event(`${EVENT}:collapse`));
+                setBannerState(id, "collapsed");
+              }}
+              aria-label="Replier l’annonce"
+              aria-controls={panelId}
+              aria-expanded="true"
+              className="relative -my-0.5 grid size-7 shrink-0 place-items-center rounded-full text-muted transition-colors after:absolute after:-inset-2 after:rounded-full after:content-[''] hover:bg-white/10 hover:text-ink"
             >
               <X aria-hidden="true" className="size-3.5" />
             </button>
           </div>
         </m.aside>
+      ) : null}
+    </AnimatePresence>
+  );
+}
+
+/** Pastille affichée quand l’annonce est repliée : un clic la rouvre (placée en haut à gauche de l’en-tête). */
+export function AlertBannerPill({ id, tone, label }: Pick<AlertBannerProps, "id" | "tone" | "label">) {
+  const state = useBannerState();
+  const pillRef = useRef<HTMLButtonElement>(null);
+  const collapsedByUser = useRef(false);
+
+  useEffect(() => {
+    const onCollapse = () => {
+      collapsedByUser.current = true;
+    };
+    window.addEventListener(`${EVENT}:collapse`, onCollapse);
+    return () => window.removeEventListener(`${EVENT}:collapse`, onCollapse);
+  }, []);
+
+  useEffect(() => {
+    // Après un repli par la personne, le focus passe sur la pastille (il ne retombe pas sur <body>).
+    if (state === "collapsed" && collapsedByUser.current) {
+      collapsedByUser.current = false;
+      pillRef.current?.focus({ preventScroll: true });
+    }
+  }, [state]);
+
+  return (
+    <AnimatePresence>
+      {state === "collapsed" ? (
+        <m.button
+          ref={pillRef}
+          key="pill"
+          type="button"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          whileTap={{ scale: 0.94 }}
+          transition={SPRING}
+          onClick={() => {
+            window.dispatchEvent(new Event(`${EVENT}:reopen`));
+            setBannerState(id, "open");
+          }}
+          aria-label={`Afficher l’annonce : ${label}`}
+          aria-controls={`annonce-${id}`}
+          aria-expanded="false"
+          className={clsx(
+            toneClass[tone],
+            "inline-flex h-11 items-center gap-1.5 rounded-full glass pr-3 pl-3.5 text-[0.66rem] font-bold tracking-[0.1em] text-[var(--tone)] uppercase forced-colors:border",
+          )}
+        >
+          <span aria-hidden="true" className="tone-dot size-1.5 rounded-full" />
+          {label}
+          <ChevronDown aria-hidden="true" className="size-3.5 opacity-80" />
+        </m.button>
       ) : null}
     </AnimatePresence>
   );

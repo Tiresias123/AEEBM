@@ -2,45 +2,58 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/config/links.config";
-import { monogramSvg, svgToDataUri } from "@/lib/monogram-svg";
+import { monogramFaviconSvg, monogramSvg, svgToDataUri, type MonogramColors } from "@/lib/monogram-svg";
 import { activeTheme } from "@/lib/site";
 
-/** Monogramme aux couleurs du thème actif (trait épaissi pour les petites tailles). */
-export function themedMonogramUri(strokeWidth = 1.6): string {
+/** Couleurs du monogramme pour le thème actif (disque bordeaux et encre ivoire par défaut, charte section 10). */
+export function monogramColors(): MonogramColors {
   const { avatar, onAccent } = activeTheme.colors;
-  return svgToDataUri(monogramSvg({ discFrom: avatar.from, discTo: avatar.to, ink: onAccent }, strokeWidth));
+  return { discFrom: avatar.from, discTo: avatar.to, ink: onAccent };
 }
 
+/** Monogramme « avatar rond » aux couleurs du thème, en SVG autonome. */
 export function themedMonogramSvg(strokeWidth = 1.6): string {
-  const { avatar, onAccent } = activeTheme.colors;
-  return monogramSvg({ discFrom: avatar.from, discTo: avatar.to, ink: onAccent }, strokeWidth);
+  return monogramSvg(monogramColors(), { strokeWidth });
 }
 
-interface IconOptions {
-  size: number;
-  /** Marge autour du disque, en fraction de la taille (zone de sécurité des icônes « maskable »). */
-  inset?: number;
-  /** Fond plein derrière le disque (icônes Apple et « maskable »). */
-  background?: boolean;
+export function themedMonogramUri(strokeWidth = 1.6): string {
+  return svgToDataUri(themedMonogramSvg(strokeWidth));
 }
+
+/** Favicon lisible à 16-32 px : carré arrondi plein, sigle agrandi, traits renforcés. */
+export function themedFaviconSvg(): string {
+  return monogramFaviconSvg(monogramColors());
+}
+
+type IconVariant =
+  /** Disque sur fond transparent (icône « any » du manifeste). */
+  | "disc"
+  /** Tuile pleine, bord à bord (écran d’accueil iOS, icône « maskable ») : iOS et Android arrondissent eux-mêmes. */
+  | "tile"
+  /** Favicon PNG (≤ 48 px). */
+  | "favicon";
 
 /** Icône PNG de l’application (favicon, écran d’accueil, manifeste). */
-export function renderIcon({ size, inset = 0, background = false }: IconOptions): ImageResponse {
-  const disc = Math.round(size * (1 - inset * 2));
-  const stroke = size <= 64 ? 3.2 : size <= 200 ? 2.4 : 1.8;
+export function renderIcon({
+  size,
+  variant = "disc",
+  safeZone = 1,
+}: {
+  size: number;
+  variant?: IconVariant;
+  safeZone?: number;
+}) {
+  const colors = monogramColors();
+  const svg =
+    variant === "favicon"
+      ? themedFaviconSvg()
+      : variant === "tile"
+        ? monogramSvg(colors, { shape: "square", scale: safeZone, strokeWidth: size <= 200 ? 2.6 : 2 })
+        : monogramSvg(colors, { strokeWidth: size <= 200 ? 2.4 : 1.8 });
   return new ImageResponse(
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: background ? activeTheme.colors.bg : "transparent",
-      }}
-    >
+    <div style={{ width: "100%", height: "100%", display: "flex" }}>
       {/* eslint-disable-next-line @next/next/no-img-element -- rendu Satori, pas de next/image */}
-      <img src={themedMonogramUri(stroke)} width={disc} height={disc} alt="" />
+      <img src={svgToDataUri(svg)} width={size} height={size} alt="" />
     </div>,
     { width: size, height: size },
   );
@@ -70,11 +83,8 @@ export async function loadThemeFonts() {
       style: "normal",
     });
   }
-  if (activeTheme.fonts.body === "poppins") {
-    fonts.push({ name: "Body", data: await loadFont("Poppins-Medium.ttf"), weight: 500, style: "normal" });
-  } else {
-    fonts.push({ name: "Body", data: await loadFont("PlusJakartaSans-Medium.ttf"), weight: 500, style: "normal" });
-  }
+  const body = activeTheme.fonts.body === "poppins" ? "Poppins-Medium.ttf" : "PlusJakartaSans-Medium.ttf";
+  fonts.push({ name: "Body", data: await loadFont(body), weight: 500, style: "normal" });
   return fonts;
 }
 

@@ -1,14 +1,26 @@
+import type { StaticImageData } from "next/image";
 import type { IconName } from "@/lib/icons";
-import type { LinkCategory, ThemeName } from "@/config/themes";
+import type { BadgeTone, LinkCategory, ThemeName } from "@/config/themes";
 
-export type { IconName, LinkCategory, ThemeName };
+export type { BadgeTone, IconName, LinkCategory, ThemeName };
 
-/** Adresse d’un lien : URL complète (https://…), courriel (mailto:…), téléphone (tel:…) ou ancre (#…). */
+/** Adresse d’un lien : URL complète (https://…), courriel (mailto:…), téléphone (tel:…), page du site (/…) ou ancre (#…). */
 export type Href =
   `https://${string}` | `http://${string}` | `mailto:${string}` | `tel:${string}` | `#${string}` | `/${string}`;
 
-/** Date ISO 8601, p. ex. "2026-09-30" ou "2026-09-30T18:00:00-04:00" (heure de Montréal). */
+/**
+ * Date ISO 8601. Sans fuseau, elle est lue à l’heure de Montréal :
+ * "2026-09-30" (minuit), "2026-09-30T18:00". Un fuseau explicite est respecté : "2026-09-30T18:00:00-04:00".
+ */
 export type IsoDate = string;
+
+/** Période d’affichage facultative : l’élément apparaît et disparaît seul, sans redéploiement. */
+export interface Schedule {
+  /** Affiché à partir de cette date. */
+  startsAt?: IsoDate;
+  /** Masqué automatiquement à partir de cette date. */
+  endsAt?: IsoDate;
+}
 
 export interface LegalLink {
   label: string;
@@ -30,16 +42,18 @@ export interface AssociationConfig {
   displayName: string;
   /** Nom légal, tel qu’il figure en première mention dans les documents de gouvernance. */
   legalName: string;
-  /** Ligne d’accroche colorée sous le nom. */
+  /** Cohorte et mandat de l’exécutif en cours, p. ex. "2026-2027". */
+  cohort: string;
+  /** Ligne d’accroche colorée sous le nom (segments séparés par « • »). */
   tagline: string;
-  /** Biographie courte (une ou deux lignes). */
+  /** Biographie courte (segments séparés par « • »). */
   bio: string;
-  /** Mission en une phrase (description SEO et pied de page). */
+  /** Mission en une phrase (description SEO et image de partage). */
   mission: string;
   /** Pastille de vérification à côté du nom. */
   verified: { enabled: boolean; label: string };
-  /** Logo officiel (version blanche, fond transparent) utilisé dans le pied de page. */
-  logo: { src: `/${string}`; alt: string; width: number; height: number };
+  /** Logo officiel (version blanche, fond transparent), affiché dans le pied de page. */
+  logo: { src: StaticImageData; alt: string };
   email: string;
   address: PostalAddress;
   neq: string;
@@ -47,19 +61,17 @@ export interface AssociationConfig {
   legalStatus: string;
   /** Date de constitution (lettres patentes), format AAAA-MM-JJ. */
   foundingDate: IsoDate;
-  /** Exécutif en fonction, p. ex. « Exécutif 2026-2027 ». */
-  executive: string;
   legalLinks: LegalLink[];
 }
 
 export type AlertTone = "info" | "important" | "urgent";
 
-export interface AlertBannerConfig {
+export interface AlertBannerConfig extends Schedule {
   /** Active ou désactive le bandeau. */
   enabled: boolean;
   /**
-   * Identifiant unique de l’annonce. Une personne qui ferme le bandeau ne le revoit plus,
-   * sauf si l’identifiant change : modifiez-le à chaque nouvelle annonce.
+   * Identifiant unique de l’annonce (lettres, chiffres et tirets). Une personne qui replie le bandeau
+   * le retrouve replié, sauf si l’identifiant change : modifiez-le à chaque nouvelle annonce.
    */
   id: string;
   tone: AlertTone;
@@ -67,24 +79,25 @@ export interface AlertBannerConfig {
   label: string;
   message: string;
   link?: { label: string; href: Href };
-  /** Affichage à partir de cette date (facultatif). */
-  startsAt?: IsoDate;
-  /** Masquage automatique à partir de cette date (facultatif). */
-  endsAt?: IsoDate;
 }
 
 export type SocialPlatform =
   "instagram" | "linkedin" | "facebook" | "whatsapp" | "discord" | "tiktok" | "youtube" | "email" | "website";
 
+/** Icône d’un réseau : pictogramme de marque (nom de plateforme) ou icône lucide du registre. */
+export type SocialIconName = SocialPlatform | IconName;
+
 export interface SocialLink {
-  /** Plateforme : détermine l’icône affichée. */
+  /** Plateforme : sert d’icône par défaut. */
   platform: SocialPlatform;
   href: Href;
   /** Libellé lu par les lecteurs d’écran et affiché en info-bulle. */
   label: string;
+  /** Icône facultative : "discord", "youtube"… ou une icône lucide ("GraduationCap"…). Par défaut : celle de la plateforme. */
+  icon?: SocialIconName;
 }
 
-export interface SpotlightConfig {
+export interface SpotlightConfig extends Schedule {
   enabled: boolean;
   title: string;
   subtitle: string;
@@ -92,26 +105,25 @@ export interface SpotlightConfig {
   icon: IconName;
   /** Pastille facultative, p. ex. « Nouveau ». */
   badge?: string;
-  /** Dégradé propre au bouton vedette. Par défaut : dégradé d’accent du thème. */
-  gradient?: { from: string; via?: string; to: string };
+  /** Dégradé propre au bouton vedette, par thème. Un thème absent reprend son dégradé d’accent. */
+  gradient?: Partial<Record<ThemeName, { from: string; via?: string; to: string }>>;
 }
 
-export type BadgeTone = "new" | "important" | "deadline" | "info";
-
-export interface LinkBadge {
+export interface LinkBadge extends Schedule {
   label: string;
   tone: BadgeTone;
 }
 
-export interface LinkItem {
+export interface LinkItem extends Schedule {
   title: string;
   subtitle: string;
   href: Href;
   icon: IconName;
   /** Catégorie : détermine la couleur du squircle d’icône. */
   category: LinkCategory;
+  /** Pastille facultative (avec sa propre période d’affichage, p. ex. jusqu’à la date limite). */
   badge?: LinkBadge;
-  /** Masque temporairement le lien sans le supprimer. */
+  /** Masque le lien sans le supprimer. */
   hidden?: boolean;
 }
 
@@ -126,19 +138,39 @@ export interface NewsletterConfig {
   enabled: boolean;
   title: string;
   description: string;
+  /** Libellé du champ, lu par les lecteurs d’écran. */
+  inputLabel: string;
   placeholder: string;
   buttonLabel: string;
+  /** Annoncé pendant l’envoi. */
+  loadingLabel: string;
   /** Point de terminaison qui reçoit { email } en POST (JSON). */
   endpoint: `/${string}` | `https://${string}`;
   successTitle: string;
   successMessage: string;
+  /** Bouton affiché après une inscription réussie. */
+  resetLabel: string;
+  invalidEmailMessage: string;
+  /** Adresse déjà abonnée (réponse de Mailchimp). */
+  alreadySubscribedMessage: string;
+  /** Adresse retirée définitivement de l’audience : réinscription impossible depuis la page. */
+  removedMessage: string;
   errorMessage: string;
-  /** Mention de consentement (LCAP / Loi 25). */
+  /** Mention à la collecte (LCAP, art. 10 ; Loi 25, art. 8), suivie du lien vers la politique de confidentialité. */
   consentNote: string;
 }
 
+export interface PrivacyConfig {
+  /** Personne responsable de la protection des renseignements personnels (Loi 25 : par défaut, la présidence). */
+  officer: { title: string; email: string };
+  /** Date de la dernière mise à jour de la politique. */
+  updatedAt: IsoDate;
+  /** Fournisseurs qui traitent des renseignements pour l’AEEBM. */
+  processors: { name: string; purpose: string; location: string }[];
+}
+
 export interface FooterConfig {
-  /** Signature typographique. `{heart}` est remplacé par un cœur animé. */
+  /** Signature typographique. `{heart}` est remplacé par un cœur. */
   signature: string;
   /** Liens institutionnels complémentaires. */
   links: LegalLink[];
@@ -155,5 +187,6 @@ export interface SiteConfig {
   spotlight: SpotlightConfig;
   sections: LinkSection[];
   newsletter: NewsletterConfig;
+  privacy: PrivacyConfig;
   footer: FooterConfig;
 }

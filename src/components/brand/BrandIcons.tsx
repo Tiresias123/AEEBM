@@ -1,6 +1,7 @@
 import type { SVGProps } from "react";
 import { Globe, Mail } from "lucide-react";
-import type { SocialPlatform } from "@/config/types";
+import type { SocialIconName, SocialPlatform } from "@/config/types";
+import { getIcon, type IconName } from "@/lib/icons";
 
 /*
  * Icônes de marques au trait (24 × 24, trait de 2) harmonisées avec lucide-react.
@@ -116,3 +117,17 @@ export const socialIcons: Record<SocialPlatform, (props: IconProps) => React.JSX
   email: EmailIcon,
   website: WebsiteIcon,
 };
+
+function isSocialPlatform(name: SocialIconName): name is SocialPlatform {
+  return Object.hasOwn(socialIcons, name);
+}
+
+/** Icône d’un réseau (rendue côté serveur) : pictogramme de marque, sinon icône lucide du registre. */
+export function SocialIcon({ name, className }: { name: SocialIconName; className?: string }) {
+  if (isSocialPlatform(name)) {
+    const Brand = socialIcons[name];
+    return <Brand className={className} />;
+  }
+  const Lucide = getIcon(name as IconName);
+  return <Lucide aria-hidden="true" focusable="false" strokeWidth={1.8} className={className} />;
+}

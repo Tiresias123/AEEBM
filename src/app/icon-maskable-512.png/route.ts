@@ -2,7 +2,7 @@ import { renderIcon } from "@/lib/brand-images";
 
 export const dynamic = "force-static";
 
-/** Icône « maskable » : disque dans la zone de sécurité (80 %) sur fond plein. */
+/** Icône « maskable » : tuile pleine, monogramme dans la zone de sécurité centrale (80 %). */
 export function GET() {
-  return renderIcon({ size: 512, inset: 0.1, background: true });
+  return renderIcon({ size: 512, variant: "tile", safeZone: 1 });
 }
