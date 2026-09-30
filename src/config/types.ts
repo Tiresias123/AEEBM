@@ -143,7 +143,7 @@ export type SectionLayout = "list" | "bento" | "tiles" | "group";
 export interface LinkSection {
   /** Identifiant (lettres, chiffres, tirets). */
   id: string;
-  /** Titre de section facultatif (numéroté en chiffres romains, en petites capitales). */
+  /** Titre de section facultatif (petites capitales, suivi d’un filet). */
   title?: string;
   layout?: SectionLayout;
   links: LinkItem[];

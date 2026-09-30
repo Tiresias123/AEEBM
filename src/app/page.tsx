@@ -17,9 +17,6 @@ import { isPendingHref } from "@/lib/pending";
 import { getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
 import { dateTile, frTypo } from "@/lib/typo";
 
-/** Numérotation des sections, comme les titres d’un texte de loi. */
-const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
-
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
 function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
   const { association, socials } = siteConfig;
@@ -117,7 +114,7 @@ export default function HomePage() {
               />
             ) : null}
 
-            {sections.map((section, sectionIndex) => {
+            {sections.map((section) => {
               const headingIndex = next();
               const enterStart = order;
               order += section.links.length;
@@ -130,12 +127,7 @@ export default function HomePage() {
                   className="mt-10"
                 >
                   {section.title ? (
-                    <SectionHeading
-                      id={`section-${section.id}`}
-                      title={section.title}
-                      numeral={ROMAN[sectionIndex]}
-                      enterIndex={headingIndex}
-                    />
+                    <SectionHeading id={`section-${section.id}`} title={section.title} enterIndex={headingIndex} />
                   ) : null}
                   <SectionLinks layout={section.layout} links={section.links} enterStart={enterStart} />
                 </section>
