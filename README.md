@@ -24,6 +24,8 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Changer d’icône                           | `icon` : un nom de `src/lib/icons.ts` (catalogue : <https://lucide.dev/icons>)     |
 | Annoncer le prochain événement            | `alertBanner` : `label`, `message`, `date`, `endsAt` (masqué seul après)           |
 | Mettre un autre lien en vedette           | `spotlight`                                                                        |
+| Changer la mise en page d’une section     | `layout` : `"list"`, `"bento"` (grande carte + tuiles), `"tiles"`, `"group"`       |
+| Mettre un lien en avant                   | `highlight: true` (carte soulignée de bordeaux)                                    |
 | Changer l’inscription du sceau            | `association.seal` : `top` (arc supérieur) et `bottom` (arc inférieur)             |
 | Changer les icônes des piliers de la bio  | `association.bioIcons` : une icône par segment de `bio` (séparés par « • »)        |
 | Afficher la date d’un événement annoncé   | `alertBanner.date` : `"2026-09-30"` (vignette « 30 sept. » à gauche du message)    |
@@ -156,6 +158,7 @@ src/
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
 - **Sceau** : le monogramme au centre d’un sceau vectoriel calculé au rendu (`src/lib/seal.ts`) : bande guillochée (quatre sinusoïdes polaires entrelacées, comme la gravure des diplômes), inscription circulaire et deux filets, tous interrompus dans l’axe horizontal (cercle ouvert de la charte) où se posent deux losanges. Autour, les « ondes du cercle ouvert » : arcs concentriques très fins, estompés sous le sceau. Les tracés se dessinent à l’arrivée (animation CSS finie, désactivée par « réduire les animations »).
+- **Sections** : numérotées en chiffres romains comme un texte de loi (I, II, III), chacune avec sa mise en page (grande carte et tuiles, tuiles compactes, bloc groupé) pour rompre la monotonie ; trois niveaux de relief (cartes, tuiles en relief à biseau lumineux, carte mise en avant soulignée de bordeaux) ; icône en filigrane sur la grande carte ; infolettre en carton d’invitation à double filet.
 - **Cercle ouvert** : repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
 - **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
 - **Titres** : sigle, titres de section et infolettre en Cormorant Garamond ; texte courant en Poppins (charte, section 12).

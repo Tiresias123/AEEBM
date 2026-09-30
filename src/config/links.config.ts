@@ -12,6 +12,8 @@
  *   • Masquer un lien sans le supprimer ......... hidden: true
  *   • Afficher un lien ou une pastille un temps .. startsAt / endsAt : "2026-10-15" (heure de Montréal)
  *   • Changer l’ordre des liens ................. déplacer le bloc { … } voulu
+ *   • Mise en page d’une section ................ layout: "list" | "bento" | "tiles" | "group"
+ *   • Mettre un lien en avant ................... highlight: true
  *   • Couleur de l’icône ........................ category: "academique" | "evenements" | "carriere" | "representation" | "services"
  *   • Pastille .................................. badge: { label: "Nouveau", tone: "new" | "important" | "deadline" | "info" }
  *   • Icônes disponibles ........................ voir src/lib/icons.ts (catalogue : https://lucide.dev/icons)
@@ -122,6 +124,7 @@ export const siteConfig: SiteConfig = {
     {
       id: "academique",
       title: "Réussir l’École",
+      layout: "bento", // Premier lien en grande carte, les suivants en tuiles
       links: [
         {
           title: "Cliniques de préparation",
@@ -149,6 +152,7 @@ export const siteConfig: SiteConfig = {
     {
       id: "vie-etudiante",
       title: "Vie étudiante",
+      layout: "tiles", // Tuiles compactes côte à côte
       links: [
         {
           title: "Calendrier des événements",
@@ -177,6 +181,7 @@ export const siteConfig: SiteConfig = {
     {
       id: "representation",
       title: "Représentation et services",
+      layout: "group", // Liens réunis dans un même bloc ; le lien « highlight » est mis en avant
       links: [
         {
           title: "Signaler une situation",
@@ -184,6 +189,7 @@ export const siteConfig: SiteConfig = {
           href: A_COMPLETER,
           icon: "MessageSquareWarning",
           category: "representation",
+          highlight: true,
         },
         {
           // Procès-verbaux : consultables par les membres (art. 20) ; les réserver à un dossier restreint.

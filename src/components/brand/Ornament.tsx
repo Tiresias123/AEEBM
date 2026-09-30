@@ -1,14 +1,14 @@
-import { cn } from "@/lib/utils";
+import { clsx } from "clsx";
 
 /**
  * Filet orné : deux traits fins de part et d’autre du cercle ouvert de la charte (section 09),
- * interrompu dans l’axe horizontal comme l’anneau de l’avatar.
+ * interrompu dans l’axe horizontal comme l’anneau de l’avatar. Sans tailwind-merge : utilisable côté client.
  */
 export function Ornament({ className }: { className?: string }) {
   return (
     <div
       aria-hidden="true"
-      className={cn(
+      className={clsx(
         "flex items-center justify-center gap-2 text-[color-mix(in_oklab,var(--ring-1)_40%,transparent)]",
         className,
       )}

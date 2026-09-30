@@ -127,13 +127,25 @@ export interface LinkItem extends Schedule {
   badge?: LinkBadge;
   /** Masque le lien sans le supprimer. */
   hidden?: boolean;
+  /** Met le lien en avant (carte soulignée de bordeaux), p. ex. une démarche importante. */
+  highlight?: boolean;
 }
+
+/**
+ * Mise en page d’une section :
+ * - "list"  : cartes en liste (par défaut) ;
+ * - "bento" : le premier lien en grande carte, les suivants en tuiles sur deux colonnes ;
+ * - "tiles" : tuiles compactes côte à côte (icône et titre ; idéal pour 3 liens courts) ;
+ * - "group" : liens réunis dans un même bloc, séparés par des filets (un lien `highlight` en sort).
+ */
+export type SectionLayout = "list" | "bento" | "tiles" | "group";
 
 export interface LinkSection {
   /** Identifiant (lettres, chiffres, tirets). */
   id: string;
-  /** Titre de section facultatif (étiquette en petites capitales). */
+  /** Titre de section facultatif (numéroté en chiffres romains, en petites capitales). */
   title?: string;
+  layout?: SectionLayout;
   links: LinkItem[];
 }
 

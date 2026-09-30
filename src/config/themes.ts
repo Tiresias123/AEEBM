@@ -86,6 +86,8 @@ export interface ThemeTokens {
       tileFg: string;
       /** Relief des grands titres (gaufrage sur papier) : ombre de texte, ou « none ». */
       emboss: string;
+      /** Relief des tuiles et grandes cartes (biseau lumineux, ombre portée plus marquée). */
+      lift: string;
     };
   };
   /** Opacité du voile de bruit. */
@@ -147,6 +149,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         tileBg: "10%",
         tileFg: "100%",
         emboss: "0 1px 0 rgb(255 255 255 / 0.8), 0 -0.5px 0 rgb(60 14 10 / 0.12)",
+        lift: "inset 0 1px 0 rgb(255 255 255 / 0.95), inset 0 -1px 0 rgb(104 26 22 / 0.05), 0 1px 2px rgb(74 35 28 / 0.06), 0 18px 34px -20px rgb(74 35 28 / 0.45)",
       },
     },
     noiseOpacity: 0.04,
@@ -207,6 +210,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         tileBg: "26%",
         tileFg: "22%",
         emboss: "none",
+        lift: "inset 0 1px 0 rgb(255 255 255 / 0.07), 0 18px 36px -20px rgb(0 0 0 / 0.85)",
       },
     },
     noiseOpacity: 0.04,
@@ -266,6 +270,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
         tileBg: "26%",
         tileFg: "22%",
         emboss: "none",
+        lift: "inset 0 1px 0 rgb(255 255 255 / 0.07), 0 18px 36px -20px rgb(0 0 0 / 0.85)",
       },
     },
     noiseOpacity: 0.035,
@@ -325,6 +330,7 @@ export function themeToCssVariables(theme: ThemeTokens): Record<string, string> 
     "--tile-bg": c.surface.tileBg,
     "--tile-fg": c.surface.tileFg,
     "--emboss": c.surface.emboss,
+    "--card-lift": c.surface.lift,
   };
   for (const [category, color] of Object.entries(c.categories)) vars[`--cat-${category}`] = color;
   return vars;

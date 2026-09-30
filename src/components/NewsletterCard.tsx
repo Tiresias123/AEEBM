@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { AnimatePresence, m } from "framer-motion";
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useId, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Ornament } from "@/components/brand/Ornament";
 import { EASE_OUT_EXPO, SPRING, TAP_SCALE } from "@/components/motion";
 import type { NewsletterConfig } from "@/config/types";
 import { celebrate } from "@/lib/confetti";
@@ -173,8 +174,13 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
       id="infolettre"
       aria-labelledby={titleId}
       style={enterStyle(enterIndex)}
-      className="enter relative overflow-hidden rounded-[1.4rem] glass px-5 pt-5 pb-5 text-center"
+      className="enter relative overflow-hidden rounded-[1.5rem] lift px-5 pt-6 pb-5 text-center"
     >
+      {/* Filet intérieur : carton d’invitation à double filet, comme le support. */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-1.5 rounded-[1.15rem] border border-line forced-colors:hidden"
+      />
       {/* Lueur d’accent en haut de carte */}
       <span
         aria-hidden="true"
@@ -229,6 +235,7 @@ export function NewsletterCard({ newsletter, enterIndex }: { newsletter: Newslet
               transition={{ duration: 0.25 }}
               className="relative"
             >
+              <Ornament className="mb-3 [&>span]:w-10" />
               <h2 id={titleId} className="font-display-name text-[length:calc(1.1rem*var(--display-scale))]">
                 <span className="text-gradient-subtitle">{newsletter.title}</span>
               </h2>

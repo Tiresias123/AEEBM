@@ -127,6 +127,22 @@
   box-shadow: var(--card-shadow);
 }
 
+/* Carte en relief (tuiles, grandes cartes) : même matière, biseau lumineux et ombre portée plus marquée. */
+@utility lift {
+  background-color: var(--fill);
+  border: 1px solid var(--line);
+  box-shadow: var(--card-lift);
+}
+
+/* Carte mise en avant : teintée et soulignée de la couleur des titres (bordeaux sur papier). */
+@utility card-highlight {
+  background-color: color-mix(in oklab, var(--heading) 6%, var(--fill-hover));
+  border: 1px solid color-mix(in oklab, var(--heading) 28%, transparent);
+  box-shadow:
+    var(--card-lift),
+    0 16px 34px -22px color-mix(in oklab, var(--heading) 60%, transparent);
+}
+
 /* Tuile d’icône : teinte discrète de la catégorie ; icône claire (support sombre) ou de la couleur de catégorie (papier). */
 @utility icon-tile {
   background-color: color-mix(in oklab, var(--cat) var(--tile-bg), transparent);

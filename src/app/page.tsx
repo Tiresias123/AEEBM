@@ -4,11 +4,11 @@ import { Ornament } from "@/components/brand/Ornament";
 import { SocialIcon } from "@/components/brand/BrandIcons";
 import { Enter } from "@/components/Enter";
 import { Footer } from "@/components/Footer";
-import { LinkCard } from "@/components/LinkCard";
 import { MotionProvider } from "@/components/motion";
 import { NewsletterCard } from "@/components/NewsletterCard";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { SectionHeading } from "@/components/SectionHeading";
+import { SectionLinks } from "@/components/SectionLinks";
 import { SocialBar } from "@/components/SocialBar";
 import { SpotlightCard } from "@/components/SpotlightCard";
 import { siteConfig } from "@/config/links.config";
@@ -16,6 +16,9 @@ import { getIcon } from "@/lib/icons";
 import { isPendingHref } from "@/lib/pending";
 import { getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
 import { dateTile, frTypo } from "@/lib/typo";
+
+/** Numérotation des sections, comme les titres d’un texte de loi. */
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
 function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
@@ -114,42 +117,30 @@ export default function HomePage() {
               />
             ) : null}
 
-            {sections.map((section) => (
-              <section
-                key={section.id}
-                data-sched={section.schedId}
-                aria-labelledby={section.title ? `section-${section.id}` : undefined}
-                aria-label={section.title ? undefined : "Liens"}
-                className="mt-9"
-              >
-                {section.title ? (
-                  <SectionHeading id={`section-${section.id}`} title={section.title} enterIndex={next()} />
-                ) : null}
-                <ul className="mt-3 flex flex-col gap-2.5">
-                  {section.links.map(({ key, link, schedId, badgeSchedId }) => {
-                    const Icon = getIcon(link.icon);
-                    return (
-                      <li key={key} data-sched={schedId}>
-                        <LinkCard
-                          title={link.title}
-                          subtitle={frTypo(link.subtitle)}
-                          href={link.href}
-                          category={link.category}
-                          pending={isPendingHref(link.href)}
-                          badge={
-                            link.badge
-                              ? { label: link.badge.label, tone: link.badge.tone, schedId: badgeSchedId }
-                              : undefined
-                          }
-                          enterIndex={next()}
-                          icon={<Icon aria-hidden="true" className="size-5" strokeWidth={1.75} />}
-                        />
-                      </li>
-                    );
-                  })}
-                </ul>
-              </section>
-            ))}
+            {sections.map((section, sectionIndex) => {
+              const headingIndex = next();
+              const enterStart = order;
+              order += section.links.length;
+              return (
+                <section
+                  key={section.id}
+                  data-sched={section.schedId}
+                  aria-labelledby={section.title ? `section-${section.id}` : undefined}
+                  aria-label={section.title ? undefined : "Liens"}
+                  className="mt-10"
+                >
+                  {section.title ? (
+                    <SectionHeading
+                      id={`section-${section.id}`}
+                      title={section.title}
+                      numeral={ROMAN[sectionIndex]}
+                      enterIndex={headingIndex}
+                    />
+                  ) : null}
+                  <SectionLinks layout={section.layout} links={section.links} enterStart={enterStart} />
+                </section>
+              );
+            })}
 
             {newsletter.enabled ? (
               <div className="mt-10">

@@ -1,6 +1,13 @@
 import { siteConfig } from "@/config/links.config";
 import { themes, type ThemeTokens } from "@/config/themes";
-import type { AlertBannerConfig, LinkItem, LinkSection, PostalAddress, SpotlightConfig } from "@/config/types";
+import type {
+  AlertBannerConfig,
+  LinkItem,
+  LinkSection,
+  PostalAddress,
+  SectionLayout,
+  SpotlightConfig,
+} from "@/config/types";
 import { isPendingHref } from "@/lib/pending";
 import {
   hasEnded,
@@ -121,6 +128,7 @@ export interface LinkModel {
 export interface SectionModel {
   id: string;
   title?: string;
+  layout: SectionLayout;
   links: LinkModel[];
   /** Identifiant de période de la section, quand tous ses liens sont datés (masquée avec eux). */
   schedId?: string;
@@ -170,7 +178,7 @@ export function getPageModel(now: number = Date.now()): PageModel {
         }
         return [model];
       });
-      const model: SectionModel = { id: section.id, title: section.title, links };
+      const model: SectionModel = { id: section.id, title: section.title, layout: section.layout ?? "list", links };
       if (links.length > 0 && links.every((link) => link.schedId)) {
         model.schedId = `g${sectionIndex}`;
         groups.push({ id: model.schedId, members: links.map((link) => link.schedId as string) });
