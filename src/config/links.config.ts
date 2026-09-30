@@ -108,7 +108,7 @@ export const siteConfig: SiteConfig = {
     enabled: true,
     title: `Guide de la rentrée ${COHORTE}`,
     subtitle: "Calendrier, services et contacts utiles",
-    href: A_COMPLETER,
+    href: "https://drive.google.com/file/d/1VreVTsNC5EDBW61fCb9X78cK8MtbBiTd/view?usp=sharing",
     icon: "BookOpen",
     badge: "Nouveau",
     // Dégradé propre au lien vedette, par thème (un thème absent reprend son dégradé d’accent).
