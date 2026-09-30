@@ -54,7 +54,7 @@ export default function PrivacyPage() {
   return (
     <>
       <BackgroundGlow />
-      <main className="support relative z-10 mx-2 mt-[max(0.5rem,env(safe-area-inset-top))] mb-[max(0.5rem,env(safe-area-inset-bottom))] min-h-[calc(100dvh-1rem)] surface px-5 pt-6 pb-16 sm:mx-auto sm:my-10 sm:min-h-0 sm:w-full sm:max-w-[min(40rem,calc(100%-3rem))] sm:px-10 sm:pt-10 sm:pb-12">
+      <main className="support relative z-10 mx-4 mt-[max(1rem,env(safe-area-inset-top))] mb-[max(1rem,env(safe-area-inset-bottom))] min-h-[calc(100dvh-2rem)] surface px-5 pt-6 pb-16 sm:mx-auto sm:my-10 sm:min-h-0 sm:w-full sm:max-w-[min(40rem,calc(100%-3rem))] sm:px-10 sm:pt-10 sm:pb-12">
         <Enter index={0}>
           <Link
             href="/"

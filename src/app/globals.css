@@ -67,6 +67,16 @@
     scrollbar-color: rgb(255 255 255 / 0.14) transparent;
   }
 
+  /*
+   * Téléphone : toute la page (textes, icônes, espacements, tous en rem) réduite de 6 % pour laisser une bande
+   * de fond plus large autour du support. En pourcentage : la taille de texte choisie par la personne est respectée.
+   */
+  @media (max-width: 39.99rem) {
+    html {
+      font-size: 93.75%;
+    }
+  }
+
   body {
     min-height: 100dvh;
     background-color: var(--bg);
