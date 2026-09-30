@@ -186,7 +186,8 @@ export const siteConfig: SiteConfig = {
         {
           title: "Signaler une situation",
           subtitle: "Plainte ou préoccupation académique",
-          href: A_COMPLETER,
+          // Formulaire Google (voir outils/formulaire-signalement.gs et README)
+          href: "https://docs.google.com/forms/d/e/1FAIpQLSfvoNcePgYKI8_Cpp3PfOtka4BJ6iwCl4QSXROPPGu8nDWz4w/viewform",
           icon: "MessageSquareWarning",
           category: "representation",
           highlight: true,
