@@ -119,7 +119,7 @@ Le script `outils/formulaire-signalement.gs` crée en un clic le formulaire Goog
 1. Depuis le compte Google de l’Association : <https://script.google.com> › Nouveau projet › coller le script.
 2. Valider le bloc `CONFIG` (délai de réponse, durée de conservation), puis exécuter `creerFormulaireSignalement` et autoriser l’accès.
 3. Récupérer le lien court affiché dans le journal (`forms.gle/…`) et le mettre dans le `href` de « Signaler une situation ».
-4. Dans Google Forms : thème bordeaux (`#681A16`) et logo en en-tête ; Réponses › ⋮ › notifications par courriel ; partager la feuille de réponses seulement avec les personnes chargées du suivi.
+4. Dans Google Forms (icône de palette « Personnaliser le thème ») : en-tête `outils/entete-formulaire-signalement.png` (1600 × 400), couleur `#681A16`, arrière-plan le plus clair proposé ; Réponses › ⋮ › notifications par courriel ; partager la feuille de réponses seulement avec les personnes chargées du suivi.
 
 Le formulaire accepte un nombre illimité de réponses, sans connexion à un compte Google.
 
