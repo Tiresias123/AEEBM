@@ -98,7 +98,7 @@ export const themes: Record<ThemeName, ThemeTokens> = {
   ivoire: {
     label: "Ivoire — charte AEEBM 2026-2027 (papier)",
     fonts: { display: "cormorant", body: "poppins" },
-    browserColor: "#F6F0E7", // Haut du support sur téléphone
+    browserColor: "#140C0B", // Fond sombre visible autour du support, sur téléphone
     avatarRing: "open",
     colors: {
       bg: "#0B0909", // Fond bordeaux sombre autour du support (grand écran)

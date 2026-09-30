@@ -253,12 +253,27 @@
 }
 
 /*
- * Support de la page : plein écran sur téléphone ; dès 640 px, carte à double filet (papier à en-tête).
- * Contexte d’empilement propre (les ondes du sceau passent sous le contenu) et débordement rogné.
+ * Support de la page : carte à double filet (bordure et filet intérieur, comme un papier à en-tête), posée sur le
+ * fond sombre qui reste visible tout autour, y compris sur téléphone (marge fine). Contexte d’empilement propre
+ * (les ondes du sceau passent sous le contenu) et débordement rogné.
  */
 .support {
   isolation: isolate;
   overflow: clip;
+  border-radius: 1.5rem;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--ring-1) 22%, transparent),
+    inset 0 1px 0 0 color-mix(in oklab, var(--ring-1) 12%, transparent),
+    0 24px 60px -30px rgb(0 0 0 / 0.9);
+}
+.support::after {
+  content: "";
+  position: absolute;
+  inset: 0.375rem;
+  z-index: -1;
+  border: 1px solid color-mix(in oklab, var(--ring-1) 12%, transparent);
+  border-radius: 1.125rem;
+  pointer-events: none;
 }
 @media (min-width: 40rem) {
   .support {
@@ -270,13 +285,9 @@
       0 30px 120px -60px color-mix(in oklab, var(--glow-1) 70%, transparent);
   }
   .support::after {
-    content: "";
-    position: absolute;
     inset: 0.5rem;
-    z-index: -1;
-    border: 1px solid color-mix(in oklab, var(--ring-1) 8%, transparent);
+    border-color: color-mix(in oklab, var(--ring-1) 8%, transparent);
     border-radius: 1.75rem;
-    pointer-events: none;
   }
 }
 

@@ -79,7 +79,7 @@ export default function HomePage() {
       </a>
       <BackgroundGlow />
       <MotionProvider>
-        <div className="support relative z-10 mx-auto flex min-h-dvh w-full flex-col surface px-[max(1rem,calc(50%-14rem))] pt-[max(1rem,env(safe-area-inset-top))] pb-[max(2rem,env(safe-area-inset-bottom))] sm:my-10 sm:min-h-0 sm:max-w-[30rem] sm:px-7 sm:pt-7 sm:pb-10">
+        <div className="support relative z-10 mx-2 mt-[max(0.5rem,env(safe-area-inset-top))] mb-[max(0.5rem,env(safe-area-inset-bottom))] flex min-h-[calc(100dvh-1rem)] flex-col surface px-[max(0.875rem,calc(50%-14rem))] pt-4 pb-8 sm:mx-auto sm:my-10 sm:min-h-0 sm:w-full sm:max-w-[30rem] sm:px-7 sm:pt-7 sm:pb-10">
           {banner ? (
             <AlertBanner
               tone={banner.tone}
