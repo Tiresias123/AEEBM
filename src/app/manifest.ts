@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/config/links.config";
 import { activeTheme } from "@/lib/site";
 
+/** Généré au build (aussi requis pour l’export statique de Cloudflare Pages). */
+export const dynamic = "force-static";
+
 export default function manifest(): MetadataRoute.Manifest {
   const { association } = siteConfig;
   return {

@@ -67,6 +67,14 @@ GitHub conserve le code et affiche ce fichier explicatif : il n’exécute pas l
 
 Chaque modification enregistrée sur GitHub redéploie le site automatiquement. L’infolettre ne fonctionne en ligne qu’une fois `MAILCHIMP_API_KEY` et `MAILCHIMP_AUDIENCE_ID` ajoutées dans Vercel › Settings › Environment Variables (puis **Redeploy**).
 
+### Autre option : Cloudflare Pages (version statique)
+
+`npm run build:cloudflare` produit une version entièrement statique du site (dossier `out/` et archive `aeebm-cloudflare.zip`), avec les en-têtes de sécurité (`_headers`) et les images de partage (`_redirects`). Sans serveur, le module d’infolettre n’y figure pas.
+
+- **Dépôt manuel** : Cloudflare › Workers & Pages › Créer › Pages › « Upload assets » (téléverser des fichiers) › nom du projet `aeebm` › glisser `aeebm-cloudflare.zip` › Deploy. Adresse : `https://aeebm.pages.dev`.
+- **Relié à GitHub** (mises à jour automatiques) : Workers & Pages › Créer › Pages › « Connect to Git » › dépôt `aeebm` ; commande de build `npm run build:cloudflare`, dossier de sortie `out` ; variables `NODE_VERSION` = `22` et `NEXT_PUBLIC_SITE_URL` = adresse publique.
+- **Domaine** : projet › Custom domains › `aeebm.ca`. Refaire ensuite le build avec `NEXT_PUBLIC_SITE_URL=https://aeebm.ca`.
+
 ---
 
 ## Démarrer

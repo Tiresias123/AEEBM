@@ -93,9 +93,21 @@ export function getPlaceholderLinks(): string[] {
 }
 
 /** Vrai si l’infolettre intégrée est active sans ses secrets Mailchimp (chaque inscription échouerait en production). */
+/**
+ * Export statique (Cloudflare Pages, voir scripts/build-static.mjs) : aucune fonction serveur, donc pas d’API
+ * d’infolettre ; le module d’inscription est retiré de la page.
+ */
+export const isStaticExport = process.env.STATIC_EXPORT === "1";
+
+/** Module d’infolettre affichable : activé, et servi par un hébergement capable d’exécuter l’API. */
+export function isNewsletterAvailable(): boolean {
+  return siteConfig.newsletter.enabled && !isStaticExport;
+}
+
 export function isNewsletterMisconfigured(): boolean {
   const { newsletter } = siteConfig;
   return (
+    !isStaticExport &&
     newsletter.enabled &&
     newsletter.endpoint === "/api/newsletter" &&
     (!process.env.MAILCHIMP_API_KEY || !process.env.MAILCHIMP_AUDIENCE_ID)

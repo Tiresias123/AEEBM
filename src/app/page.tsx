@@ -14,7 +14,7 @@ import { SpotlightCard } from "@/components/SpotlightCard";
 import { siteConfig } from "@/config/links.config";
 import { getIcon } from "@/lib/icons";
 import { isPendingHref } from "@/lib/pending";
-import { getPageModel, getSiteUrl, getSpotlightGradient } from "@/lib/site";
+import { getPageModel, getSiteUrl, getSpotlightGradient, isNewsletterAvailable } from "@/lib/site";
 import { dateTile, frTypo } from "@/lib/typo";
 
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
@@ -134,7 +134,7 @@ export default function HomePage() {
               );
             })}
 
-            {newsletter.enabled ? (
+            {isNewsletterAvailable() ? (
               <div className="mt-10">
                 <NewsletterCard newsletter={newsletter} enterIndex={next()} />
               </div>
