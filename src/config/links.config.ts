@@ -94,7 +94,7 @@ export const siteConfig: SiteConfig = {
   /* ───────────────────────────── 3. RÉSEAUX SOCIAUX ───────────────────────────── */
   // ⚠️ Remplacer les adresses A_COMPLETER par les comptes officiels de l’AEEBM.
   socials: [
-    { platform: "instagram", href: A_COMPLETER, label: "Instagram de l’AEEBM" },
+    { platform: "instagram", href: "https://www.instagram.com/aeeb.mtl/", label: "Instagram de l’AEEBM (@aeeb.mtl)" },
     { platform: "linkedin", href: A_COMPLETER, label: "LinkedIn de l’AEEBM" },
     // Groupe de cohorte : préférer une Communauté WhatsApp (numéros masqués entre membres)
     // ou activer « Approuver les nouveaux participants ». Pour Discord : platform: "discord".
