@@ -112,6 +112,17 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 - [ ] Remplacer `https://www.alumo.ca` par le portail du régime de l’AEEBM.
 - [ ] Ajouter l’heure et le lieu de l’AGA au bandeau.
 
+### Formulaire « Signaler une situation »
+
+Le script `outils/formulaire-signalement.gs` crée en un clic le formulaire Google complet (parcours anonyme ou avec suivi, nature de la situation, description, démarches, attentes, urgence, consentement, avis de confidentialité) et sa feuille de réponses.
+
+1. Depuis le compte Google de l’Association : <https://script.google.com> › Nouveau projet › coller le script.
+2. Valider le bloc `CONFIG` (délai de réponse, durée de conservation), puis exécuter `creerFormulaireSignalement` et autoriser l’accès.
+3. Récupérer le lien court affiché dans le journal (`forms.gle/…`) et le mettre dans le `href` de « Signaler une situation ».
+4. Dans Google Forms : thème bordeaux (`#681A16`) et logo en en-tête ; Réponses › ⋮ › notifications par courriel ; partager la feuille de réponses seulement avec les personnes chargées du suivi.
+
+Le formulaire accepte un nombre illimité de réponses, sans connexion à un compte Google.
+
 ### Évolution prévue : prochain événement depuis Google Agenda
 
 Objectif : que le bandeau affiche seul le prochain événement public de l’AEEBM, sans modifier le code.
