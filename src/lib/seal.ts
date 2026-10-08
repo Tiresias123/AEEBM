@@ -89,3 +89,37 @@ export function diamond(x: number, y: number, size: number): string {
   const h = size / 2;
   return `M${round(x)} ${round(y - h)}L${round(x + h)} ${round(y)}L${round(x)} ${round(y + h)}L${round(x - h)} ${round(y)}Z`;
 }
+
+/**
+ * Ruban guilloché horizontal (bande de sécurité des billets et des chèques) : `strands` sinusoïdes déphasées,
+ * y(x) = cy + amplitude · sin(2π·x / period + φ), de x = 0 à `width`, échantillonnées tous les `step` unités.
+ */
+export function guillocheRibbon({
+  width,
+  cy,
+  amplitude,
+  period,
+  strands,
+  offset = 0,
+  step = 4,
+}: {
+  width: number;
+  cy: number;
+  amplitude: number;
+  period: number;
+  strands: number;
+  /** Déphasage commun (en radians), pour croiser deux rubans. */
+  offset?: number;
+  step?: number;
+}): string[] {
+  const paths: string[] = [];
+  for (let strand = 0; strand < strands; strand++) {
+    const phase = offset + (strand * 2 * Math.PI) / strands;
+    const points: string[] = [];
+    for (let x = 0; x <= width + 1e-9; x += step) {
+      points.push(`${round(x)} ${round(cy + amplitude * Math.sin((2 * Math.PI * x) / period + phase))}`);
+    }
+    paths.push(`M${points.join("L")}`);
+  }
+  return paths;
+}

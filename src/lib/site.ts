@@ -147,10 +147,33 @@ export interface SectionModel {
   schedId?: string;
 }
 
+export interface PartnerModel {
+  key: string;
+  /** Configuration du partenaire, lien complété des paramètres UTM. */
+  partner: PartnerConfig;
+  /** Identifiant de période d’affichage (début et fin du partenariat), s’il est daté. */
+  schedId?: string;
+}
+
+export interface PartnersModel {
+  label: string;
+  disclosure?: string;
+  /**
+   * Partenaires principaux : un grand encart chacun. Un seul à la fois en principe ; en datant les partenariats,
+   * le suivant prend le relais à sa date de début, sans redéploiement.
+   */
+  principal: PartnerModel[];
+  /** Partenaires de soutien : rangée de noms sous l’encart. */
+  soutien: PartnerModel[];
+  /** Identifiant du bloc, quand tous ses partenaires sont datés (masqué avec eux). */
+  schedId?: string;
+}
+
 export interface PageModel {
   sections: SectionModel[];
   spotlight: { config: SpotlightConfig; schedId?: string } | null;
   banner: AlertBannerConfig | null;
+  partners: PartnersModel | null;
   /** Éléments datés, masqués avant le premier affichage hors de leur période (script de préaffichage). */
   scheduled: ScheduledElement[];
   /** Sections dont tous les liens sont datés : masquées quand tous leurs liens le sont. */
@@ -213,33 +236,50 @@ export function getPageModel(now: number = Date.now()): PageModel {
   const banner =
     bannerConfig.enabled && !hasEnded(resolveWindow(bannerConfig, "alertBanner"), now) ? bannerConfig : null;
 
-  return { sections, spotlight, banner, scheduled, groups };
+  let partners: PartnersModel | null = null;
+  const partnersConfig = siteConfig.partners;
+  if (partnersConfig?.enabled) {
+    const models = partnersConfig.items.flatMap((partner, index): PartnerModel[] => {
+      if (partner.hidden) return [];
+      const window = resolveWindow(partner, `Partenaire « ${partner.name} »`);
+      if (hasEnded(window, now)) return [];
+      const model: PartnerModel = {
+        key: `partenaire-${index}`,
+        partner: {
+          ...partner,
+          href: withUtm(partner.href, partnersConfig.campaign, partner.tier) as PartnerConfig["href"],
+        },
+      };
+      if (isDated(window)) model.schedId = schedule(window);
+      return [model];
+    });
+    if (models.length > 0) {
+      partners = {
+        label: partnersConfig.label,
+        disclosure: partnersConfig.disclosure,
+        principal: models.filter((model) => model.partner.tier === "principal"),
+        soutien: models.filter((model) => model.partner.tier === "soutien"),
+      };
+      if (models.every((model) => model.schedId)) {
+        partners.schedId = "partenaires";
+        groups.push({ id: partners.schedId, members: models.map((model) => model.schedId as string) });
+      }
+    }
+  }
+
+  return { sections, spotlight, banner, partners, scheduled, groups };
 }
 
 /**
- * Partenaires visibles (non masqués, période non terminée), regroupés par niveau. Le lien reçoit des paramètres
- * UTM : le partenaire mesure dans ses propres statistiques les visites venues de la page, sans traceur chez nous.
+ * Lien de partenaire complété des paramètres UTM : le partenaire mesure dans ses propres statistiques les visites
+ * venues de la page, sans traceur chez nous.
  */
-export function getPartners(now: number = Date.now()): { principal: PartnerConfig | null; soutien: PartnerConfig[] } {
-  const partners = siteConfig.partners;
-  if (!partners?.enabled) return { principal: null, soutien: [] };
-  const visible = partners.items
-    .filter((partner) => !partner.hidden && !hasEnded(resolveWindow(partner, `Partenaire « ${partner.name} »`), now))
-    .map((partner): PartnerConfig => ({
-      ...partner,
-      href: withUtm(partner.href, partners.campaign) as PartnerConfig["href"],
-    }));
-  return {
-    principal: visible.find((partner) => partner.tier === "principal") ?? null,
-    soutien: visible.filter((partner) => partner.tier === "soutien"),
-  };
-}
-
-function withUtm(href: string, campaign: string): string {
+function withUtm(href: string, campaign: string, content: string): string {
   if (!/^https?:\/\//i.test(href)) return href;
   const url = new URL(href);
   url.searchParams.set("utm_source", "aeebm");
   url.searchParams.set("utm_medium", "page-de-liens");
   url.searchParams.set("utm_campaign", campaign);
+  url.searchParams.set("utm_content", content);
   return url.toString();
 }

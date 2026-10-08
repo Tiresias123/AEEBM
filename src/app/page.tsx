@@ -6,6 +6,7 @@ import { Enter } from "@/components/Enter";
 import { Footer } from "@/components/Footer";
 import { MotionProvider } from "@/components/motion";
 import { NewsletterCard } from "@/components/NewsletterCard";
+import { PartnerShowcase } from "@/components/PartnerShowcase";
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { SectionHeading } from "@/components/SectionHeading";
 import { SectionLinks } from "@/components/SectionLinks";
@@ -14,11 +15,11 @@ import { SpotlightCard } from "@/components/SpotlightCard";
 import { siteConfig } from "@/config/links.config";
 import { getIcon } from "@/lib/icons";
 import { isPendingHref } from "@/lib/pending";
-import { getPageModel, getSiteUrl, getSpotlightGradient, isNewsletterAvailable } from "@/lib/site";
+import { getPageModel, getSiteUrl, getSpotlightGradient, isNewsletterAvailable, type PartnerModel } from "@/lib/site";
 import { dateTile, frTypo } from "@/lib/typo";
 
 /** Données structurées schema.org (Organisation) pour les moteurs de recherche. */
-function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
+function OrganizationJsonLd({ siteUrl, sponsors }: { siteUrl: string; sponsors: PartnerModel[] }) {
   const { association, socials } = siteConfig;
   const data = {
     "@context": "https://schema.org",
@@ -41,6 +42,16 @@ function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
     },
     identifier: { "@type": "PropertyValue", propertyID: "NEQ", value: association.neq },
     sameAs: socials.map((s) => s.href).filter((href) => href.startsWith("https://")),
+    // Partenaire principal (adresse sans paramètres UTM).
+    ...(sponsors.length
+      ? {
+          sponsor: sponsors.map(({ partner }) => ({
+            "@type": "Organization",
+            name: [partner.name, partner.descriptor].filter(Boolean).join(" "),
+            url: partner.href.split("?")[0],
+          })),
+        }
+      : {}),
   };
   return (
     <script
@@ -52,7 +63,7 @@ function OrganizationJsonLd({ siteUrl }: { siteUrl: string }) {
 
 export default function HomePage() {
   const { association, socials, newsletter, footer } = siteConfig;
-  const { sections, spotlight, banner } = getPageModel();
+  const { sections, spotlight, banner, partners } = getPageModel();
   const siteUrl = getSiteUrl();
 
   // Rang de chaque bloc dans l’entrée en cascade.
@@ -141,10 +152,20 @@ export default function HomePage() {
             ) : null}
           </main>
 
+          {/* Partenaires : entre le filet ci-dessous et celui du pied de page, au-dessus du logo. */}
+          {partners ? (
+            <div data-sched={partners.schedId}>
+              <Enter index={next()} className="mt-14">
+                <Ornament className="mb-8" />
+                <PartnerShowcase partners={partners} />
+              </Enter>
+            </div>
+          ) : null}
+
           <Footer association={association} footer={footer} buildYear={new Date().getFullYear()} enterIndex={next()} />
         </div>
       </MotionProvider>
-      <OrganizationJsonLd siteUrl={siteUrl} />
+      <OrganizationJsonLd siteUrl={siteUrl} sponsors={partners?.principal ?? []} />
     </>
   );
 }

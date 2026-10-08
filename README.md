@@ -31,6 +31,7 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Afficher la date d’un événement annoncé   | `alertBanner.date` : `"2026-09-30"` (vignette « 30 sept. » à gauche du message)    |
 | Passer à la nouvelle année                | la constante `COHORTE`                                                             |
 | Changer de thème                          | `theme: "ivoire"` (papier, par défaut), `"bordeaux"` (sombre) ou `"amethyste"`     |
+| Gérer les partenaires (commandites)       | `partners` : `tier` (`"principal"` ou `"soutien"`), textes, `startsAt` / `endsAt`  |
 
 Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit changes**. L’hébergeur (Vercel) redéploie automatiquement.
 
@@ -120,6 +121,21 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 - [ ] Remplacer `https://www.alumo.ca` par le portail du régime de l’AEEBM.
 - [ ] Ajouter l’heure et le lieu de l’AGA au bandeau.
 
+### Partenaires et commandites
+
+Le bloc des partenaires se place au bas de la page, entre deux filets ornés, juste au-dessus du logo de l’Association. Tout se règle dans `partners` (`src/config/links.config.ts`).
+
+| Niveau de visibilité | Rendu                                                                                                 |
+| -------------------- | ----------------------------------------------------------------------------------------------------- |
+| `"principal"`        | Grand encart : bandeau d’encre au nom du partenaire, signature, titre, présentation, domaines, bouton |
+| `"soutien"`          | Nom en petites capitales (ou logo) sous l’encart, dans « Avec le soutien de »                         |
+
+- **Durée du partenariat** : `startsAt` / `endsAt`. L’encart apparaît et disparaît seul, sans redéploiement. Si l’on inscrit le partenaire de l’année suivante avec sa date de début, il prend le relais tout seul.
+- **Logo officiel** : à demander au partenaire en version blanche (SVG ou PNG), avec ses normes graphiques et une autorisation d’utiliser sa marque. Placez le fichier dans `src/assets/partners/`, importez-le en haut du fichier de configuration, puis indiquez `logo: { src, alt }`. Il remplace alors le nom composé en capitales. Tant qu’il manque, le nom est composé en typographie, sans logotype inventé.
+- **Mesure** : le lien reçoit `utm_source=aeebm`, `utm_medium=page-de-liens`, `utm_campaign` (`campaign`) et `utm_content` (le niveau). Le partenaire voit ainsi dans ses propres statistiques les visites venues de la page. Aucun traceur ni témoin n’est ajouté chez nous.
+- **Transparence** : le titre du bloc (« Partenaire principal ») et la mention `disclosure` (« Publicité · … ») signalent le contenu commandité. Les liens portent `rel="sponsored"`. Le partenaire principal est aussi déclaré dans les données structurées (`sponsor`).
+- **Textes** : ne reprendre que des faits publiés par le partenaire. Dans un cabinet de services financiers, sa personne responsable de la conformité doit approuver par écrit les textes définitifs (accroche, présentation, domaines, mention) : pas de promesse de rendement, de superlatif ni de témoignage.
+
 ### Formulaire « Signaler une situation »
 
 Le script `outils/formulaire-signalement.gs` crée en un clic le formulaire Google complet (parcours anonyme ou avec suivi, nature de la situation, description, démarches, attentes, urgence, consentement, avis de confidentialité) et sa feuille de réponses.
@@ -163,6 +179,7 @@ src/
 │   ├── LinkCard.tsx            Carte de lien (tuile d’icône, titres, chevron animé)
 │   ├── NewsletterCard.tsx      Formulaire d’infolettre avec états, annonces et confettis
 │   ├── AlertBanner.tsx         Bandeau du prochain événement (vignette de date)
+│   ├── PartnerShowcase.tsx     Partenaires : encart du partenaire principal, partenaires de soutien
 │   ├── Footer.tsx              Logo officiel et mentions institutionnelles
 │   └── brand/                  Monogramme vectoriel, pastille vérifiée, icônes de marques
 ├── config/
@@ -177,7 +194,7 @@ src/
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
 - **Sceau** : le monogramme au centre d’un sceau vectoriel calculé au rendu (`src/lib/seal.ts`) : bande guillochée (quatre sinusoïdes polaires entrelacées, comme la gravure des diplômes), inscription circulaire et deux filets, tous interrompus dans l’axe horizontal (cercle ouvert de la charte) où se posent deux losanges. Autour, les « ondes du cercle ouvert » : arcs concentriques très fins, estompés sous le sceau. Les tracés se dessinent à l’arrivée (animation CSS finie, désactivée par « réduire les animations »).
-- **Sections** : titre en petites capitales suivi d’un filet, chacune avec sa mise en page (grande carte et tuiles, tuiles compactes, bloc groupé) pour rompre la monotonie ; trois niveaux de relief (cartes, tuiles en relief à biseau lumineux, carte mise en avant soulignée de bordeaux) ; icône en filigrane sur la grande carte ; infolettre en carton d’invitation à double filet.
+- **Sections** : titre en petites capitales suivi d’un filet, chacune avec sa mise en page (grande carte et tuiles, tuiles compactes, bloc groupé) pour rompre la monotonie ; trois niveaux de relief (cartes, tuiles en relief à biseau lumineux, carte mise en avant soulignée de bordeaux) ; icône en filigrane sur la grande carte ; infolettre en carton d’invitation à double filet. Le bas de page présente le partenaire principal entre deux filets ornés : un bandeau d’encre où son nom, en capitales espacées comme son logotype, se pose sur un ruban guilloché (la bande de sécurité des billets, en écho au sceau), puis un volet papier avec un bouton grenat.
 - **Cercle ouvert** : repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
 - **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
 - **Titres** : sigle, titres de section et infolettre en Cormorant Garamond ; texte courant en Poppins (charte, section 12).

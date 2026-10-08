@@ -18,6 +18,7 @@
  *   • Pastille .................................. badge: { label: "Nouveau", tone: "new" | "important" | "deadline" | "info" }
  *   • Icônes disponibles ........................ voir src/lib/icons.ts (catalogue : https://lucide.dev/icons)
  *   • Prochain événement (bandeau) .............. alertBanner : label, message, date, endsAt
+ *   • Partenaires (commandites) ................. partners : tier "principal" | "soutien", startsAt / endsAt
  *   • Thème visuel .............................. theme: "ivoire" (charte, papier clair) | "bordeaux" (charte, sombre) | "amethyste"
  *   • Nouvelle année ............................ changer COHORTE ci-dessous
  *
@@ -237,6 +238,38 @@ export const siteConfig: SiteConfig = {
     removedMessage: `Cette adresse a été retirée de notre liste et ne peut pas être réinscrite ici. Écrivez-nous à ${COURRIEL}.`,
     errorMessage: `Inscription impossible pour le moment. Écrivez-nous à ${COURRIEL}.`,
     consentNote: "Avis, assemblées et événements de l’AEEBM. Désabonnement en un clic.",
+  },
+
+  /* ───────────────────────────── 7. PARTENAIRES ───────────────────────────── */
+  // Bloc entre deux filets, au-dessus du logo. Niveaux de visibilité :
+  //   • "principal" : grand encart (bandeau au nom du partenaire, titre, présentation, domaines, bouton) ;
+  //   • "soutien"   : nom en petites capitales, sous l’encart (« Avec le soutien de »).
+  // Durée du partenariat : startsAt / endsAt (heure de Montréal) ; l’encart apparaît et disparaît seul.
+  // Liens : paramètres UTM ajoutés (utm_source=aeebm) pour que le partenaire mesure les visites reçues.
+  // ⚠️ Textes repris du site du partenaire (jolicoeurlapierre.com) : à faire valider par Jolicoeur | Lapierre.
+  partners: {
+    enabled: true,
+    label: "Partenaire principal",
+    disclosure: "Publicité · Services offerts par le cabinet. L’AEEBM ne fournit aucun conseil financier.",
+    campaign: `partenaires-${COHORTE}`,
+    items: [
+      {
+        tier: "principal",
+        name: "Jolicoeur | Lapierre",
+        descriptor: "Gestion financière",
+        tagline: "Simplement.",
+        headline: "Nous sommes votre partenaire de vie.",
+        description:
+          "Cabinet de planification financière spécialisé dans la sécurité financière des professionnels du droit.",
+        services: ["Finances personnelles", "Fiscalité", "Retraite", "Première maison", "Gestion des risques"],
+        href: "https://www.jolicoeurlapierre.com/",
+        cta: "Découvrir le cabinet",
+        legal: "Jolicoeur | Lapierre Gestion financière inc. · Cabinet de services financiers",
+        // Logo officiel (version blanche, PNG ou SVG) : l’importer comme logoBlanc ci-dessus, puis
+        // logo: { src: logoJolicoeurLapierre, alt: "Jolicoeur | Lapierre, gestion financière" },
+        // endsAt: "2027-09-01", // Fin du partenariat
+      },
+    ],
   },
 
   /* ───────────────────────── CONFIDENTIALITÉ (Loi 25) ───────────────────────── */

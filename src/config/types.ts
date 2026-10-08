@@ -206,8 +206,10 @@ export interface PartnerConfig extends Schedule {
   name: string;
   /** Complément du nom, p. ex. « Gestion financière ». */
   descriptor?: string;
-  /** Accroche courte (à faire valider par le partenaire). */
+  /** Signature du partenaire, sous son nom (p. ex. « Simplement. »). */
   tagline?: string;
+  /** Titre de l’encart (une phrase, idéalement reprise des communications du partenaire). */
+  headline?: string;
   /** Présentation en une ou deux phrases (faits publiés par le partenaire seulement). */
   description?: string;
   /** Domaines mis en avant (trois ou quatre au plus). */
@@ -216,6 +218,8 @@ export interface PartnerConfig extends Schedule {
   href: Href;
   /** Libellé du bouton. */
   cta?: string;
+  /** Mention en petits caractères sous le bouton (raison sociale, statut réglementaire). */
+  legal?: string;
   /** Logo officiel fourni par le partenaire ; sinon, son nom est composé en typographie. */
   logo?: { src: StaticImageData; alt: string };
   /** Masque le partenaire sans le supprimer. */
@@ -224,8 +228,10 @@ export interface PartnerConfig extends Schedule {
 
 export interface PartnersConfig {
   enabled: boolean;
-  /** Mention de partenariat affichée avec l’encart (transparence publicitaire). */
+  /** Titre du bloc (p. ex. « Partenaire principal »). */
   label: string;
+  /** Mention publicitaire sous l’encart (transparence : contenu commandité, services offerts par le partenaire). */
+  disclosure?: string;
   /** Campagne UTM (p. ex. « partenaires-2026-2027 »). */
   campaign: string;
   items: PartnerConfig[];
