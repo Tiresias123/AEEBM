@@ -5,6 +5,8 @@ import type {
   LinkItem,
   LinkSection,
   PartnerConfig,
+  PartnersConfig,
+  PartnerTier,
   PostalAddress,
   SectionLayout,
   SpotlightConfig,
@@ -90,6 +92,11 @@ export function getPlaceholderLinks(): string[] {
   }
   siteConfig.association.legalLinks.forEach((l) => check(`Mention légale · ${l.label}`, l.href));
   siteConfig.footer.links.forEach((l) => check(`Pied de page · ${l.label}`, l.href));
+  if (siteConfig.partners?.enabled) {
+    siteConfig.partners.items.forEach((p) => {
+      if (!p.hidden) check(`Partenaire · ${p.name}`, p.href);
+    });
+  }
   return pending;
 }
 
@@ -149,24 +156,29 @@ export interface SectionModel {
 
 export interface PartnerModel {
   key: string;
-  /** Configuration du partenaire, lien complété des paramètres UTM. */
   partner: PartnerConfig;
+  /** Liens vers le site du partenaire, avec paramètres UTM : depuis la page d’accueil et depuis la page des partenaires. */
+  links: { home: string; page: string };
   /** Identifiant de période d’affichage (début et fin du partenariat), s’il est daté. */
   schedId?: string;
 }
 
+/** Nombre de places en page d’accueil : un partenaire principal et deux grands partenaires. */
+export const FEATURED_GRAND_SLOTS = 2;
+
 export interface PartnersModel {
-  label: string;
-  disclosure?: string;
-  /**
-   * Partenaires principaux : un grand encart chacun. Un seul à la fois en principe ; en datant les partenariats,
-   * le suivant prend le relais à sa date de début, sans redéploiement.
-   */
-  principal: PartnerModel[];
-  /** Partenaires de soutien : rangée de noms sous l’encart. */
-  soutien: PartnerModel[];
-  /** Identifiant du bloc, quand tous ses partenaires sont datés (masqué avec eux). */
-  schedId?: string;
+  config: PartnersConfig;
+  /** Page d’accueil : les trois plus grands partenaires. */
+  featured: {
+    principal: PartnerModel[];
+    grand: PartnerModel[];
+    /** Places de grand partenaire libres à signaler (0 si showOpenSlots est faux). */
+    openSlots: number;
+    /** Identifiant du bloc, quand tous ses partenaires sont datés et sans place libre (masqué avec eux). */
+    schedId?: string;
+  };
+  /** Page des partenaires : tous les partenaires en cours, par niveau. */
+  all: Record<PartnerTier, PartnerModel[]>;
 }
 
 export interface PageModel {
@@ -239,31 +251,27 @@ export function getPageModel(now: number = Date.now()): PageModel {
   let partners: PartnersModel | null = null;
   const partnersConfig = siteConfig.partners;
   if (partnersConfig?.enabled) {
-    const models = partnersConfig.items.flatMap((partner, index): PartnerModel[] => {
-      if (partner.hidden) return [];
+    const all: Record<PartnerTier, PartnerModel[]> = { principal: [], grand: [], soutien: [] };
+    partnersConfig.items.forEach((partner, index) => {
+      if (partner.hidden) return;
       const window = resolveWindow(partner, `Partenaire « ${partner.name} »`);
-      if (hasEnded(window, now)) return [];
+      if (hasEnded(window, now)) return;
+      const utm = (placement: string) => withUtm(partner.href, partnersConfig.campaign, `${partner.tier}-${placement}`);
       const model: PartnerModel = {
         key: `partenaire-${index}`,
-        partner: {
-          ...partner,
-          href: withUtm(partner.href, partnersConfig.campaign, partner.tier) as PartnerConfig["href"],
-        },
+        partner,
+        links: { home: utm("accueil"), page: utm("page-partenaires") },
       };
       if (isDated(window)) model.schedId = schedule(window);
-      return [model];
+      all[partner.tier].push(model);
     });
-    if (models.length > 0) {
-      partners = {
-        label: partnersConfig.label,
-        disclosure: partnersConfig.disclosure,
-        principal: models.filter((model) => model.partner.tier === "principal"),
-        soutien: models.filter((model) => model.partner.tier === "soutien"),
-      };
-      if (models.every((model) => model.schedId)) {
-        partners.schedId = "partenaires";
-        groups.push({ id: partners.schedId, members: models.map((model) => model.schedId as string) });
-      }
+    const grand = all.grand.slice(0, FEATURED_GRAND_SLOTS);
+    const openSlots = partnersConfig.showOpenSlots ? FEATURED_GRAND_SLOTS - grand.length : 0;
+    partners = { config: partnersConfig, featured: { principal: all.principal, grand, openSlots }, all };
+    const members = [...all.principal, ...grand];
+    if (members.length > 0 && openSlots === 0 && members.every((model) => model.schedId)) {
+      partners.featured.schedId = "partenaires";
+      groups.push({ id: partners.featured.schedId, members: members.map((model) => model.schedId as string) });
     }
   }
 

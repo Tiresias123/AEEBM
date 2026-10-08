@@ -198,7 +198,13 @@ export interface FooterConfig {
  * - "principal" : encart de communication entre deux filets, au-dessus du pied de page (un seul à la fois) ;
  * - "soutien"   : nom ou logo dans la rangée « Avec le soutien de » du même encart.
  */
-export type PartnerTier = "principal" | "soutien";
+/**
+ * Niveaux de visibilité des partenaires :
+ * - "principal" : grand encart en page d’accueil (un seul à la fois) ;
+ * - "grand"     : bandeau en page d’accueil, sous le partenaire principal (deux au plus) ;
+ * - "soutien"   : présentation sur la page des partenaires seulement.
+ */
+export type PartnerTier = "principal" | "grand" | "soutien";
 
 export interface PartnerConfig extends Schedule {
   tier: PartnerTier;
@@ -212,7 +218,7 @@ export interface PartnerConfig extends Schedule {
   headline?: string;
   /** Présentation en une ou deux phrases (faits publiés par le partenaire seulement). */
   description?: string;
-  /** Domaines mis en avant (trois ou quatre au plus). */
+  /** Domaines mis en avant (cinq au plus). */
   services?: string[];
   /** Site du partenaire ; des paramètres UTM sont ajoutés pour qu’il mesure les visites venues de la page. */
   href: Href;
@@ -220,17 +226,45 @@ export interface PartnerConfig extends Schedule {
   cta?: string;
   /** Mention en petits caractères sous le bouton (raison sociale, statut réglementaire). */
   legal?: string;
-  /** Logo officiel fourni par le partenaire ; sinon, son nom est composé en typographie. */
+  /** Logo officiel fourni par le partenaire (version blanche) ; sinon, son nom est composé en typographie. */
   logo?: { src: StaticImageData; alt: string };
   /** Masque le partenaire sans le supprimer. */
   hidden?: boolean;
 }
 
+/** Bloc « Devenir partenaire » de la page des partenaires. */
+export interface PartnersJoinConfig {
+  /** Titre de section, p. ex. « Devenir partenaire ». */
+  title: string;
+  /** Accroche en Cormorant. */
+  heading: string;
+  text: string;
+  /** Niveaux proposés (nom et contrepartie de visibilité). */
+  tiers: { name: string; text: string }[];
+  /** Note en petits caractères (p. ex. mesure des visites). */
+  note?: string;
+  cta: string;
+  /** Adresse de contact (mailto: avec objet prérempli). */
+  href: Href;
+}
+
 export interface PartnersConfig {
   enabled: boolean;
-  /** Titre du bloc (p. ex. « Partenaire principal »). */
-  label: string;
-  /** Mention publicitaire sous l’encart (transparence : contenu commandité, services offerts par le partenaire). */
+  /** Saison affichée (p. ex. « 2026-2027 »). */
+  season: string;
+  /** Page d’accueil : titre du bloc des trois plus grands partenaires. */
+  title: string;
+  /** Page d’accueil : mot de remerciement sous le titre. */
+  intro?: string;
+  /** Libellé de la micro-bulle qui mène à la page des partenaires. */
+  linkLabel: string;
+  /** Page d’accueil : rangée « place disponible » pour les places de grand partenaire encore libres. */
+  showOpenSlots?: boolean;
+  /** Texte de cette rangée. */
+  openSlotText?: string;
+  /** Page des partenaires (/partenaires) : titre, remerciement, bloc « Devenir partenaire ». */
+  page: { title: string; description: string; intro: string; join?: PartnersJoinConfig };
+  /** Mention publicitaire (transparence : contenus commandités, services offerts par les partenaires). */
   disclosure?: string;
   /** Campagne UTM (p. ex. « partenaires-2026-2027 »). */
   campaign: string;

@@ -338,6 +338,27 @@
   display: none !important;
 }
 
+/* ───────────────────────────── Changement d’onglet ─────────────────────────────
+ * Page de liens ↔ page des partenaires (voir src/components/TransitionLink.tsx) : l’ancienne vue s’efface vite,
+ * la nouvelle apparaît en fondu ; son contenu central entre ensuite en cascade (classe « enter »).
+ */
+::view-transition-old(root) {
+  animation: tab-out 0.22s ease-in both;
+}
+::view-transition-new(root) {
+  animation: tab-in 0.5s var(--ease-out-expo) 0.06s both;
+}
+@keyframes tab-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes tab-in {
+  from {
+    opacity: 0;
+  }
+}
+
 /* ───────────────────────────── Mouvement réduit ───────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {

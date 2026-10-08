@@ -31,7 +31,7 @@ Tout se trouve dans **`src/config/links.config.ts`**.
 | Afficher la date d’un événement annoncé   | `alertBanner.date` : `"2026-09-30"` (vignette « 30 sept. » à gauche du message)    |
 | Passer à la nouvelle année                | la constante `COHORTE`                                                             |
 | Changer de thème                          | `theme: "ivoire"` (papier, par défaut), `"bordeaux"` (sombre) ou `"amethyste"`     |
-| Gérer les partenaires (commandites)       | `partners` : `tier` (`"principal"` ou `"soutien"`), textes, `startsAt` / `endsAt`  |
+| Ajouter un partenaire (commandite)        | un bloc dans `partners.items` : `tier` (`principal`, `grand`, `soutien`), textes   |
 
 Depuis GitHub : ouvrir le fichier › crayon ✏️ › modifier › **Commit changes**. L’hébergeur (Vercel) redéploie automatiquement.
 
@@ -123,18 +123,23 @@ L’API limite les envois par adresse IP (au mieux, par instance) et refuse les 
 
 ### Partenaires et commandites
 
-Le bloc des partenaires se place au bas de la page, entre deux filets ornés, juste au-dessus du logo de l’Association. Tout se règle dans `partners` (`src/config/links.config.ts`).
+Tout se règle dans `partners` (`src/config/links.config.ts`). Un nouveau partenariat signé = un bloc `{ … }` de plus dans `items` (l’ordre de la liste est l’ordre d’affichage).
 
-| Niveau de visibilité | Rendu                                                                                                 |
-| -------------------- | ----------------------------------------------------------------------------------------------------- |
-| `"principal"`        | Grand encart : bandeau d’encre au nom du partenaire, signature, titre, présentation, domaines, bouton |
-| `"soutien"`          | Nom en petites capitales (ou logo) sous l’encart, dans « Avec le soutien de »                         |
+**Page d’accueil.** Entre deux filets ornés, juste au-dessus du logo de l’Association, l’espace est réservé aux **trois plus grands partenaires** : titre (`title`), mot de remerciement (`intro`), micro-bulle « Tous nos partenaires » (`linkLabel`) vers la page des partenaires, puis l’encart du partenaire principal et les bandeaux des deux grands partenaires. Tant qu’une place de grand partenaire est libre, une rangée en pointillé l’indique et mène au bloc « Devenir partenaire » (`showOpenSlots: false` pour la masquer).
 
-- **Durée du partenariat** : `startsAt` / `endsAt`. L’encart apparaît et disparaît seul, sans redéploiement. Si l’on inscrit le partenaire de l’année suivante avec sa date de début, il prend le relais tout seul.
-- **Logo officiel** : à demander au partenaire en version blanche (SVG ou PNG), avec ses normes graphiques et une autorisation d’utiliser sa marque. Placez le fichier dans `src/assets/partners/`, importez-le en haut du fichier de configuration, puis indiquez `logo: { src, alt }`. Il remplace alors le nom composé en capitales. Tant qu’il manque, le nom est composé en typographie, sans logotype inventé.
-- **Mesure** : le lien reçoit `utm_source=aeebm`, `utm_medium=page-de-liens`, `utm_campaign` (`campaign`) et `utm_content` (le niveau). Le partenaire voit ainsi dans ses propres statistiques les visites venues de la page. Aucun traceur ni témoin n’est ajouté chez nous.
-- **Transparence** : le titre du bloc (« Partenaire principal ») et la mention `disclosure` (« Publicité · … ») signalent le contenu commandité. Les liens portent `rel="sponsored"`. Le partenaire principal est aussi déclaré dans les données structurées (`sponsor`).
-- **Textes** : ne reprendre que des faits publiés par le partenaire. Dans un cabinet de services financiers, sa personne responsable de la conformité doit approuver par écrit les textes définitifs (accroche, présentation, domaines, mention) : pas de promesse de rendement, de superlatif ni de témoignage.
+**Page des partenaires (`/partenaires`).** Même fond, même bulle principale, même en-tête (sceau) et même pied de page (logo) : seul le contenu central change. Remerciement (`page.intro`), partenaires par niveau, bloc « Devenir partenaire » (`page.join` : niveaux proposés, bouton de courriel prérempli), mention publicitaire. Le passage d’une page à l’autre est animé : le layout commun reste en place, l’ancien contenu s’efface en fondu et le nouveau entre en cascade (API View Transitions ; navigation ordinaire sur Firefox, avec « réduire les animations » ou sans JavaScript).
+
+| Niveau (`tier`) | Page d’accueil                                          | Page des partenaires                          |
+| --------------- | ------------------------------------------------------- | --------------------------------------------- |
+| `"principal"`   | Grand encart (bandeau d’encre, titre, domaines, bouton) | Même encart                                   |
+| `"grand"`       | Bandeau d’encre sous l’encart (deux au plus)            | Bandeau d’encre avec présentation             |
+| `"soutien"`     | —                                                       | Liste groupée : nom, complément, présentation |
+
+- **Durée du partenariat** : `startsAt` / `endsAt`. Le partenaire apparaît et disparaît seul, sans redéploiement. Si l’on inscrit le partenaire de l’année suivante avec sa date de début, il prend le relais tout seul.
+- **Logo officiel** : à demander au partenaire en version blanche (SVG ou PNG), avec ses normes graphiques et une autorisation d’utiliser sa marque. Placez le fichier dans `src/assets/partners/`, importez-le en haut du fichier de configuration, puis indiquez `logo: { src, alt }` : il remplace le nom composé en capitales dans l’encart et les bandeaux. Tant qu’il manque, le nom est composé en typographie, sans logotype inventé.
+- **Mesure** : chaque lien reçoit `utm_source=aeebm`, `utm_medium=page-de-liens`, `utm_campaign` (`campaign`) et `utm_content` (niveau et emplacement, p. ex. `principal-accueil` ou `principal-page-partenaires`). Le partenaire voit ainsi dans ses propres statistiques les visites venues de la page. Aucun traceur ni témoin n’est ajouté chez nous.
+- **Transparence** : la mention `disclosure` (« Publicité · … ») accompagne les partenaires sur les deux pages ; les liens portent `rel="sponsored"` ; les partenaires de la page d’accueil sont déclarés dans les données structurées (`sponsor`).
+- **Textes** : ne reprendre que des faits publiés par le partenaire. Dans un cabinet de services financiers, la personne responsable de la conformité doit approuver par écrit les textes définitifs (accroche, présentation, domaines, mention) : pas de promesse de rendement, de superlatif ni de témoignage. Le mot de remerciement et la page des partenaires sont à valider par l’exécutif.
 
 ### Formulaire « Signaler une situation »
 
@@ -165,7 +170,9 @@ Aucune clé d’API n’est nécessaire pour un agenda public. À implémenter :
 src/
 ├── app/
 │   ├── layout.tsx              Métadonnées, polices, variables de thème, script de préaffichage, avertissements de build
-│   ├── page.tsx                Assemblage de la page + données structurées schema.org
+│   ├── (liens)/layout.tsx      Layout commun : fond, support, bandeau, en-tête (sceau), réseaux, pied de page
+│   ├── (liens)/page.tsx        Page de liens (contenu central) + données structurées schema.org
+│   ├── (liens)/partenaires/    Page des partenaires (contenu central, même layout)
 │   ├── globals.css             Système de design (verre, halos, entrée en cascade, catégories, pastilles)
 │   ├── confidentialite/        Politique de confidentialité (Loi 25)
 │   ├── api/newsletter/         Inscription Mailchimp (statuts, réabonnement, pot de miel, origine)
@@ -179,7 +186,10 @@ src/
 │   ├── LinkCard.tsx            Carte de lien (tuile d’icône, titres, chevron animé)
 │   ├── NewsletterCard.tsx      Formulaire d’infolettre avec états, annonces et confettis
 │   ├── AlertBanner.tsx         Bandeau du prochain événement (vignette de date)
-│   ├── PartnerShowcase.tsx     Partenaires : encart du partenaire principal, partenaires de soutien
+│   ├── PartnerShowcase.tsx     Page d’accueil : les trois plus grands partenaires et la micro-bulle
+│   ├── partners/               Encart principal, bandeaux, place disponible, liste, « Devenir partenaire »
+│   ├── PageSwitch.tsx          Micro-bulle de changement de page (Tous nos partenaires, Retour aux liens)
+│   ├── TransitionLink.tsx      Changement de page animé (API View Transitions), layout commun en place
 │   ├── Footer.tsx              Logo officiel et mentions institutionnelles
 │   └── brand/                  Monogramme vectoriel, pastille vérifiée, icônes de marques
 ├── config/
@@ -194,7 +204,7 @@ src/
 - **Monogramme** : sigle AEEBM vectorisé en Cormorant Garamond SemiBold, inscrit dans le cercle ouvert (fiche d’identité 2026-2027, section 10). Variante renforcée pour les favicons.
 - **Logo officiel** (`src/assets/brand/aeebm-logo-blanc.png`) : version principale « blanc sur bordeaux » (plaque bordeaux en aplat, zone de protection respectée), affichée à 120 px, au-dessus du minimum de 110 px.
 - **Sceau** : le monogramme au centre d’un sceau vectoriel calculé au rendu (`src/lib/seal.ts`) : bande guillochée (quatre sinusoïdes polaires entrelacées, comme la gravure des diplômes), inscription circulaire et deux filets, tous interrompus dans l’axe horizontal (cercle ouvert de la charte) où se posent deux losanges. Autour, les « ondes du cercle ouvert » : arcs concentriques très fins, estompés sous le sceau. Les tracés se dessinent à l’arrivée (animation CSS finie, désactivée par « réduire les animations »).
-- **Sections** : titre en petites capitales suivi d’un filet, chacune avec sa mise en page (grande carte et tuiles, tuiles compactes, bloc groupé) pour rompre la monotonie ; trois niveaux de relief (cartes, tuiles en relief à biseau lumineux, carte mise en avant soulignée de bordeaux) ; icône en filigrane sur la grande carte ; infolettre en carton d’invitation à double filet. Le bas de page présente le partenaire principal entre deux filets ornés : un bandeau d’encre où son nom, en capitales espacées comme son logotype, se pose sur un ruban guilloché (la bande de sécurité des billets, en écho au sceau), puis un volet papier avec un bouton grenat.
+- **Sections** : titre en petites capitales suivi d’un filet, chacune avec sa mise en page (grande carte et tuiles, tuiles compactes, bloc groupé) pour rompre la monotonie ; trois niveaux de relief (cartes, tuiles en relief à biseau lumineux, carte mise en avant soulignée de bordeaux) ; icône en filigrane sur la grande carte ; infolettre en carton d’invitation à double filet. Le bas de page présente les trois plus grands partenaires entre deux filets ornés : l’encart du partenaire principal (bandeau d’encre où son nom, en capitales espacées comme son logotype, se pose sur un ruban guilloché, la bande de sécurité des billets, en écho au sceau, puis volet papier avec un bouton grenat) et, dans la même matière d’encre, les bandeaux des grands partenaires.
 - **Cercle ouvert** : repris en ornement entre deux filets (sous les réseaux sociaux et au-dessus du pied de page).
 - **Support** : surface éclairée par le haut et légèrement grainée comme un papier vergé (blanc cassé dans `ivoire`, bordeaux fumé dans `bordeaux`) ; plein écran sur téléphone, carte à double filet (bordure et filet intérieur) dès 640 px. Teinte réglable dans `themes.ts` (`panel`).
 - **Titres** : sigle, titres de section et infolettre en Cormorant Garamond ; texte courant en Poppins (charte, section 12).

@@ -241,16 +241,47 @@ export const siteConfig: SiteConfig = {
   },
 
   /* ───────────────────────────── 7. PARTENAIRES ───────────────────────────── */
-  // Bloc entre deux filets, au-dessus du logo. Niveaux de visibilité :
+  // Page d’accueil : entre deux filets, au-dessus du logo, l’espace est réservé aux TROIS plus grands partenaires
+  // (un partenaire principal et deux grands partenaires), avec un mot de remerciement et une micro-bulle vers la
+  // page /partenaires, qui présente tous les partenaires (même fond, même en-tête, même pied de page).
+  // Niveaux (tier) :
   //   • "principal" : grand encart (bandeau au nom du partenaire, titre, présentation, domaines, bouton) ;
-  //   • "soutien"   : nom en petites capitales, sous l’encart (« Avec le soutien de »).
-  // Durée du partenariat : startsAt / endsAt (heure de Montréal) ; l’encart apparaît et disparaît seul.
+  //   • "grand"     : bandeau d’encre sous l’encart (deux au plus en page d’accueil) ;
+  //   • "soutien"   : présentation sur la page des partenaires seulement.
+  // Nouveau partenariat signé : ajouter un bloc { … } dans items (l’ordre de la liste est l’ordre d’affichage).
+  // Durée du partenariat : startsAt / endsAt (heure de Montréal) ; le partenaire apparaît et disparaît seul.
   // Liens : paramètres UTM ajoutés (utm_source=aeebm) pour que le partenaire mesure les visites reçues.
-  // ⚠️ Textes repris du site du partenaire (jolicoeurlapierre.com) : à faire valider par Jolicoeur | Lapierre.
+  // ⚠️ Textes de Jolicoeur | Lapierre repris de son site (jolicoeurlapierre.com) : à lui faire valider.
   partners: {
     enabled: true,
-    label: "Partenaire principal",
-    disclosure: "Publicité · Services offerts par le cabinet. L’AEEBM ne fournit aucun conseil financier.",
+    season: COHORTE,
+    title: "Nos grands partenaires",
+    intro:
+      "Merci à nos grands partenaires, qui soutiennent les activités et les services de l’AEEBM tout au long de l’année.",
+    linkLabel: "Tous nos partenaires",
+    // Places de grand partenaire encore libres : une rangée « place disponible » (false pour la masquer).
+    showOpenSlots: true,
+    openSlotText: `Associez votre organisation à la cohorte ${COHORTE}.`,
+    page: {
+      title: "Nos partenaires",
+      description: `Les partenaires de l’AEEBM pour la cohorte ${COHORTE}, et comment le devenir.`,
+      // ⚠️ À valider par l’exécutif.
+      intro: `L’AEEBM remercie chaleureusement les organisations qui soutiennent la cohorte ${COHORTE}. Leur appui enrichit nos activités, notre entraide et notre vie associative, au bénéfice des candidates et des candidats de l’École du Barreau à Montréal.`,
+      join: {
+        title: "Devenir partenaire",
+        heading: `Associez votre organisation à la cohorte ${COHORTE}`,
+        text: "La page d’accueil est réservée à trois partenaires par cohorte : un partenaire principal et deux grands partenaires.",
+        tiers: [
+          { name: "Partenaire principal", text: "Grand encart en page d’accueil, juste au-dessus du logo de l’AEEBM." },
+          { name: "Grand partenaire", text: "Bandeau en page d’accueil, sous le partenaire principal." },
+          { name: "Partenaire", text: "Présentation sur cette page, avec un lien vers votre site." },
+        ],
+        note: "Chaque lien porte un suivi UTM : vous mesurez dans vos propres statistiques les visites venues de l’AEEBM.",
+        cta: "Écrire à l’exécutif",
+        href: `mailto:${COURRIEL}?subject=${encodeURIComponent(`Partenariat AEEBM ${COHORTE}`)}`,
+      },
+    },
+    disclosure: "Publicité · Les produits et services présentés sont offerts par nos partenaires, et non par l’AEEBM.",
     campaign: `partenaires-${COHORTE}`,
     items: [
       {
@@ -269,6 +300,14 @@ export const siteConfig: SiteConfig = {
         // logo: { src: logoJolicoeurLapierre, alt: "Jolicoeur | Lapierre, gestion financière" },
         // endsAt: "2027-09-01", // Fin du partenariat
       },
+      // Modèle pour un grand partenaire (bandeau d’encre en page d’accueil) :
+      // {
+      //   tier: "grand",
+      //   name: "Nom du partenaire",
+      //   descriptor: "Secteur d’activité",
+      //   description: "Présentation en une phrase.",
+      //   href: "https://www.exemple.ca/",
+      // },
     ],
   },
 
