@@ -193,6 +193,44 @@ export interface FooterConfig {
   links: LegalLink[];
 }
 
+/**
+ * Niveaux de visibilité des partenaires :
+ * - "principal" : encart de communication entre deux filets, au-dessus du pied de page (un seul à la fois) ;
+ * - "soutien"   : nom ou logo dans la rangée « Avec le soutien de » du même encart.
+ */
+export type PartnerTier = "principal" | "soutien";
+
+export interface PartnerConfig extends Schedule {
+  tier: PartnerTier;
+  /** Nom tel qu’il s’écrit, p. ex. « Jolicoeur | Lapierre ». */
+  name: string;
+  /** Complément du nom, p. ex. « Gestion financière ». */
+  descriptor?: string;
+  /** Accroche courte (à faire valider par le partenaire). */
+  tagline?: string;
+  /** Présentation en une ou deux phrases (faits publiés par le partenaire seulement). */
+  description?: string;
+  /** Domaines mis en avant (trois ou quatre au plus). */
+  services?: string[];
+  /** Site du partenaire ; des paramètres UTM sont ajoutés pour qu’il mesure les visites venues de la page. */
+  href: Href;
+  /** Libellé du bouton. */
+  cta?: string;
+  /** Logo officiel fourni par le partenaire ; sinon, son nom est composé en typographie. */
+  logo?: { src: StaticImageData; alt: string };
+  /** Masque le partenaire sans le supprimer. */
+  hidden?: boolean;
+}
+
+export interface PartnersConfig {
+  enabled: boolean;
+  /** Mention de partenariat affichée avec l’encart (transparence publicitaire). */
+  label: string;
+  /** Campagne UTM (p. ex. « partenaires-2026-2027 »). */
+  campaign: string;
+  items: PartnerConfig[];
+}
+
 export interface SiteConfig {
   /** Thème visuel : "ivoire" (charte, papier clair, défaut), "bordeaux" (charte, sombre) ou "amethyste". */
   theme: ThemeName;
@@ -206,6 +244,8 @@ export interface SiteConfig {
   spotlight: SpotlightConfig;
   sections: LinkSection[];
   newsletter: NewsletterConfig;
+  /** Partenaires et commanditaires (système de visibilité). */
+  partners?: PartnersConfig;
   privacy: PrivacyConfig;
   footer: FooterConfig;
 }

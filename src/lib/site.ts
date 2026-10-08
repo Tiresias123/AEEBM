@@ -4,6 +4,7 @@ import type {
   AlertBannerConfig,
   LinkItem,
   LinkSection,
+  PartnerConfig,
   PostalAddress,
   SectionLayout,
   SpotlightConfig,
@@ -213,4 +214,32 @@ export function getPageModel(now: number = Date.now()): PageModel {
     bannerConfig.enabled && !hasEnded(resolveWindow(bannerConfig, "alertBanner"), now) ? bannerConfig : null;
 
   return { sections, spotlight, banner, scheduled, groups };
+}
+
+/**
+ * Partenaires visibles (non masqués, période non terminée), regroupés par niveau. Le lien reçoit des paramètres
+ * UTM : le partenaire mesure dans ses propres statistiques les visites venues de la page, sans traceur chez nous.
+ */
+export function getPartners(now: number = Date.now()): { principal: PartnerConfig | null; soutien: PartnerConfig[] } {
+  const partners = siteConfig.partners;
+  if (!partners?.enabled) return { principal: null, soutien: [] };
+  const visible = partners.items
+    .filter((partner) => !partner.hidden && !hasEnded(resolveWindow(partner, `Partenaire « ${partner.name} »`), now))
+    .map((partner): PartnerConfig => ({
+      ...partner,
+      href: withUtm(partner.href, partners.campaign) as PartnerConfig["href"],
+    }));
+  return {
+    principal: visible.find((partner) => partner.tier === "principal") ?? null,
+    soutien: visible.filter((partner) => partner.tier === "soutien"),
+  };
+}
+
+function withUtm(href: string, campaign: string): string {
+  if (!/^https?:\/\//i.test(href)) return href;
+  const url = new URL(href);
+  url.searchParams.set("utm_source", "aeebm");
+  url.searchParams.set("utm_medium", "page-de-liens");
+  url.searchParams.set("utm_campaign", campaign);
+  return url.toString();
 }
