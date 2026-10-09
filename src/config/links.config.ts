@@ -292,7 +292,13 @@ export const siteConfig: SiteConfig = {
         headline: "Nous sommes votre partenaire de vie.",
         description:
           "Cabinet de planification financière spécialisé dans la sécurité financière des professionnels du droit.",
-        services: ["Finances personnelles", "Fiscalité", "Retraite", "Première maison", "Gestion des risques"],
+        services: [
+          "Planification budgétaire et remboursement des dettes",
+          "Fiscalité",
+          "Investissements",
+          "Première maison",
+          "Gestion des risques",
+        ],
         href: "https://www.jolicoeurlapierre.com/",
         cta: "Découvrir le cabinet",
         legal: "Jolicoeur | Lapierre Gestion financière inc. · Cabinet de services financiers",

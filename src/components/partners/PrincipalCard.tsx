@@ -95,7 +95,7 @@ export function PrincipalCard({
             {partner.services.map((service) => (
               <li
                 key={service}
-                className="rounded-full bg-fill-hover px-2.5 py-[0.3rem] text-[0.68rem] leading-none text-soft ring-1 ring-line"
+                className="rounded-[0.85rem] bg-fill-hover px-2.5 py-[0.3rem] text-[0.68rem] leading-[1.25] text-balance text-soft ring-1 ring-line"
               >
                 {frTypo(service)}
               </li>
